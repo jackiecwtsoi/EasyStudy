@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/home_text"
+        android:text="home" android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="65px">
+    </TextView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/folders_text"
+        android:text="folders" android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="65px">
+    </TextView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_text"
+        android:text="add" android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="65px">
+    </TextView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/study_text"
+        android:text='study' android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="65px">
+
+    </TextView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stats_text"
+        android:text='stats' android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="65px">
+
+    </TextView>
+
+</LinearLayout>
