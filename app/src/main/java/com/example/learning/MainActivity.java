@@ -2,6 +2,7 @@ package com.example.learning;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.graphics.Color;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private HonrizonViewPager viewPager;
     private TabLayout tabLayout;
     private static final String TAG = "luchixiang";
+    FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,23 @@ public class MainActivity extends AppCompatActivity {
             viewer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mcContainer.setCurrentItem(textViewList.indexOf(viewer));
+                    switch (view.getId()){
+                        case R.id.home_text:
+                            mcContainer.setCurrentItem(0);
+                            break;
+                        case R.id.folders_text:
+                            mcContainer.setCurrentItem(1);
+                            break;
+                        case R.id.add_text:
+                            mcContainer.setCurrentItem(2);
+                            break;
+                        case R.id.study_text:
+                            mcContainer.setCurrentItem(3);
+                            break;
+                        case R.id.stats_text:
+                            mcContainer.setCurrentItem(4);
+                            break;
+                    }
                 }
             });
         }
