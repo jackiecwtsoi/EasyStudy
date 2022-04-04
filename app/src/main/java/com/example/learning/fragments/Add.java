@@ -1,6 +1,9 @@
 package com.example.learning.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -15,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.learning.AddCardActivity;
 import com.example.learning.R;
 import com.example.learning.customizeview.WheelView;
 
@@ -39,11 +43,16 @@ public class Add extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    View rootView;
-    TextView select;
-    TextView add;
+    private View rootView;
+    private TextView select;
+    private  TextView add;
+    private View addView;
+    private TextView createDeck;
+    private String selectedFolder = "Folder 1";
 //    TextView selected;
-    private static final String[] PLANETS = new String[]{"Folder1", "Folder2", "Folder3", "Folder4", "Folder5", "Folder6", "Folder7", "Folder8"};
+    private static  String[] PLANETS = new String[]{"Folder1", "Folder2", "Folder3", "Folder4", "Folder5", "Folder6", "Folder7", "Folder8"};
+    private ArrayList<String> folderList = new ArrayList<String>();
+
     private static final String TAG = Add.class.getSimpleName();
     private OnFragmentInteractionListener mListener;
 
@@ -82,10 +91,15 @@ public class Add extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final Context context = getActivity();
-
+        folderList.addAll(Arrays.asList(PLANETS));
         rootView = inflater.inflate(R.layout.fragment_add, container, false);
+        addView = inflater.inflate(R.layout.create_folder,container,false);
+        addView.setBackgroundColor(Color.WHITE);
         select = rootView.findViewById(R.id.select_folder);
         add = rootView.findViewById(R.id.add_folder);
+        createDeck = rootView.findViewById(R.id.add_create_deck);
+        add.setTextColor(Color.WHITE);
+        //add.setBackgroundColor(Color.BLUE);
 //        selected = rootView.findViewById(R.id.selected_folder);
         select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,32 +107,61 @@ public class Add extends Fragment {
                 View outerView = LayoutInflater.from(context).inflate(R.layout.folder_wheel_view, null);
                 WheelView wv = (WheelView) outerView.findViewById(R.id.foler_wheel_view);
                 wv.setOffset(2);
-                wv.setItems(Arrays.asList(PLANETS));
+                wv.setItems(folderList);
                 wv.setSeletion(3);
                 wv.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
                     @Override
                     public void onSelected(int selectedIndex, String item) {
                         Log.d(TAG, "[Dialog]selectedIndex: " + selectedIndex + ", item: " + item);
-                        select.setText(item);
+                        selectedFolder = item;
                     }
                 });
 
                 new AlertDialog.Builder(context)
                         .setTitle("Select your folder")
                         .setView(outerView)
-                        .setPositiveButton("OK", null)
+                        .setPositiveButton("OK",new DialogInterface.OnClickListener(){
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                select.setText(selectedFolder);
+                            }
+                        })
                         .show();
             }
         });
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final AlertDialog dialog = builder.create();
+        // dialog.setTitle("Add folder");
+        dialog.setView(addView);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText input = new EditText(context);
-                new AlertDialog.Builder(context)
-                        .setTitle("Add folder")
-                        .setView(input)
-                        .setPositiveButton("OK", null)
-                        .show();
+                dialog.show();
+                TextView cancel = addView.findViewById(R.id.add_folder_cancel);
+                TextView save = addView.findViewById(R.id.add_folder_save);
+                final EditText title = addView.findViewById(R.id.create_folder_input);
+                EditText description = addView.findViewById(R.id.create_folder_description);
+                save.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        folderList.add(title.getText().toString());
+                        dialog.dismiss();
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+        createDeck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, AddCardActivity.class);
+                startActivity(intent);
             }
         });
         return rootView;

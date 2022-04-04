@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textColor="#000000"
-        android:id="@+id/folder_name"/>
+        android:textSize="22sp"
+        android:layout_marginLeft="20dp"
+        android:text="folder 1"
+        android:id="@+id/folder_name"
+        android:layout_marginTop="30dp"
+        />
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="#000000"
-        android:id="@+id/folder_pro"/>
+        android:id="@+id/folder_pro"
+        android:text="description"
+        android:textSize="18sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+       />
 
 
 </LinearLayout>

@@ -1,8 +1,11 @@
 package com.example.learning.fragments;
 
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.learning.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
@@ -21,12 +25,15 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
             super(itemView);
             tv1 = itemView.findViewById(R.id.folder_name);
             tv2 = itemView.findViewById(R.id.folder_pro);
-        }
+            tv2.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+            tv2.getPaint().setAntiAlias(true);
+         }
     }
-    private List<Character> dataList;
-
-    public FolderAdapter(List<Character> dataList) {
+    private List<FolderItem> dataList;
+    private List<FolderItem> dataListCopy = new ArrayList<>();
+    public FolderAdapter(List<FolderItem> dataList) {
         this.dataList = dataList;
+        this.dataListCopy.addAll(dataList);
     }
 
     @NonNull
@@ -37,12 +44,26 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        Character c = dataList.get(position);
-        holder.tv1.setText(c.toString());
-        holder.tv2.setText(String.valueOf(Integer.valueOf(c)));
+        FolderItem c = dataList.get(position);
+        holder.tv1.setText(c.getTitle());
+        holder.tv2.setText(c.getDescription());
     }
     @Override
     public int getItemCount() {
         return dataList.size();
+    }
+    public void filter(String text) {
+        dataList.clear();
+        if(text.isEmpty()){
+            dataList.addAll(dataListCopy);
+        } else{
+            text = text.toLowerCase();
+            for(FolderItem item: dataListCopy){
+                if(item.getTitle().toLowerCase().contains(text) || item.getDescription().toLowerCase().contains(text)){
+                    dataList.add(item);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }

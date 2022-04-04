@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.learning.R;
@@ -39,7 +40,8 @@ public class Folder extends Fragment {
     RecyclerView folder_viewer;
     FolderAdapter adapter;
     private View rootView;
-
+    private SearchView searchView;
+    List<FolderItem> folderList = new ArrayList<FolderItem>();
     private OnFragmentInteractionListener mListener;
 
     public Folder() {
@@ -80,21 +82,27 @@ public class Folder extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_folder, container, false);
         folder_viewer = rootView.findViewById(R.id.foler_viewer);
-        List<Character> characterList = new ArrayList<>();
-        for (char c = 'a'; c <= 'z'; c++) {
-            characterList.add(c);
-        }
-        for (char c = 'a'; c <= 'z'; c++) {
-            characterList.add(c);
-        }
-        for (char c = 'a'; c <= 'z'; c++) {
-            characterList.add(c);
+        searchView = rootView.findViewById(R.id.folder_search);
+        for (int i = 0; i < 10; i++){
+            folderList.add(new FolderItem("Folder" + Integer.toString(i), "It is a long long long long long long long long long example of description"));
         }
         Context context = getActivity();
-        adapter = new FolderAdapter(characterList);
-
+        adapter = new FolderAdapter(folderList);
         folder_viewer.setAdapter(adapter);
         folder_viewer.setLayoutManager(new LinearLayoutManager(context));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                adapter.filter(s);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                adapter.filter(s);
+                return true;
+            }
+        });
         return rootView;
     }
 
