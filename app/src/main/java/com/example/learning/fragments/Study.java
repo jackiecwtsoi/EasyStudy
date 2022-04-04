@@ -155,7 +155,7 @@ public class Study extends Fragment {
         this.pieTodayProgress.setData(pieDataTodayProgress);
 
         // customize more
-        this.pieDataTodayProgress.setValueFormatter(new PercentFormatter(this.pieTodayProgress));
+        // this.pieDataTodayProgress.setValueFormatter(new PercentFormatter(this.pieTodayProgress));
         this.pieTodayProgress.setTouchEnabled(INTERACT_ENABLE);
         this.pieTodayProgress.setUsePercentValues(true);
         this.pieTodayProgress.setDrawHoleEnabled(false);
