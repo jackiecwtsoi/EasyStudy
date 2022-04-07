@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -39,14 +40,15 @@ public class Add extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    protected boolean isCreated = false;
     WheelView wva;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private View rootView;
     private TextView select;
     private  TextView add;
     private View addView;
+    private View rootView;
     private TextView createDeck;
     private String selectedFolder = "Folder 1";
 //    TextView selected;
@@ -90,7 +92,14 @@ public class Add extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final Context context = getActivity();
+        System.out.println("add view created");
+        isCreated = true;
+        if (rootView != null){
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null){
+                parent.removeView(rootView);
+            }
+        }
         folderList.addAll(Arrays.asList(PLANETS));
         rootView = inflater.inflate(R.layout.fragment_add, container, false);
         addView = inflater.inflate(R.layout.create_folder,container,false);
@@ -104,7 +113,7 @@ public class Add extends Fragment {
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View outerView = LayoutInflater.from(context).inflate(R.layout.folder_wheel_view, null);
+                View outerView = LayoutInflater.from(rootView.getContext()).inflate(R.layout.folder_wheel_view, null);
                 WheelView wv = (WheelView) outerView.findViewById(R.id.foler_wheel_view);
                 wv.setOffset(2);
                 wv.setItems(folderList);
@@ -117,7 +126,7 @@ public class Add extends Fragment {
                     }
                 });
 
-                new AlertDialog.Builder(context)
+                new AlertDialog.Builder(rootView.getContext())
                         .setTitle("Select your folder")
                         .setView(outerView)
                         .setPositiveButton("OK",new DialogInterface.OnClickListener(){
@@ -130,7 +139,7 @@ public class Add extends Fragment {
                         .show();
             }
         });
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
         final AlertDialog dialog = builder.create();
         // dialog.setTitle("Add folder");
         dialog.setView(addView);
@@ -160,7 +169,7 @@ public class Add extends Fragment {
         createDeck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, AddCardActivity.class);
+                Intent intent = new Intent(rootView.getContext(), AddCardActivity.class);
                 startActivity(intent);
             }
         });
@@ -174,7 +183,11 @@ public class Add extends Fragment {
         }
     }
 
-
+    @Override
+    public void onResume(){
+        super.onResume();
+        System.out.println("Add on resume");
+    }
     @Override
     public void onDetach() {
         super.onDetach();
@@ -195,4 +208,5 @@ public class Add extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

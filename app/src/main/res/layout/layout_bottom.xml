@@ -3,47 +3,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:id="@+id/home_text"
-        android:text="home" android:layout_weight="1"
+        android:src="@drawable/home" android:layout_weight="1"
         android:gravity="center"
-        android:textSize="25sp">
-    </TextView>
-    <TextView
+        >
+    </ImageView>
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:id="@+id/folders_text"
-        android:text="folders" android:layout_weight="1"
+        android:src="@drawable/folder" android:layout_weight="1"
         android:gravity="center"
-        android:textSize="25sp">
-    </TextView>
-    <TextView
+        >
+    </ImageView>
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:id="@+id/add_text"
-        android:text="add" android:layout_weight="1"
+        android:src="@drawable/add" android:layout_weight="1"
         android:gravity="center"
-        android:textSize="25sp">
-    </TextView>
-    <TextView
+       >
+    </ImageView>
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:id="@+id/study_text"
-        android:text='study' android:layout_weight="1"
+        android:src='@drawable/study' android:layout_weight="1"
         android:gravity="center"
-        android:textSize="25sp">
+        >
 
-    </TextView>
-    <TextView
+    </ImageView>
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:id="@+id/stats_text"
-        android:text='stats' android:layout_weight="1"
+        android:src='@drawable/statistics' android:layout_weight="1"
         android:gravity="center"
-        android:textSize="25sp">
+       >
 
-    </TextView>
+    </ImageView>
 
 </LinearLayout>

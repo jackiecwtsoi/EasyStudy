@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.learning.customizeview.HonrizonViewPager;
@@ -25,15 +26,15 @@ public class MainActivity extends AppCompatActivity {
     ViewPager mcContainer;
 
 
-    TextView mcHome;
-    TextView mcFolder;
-    TextView mcAdd;
-    TextView mcStudy;
-    TextView mcStats;
+    ImageView mcHome;
+    ImageView mcFolder;
+    ImageView mcAdd;
+    ImageView mcStudy;
+    ImageView mcStats;
 
     private List<Fragment> fragmentList;
 
-    private List<TextView> textViewList;
+    private List<ImageView> textViewList;
 
     private int mDefaultColor = Color.BLACK;
 
@@ -60,40 +61,44 @@ public class MainActivity extends AppCompatActivity {
         fragmentList.add(new Study());
         fragmentList.add(new Statistic());
 
-        textViewList=new ArrayList<TextView>();
+        textViewList=new ArrayList<ImageView>();
         textViewList.add(mcHome);
         textViewList.add(mcFolder);
         textViewList.add(mcAdd);
         textViewList.add(mcStudy);
         textViewList.add(mcStats);
-        for (final TextView viewer :
+
+        for (final ImageView viewer :
                 textViewList) {
-            viewer.setTextColor(mDefaultColor);
             viewer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     switch (view.getId()){
                         case R.id.home_text:
+                            System.out.println("we select the home tab");
+                            // fragmentList[0] = new Home();
                             mcContainer.setCurrentItem(0);
                             break;
                         case R.id.folders_text:
+                            System.out.println("we select the folder tab");
                             mcContainer.setCurrentItem(1);
                             break;
                         case R.id.add_text:
+                            System.out.println("we select the add tab");
                             mcContainer.setCurrentItem(2);
                             break;
                         case R.id.study_text:
+                            System.out.println("we select the study tab");
                             mcContainer.setCurrentItem(3);
                             break;
                         case R.id.stats_text:
+                            System.out.println("we select the stats tab");
                             mcContainer.setCurrentItem(4);
                             break;
                     }
                 }
             });
         }
-        textViewList.get(0).setTextColor(mActiveColor);
-
         mcContainer.setAdapter(new AppFragmentPageAdapter(getSupportFragmentManager(),fragmentList));
         mcContainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -103,11 +108,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                for (TextView viewer :
-                        textViewList) {
-                    viewer.setTextColor(mDefaultColor);
-                }
-                textViewList.get(position).setTextColor(mActiveColor);
             }
 
             @Override
@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 //Do Nothing
             }
         });
+        mcContainer.setOffscreenPageLimit(1);
     }
 
 }

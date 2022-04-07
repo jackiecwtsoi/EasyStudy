@@ -86,9 +86,6 @@ public class Study extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if (container != null) {
-            container.removeAllViews();
-        }
         rootView = inflater.inflate(R.layout.fragment_study, container, false);
 
         btnReviewAll = rootView.findViewById(R.id.btnReviewAll);
@@ -118,7 +115,7 @@ public class Study extends Fragment {
     public void analyzeTodayProgress() {
         // iterate through to-study list to count statistics
         for (ArrayList<String> row: STUDY_LIST) {
-            System.out.println(row);
+            // System.out.println(row);
             if (row.size() < 4) {
                 this.nIncomplete++;
             }
@@ -164,7 +161,7 @@ public class Study extends Fragment {
         this.pieTodayProgress.invalidate();
 
 
-        System.out.printf("%d %d %d %d\n",nEasy, nForgot, nHard, nIncomplete);
+        // System.out.printf("%d %d %d %d\n",nEasy, nForgot, nHard, nIncomplete);
 
     }
 
