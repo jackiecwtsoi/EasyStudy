@@ -59,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
         mcStudy = findViewById(R.id.study_text);
         mcStats = findViewById(R.id.stats_text);
         mcContainer = findViewById(R.id.vp_container);
-        fragmentList=new ArrayList<Fragment>();
+        fragmentList = new ArrayList<Fragment>();
         fragmentList.add(new Home());
         fragmentList.add(new Folder());
         fragmentList.add(new Add());
         fragmentList.add(new Study());
         fragmentList.add(new Statistic());
 
-        textViewList=new ArrayList<ImageView>();
+        textViewList = new ArrayList<ImageView>();
         textViewList.add(mcHome);
         textViewList.add(mcFolder);
         textViewList.add(mcAdd);
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             viewer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    switch (view.getId()){
+                    switch (view.getId()) {
                         case R.id.home_text:
                             System.out.println("we select the home tab");
                             // fragmentList[0] = new Home();
@@ -104,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        mcContainer.setAdapter(new AppFragmentPageAdapter(getSupportFragmentManager(),fragmentList));
+
+        mcContainer.setAdapter(new AppFragmentPageAdapter(getSupportFragmentManager(), fragmentList));
         mcContainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -120,7 +121,11 @@ public class MainActivity extends AppCompatActivity {
                 //Do Nothing
             }
         });
-        mcContainer.setOffscreenPageLimit(1);
+        mcContainer.setOffscreenPageLimit(0);
+    }
+
+    public void changeToStudy() {
+        mcContainer.setCurrentItem(3);
     }
 
 }

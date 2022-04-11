@@ -49,10 +49,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Question"
+            android:text="Answer"
             android:textSize="20sp"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:id="@+id/card_answer_area"
+            />
         <TextView
             android:id="@+id/tap_to_filp_back"
             android:layout_width="match_parent"

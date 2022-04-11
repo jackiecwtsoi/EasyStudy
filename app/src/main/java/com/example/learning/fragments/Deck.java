@@ -5,13 +5,11 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,19 +19,13 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.example.learning.MainActivity;
 import com.example.learning.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link Folder#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class Folder extends Fragment {
+public class Deck extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -48,10 +40,11 @@ public class Folder extends Fragment {
     private SearchView searchView;
     private ImageView addFolder;
     private View addView;
-    ViewPager mcContainer;
-    List<FolderItem> folderList = new ArrayList<FolderItem>();
+    List<FolderItem> deckList = new ArrayList<FolderItem>();
+    private int folder_id;
 
-    public Folder() {
+    public Deck(int folder) {
+        this.folder_id = folder;
         // Required empty public constructor
     }
 
@@ -61,11 +54,11 @@ public class Folder extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Folder.
+     * @return A new instance of fragment Deck.
      */
     // TODO: Rename and change types and number of parameters
-    public static Folder newInstance(String param1, String param2) {
-        Folder fragment = new Folder();
+    public static Deck newInstance(String param1, String param2, int folder_id) {
+        Deck fragment = new Deck(folder_id);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -80,41 +73,37 @@ public class Folder extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if (rootView != null){
+        // Inflate the layout for this fragment
+        if (rootView != null) {
             ViewGroup parent = (ViewGroup) rootView.getParent();
-            if (parent != null){
+            if (parent != null) {
                 parent.removeView(rootView);
             }
         }
         rootView = inflater.inflate(R.layout.fragment_folder, container, false);
-        addView = inflater.inflate(R.layout.create_folder,container,false);
+        addView = inflater.inflate(R.layout.create_folder, container, false);
         addView.setBackgroundColor(Color.WHITE);
         folder_viewer = rootView.findViewById(R.id.foler_viewer);
         searchView = rootView.findViewById(R.id.folder_search);
         addFolder = rootView.findViewById(R.id.folder_add);
 
-        for (int i = 0; i < 10; i++){
-            folderList.add(new FolderItem("Folder" + Integer.toString(i), "It is a long long long long long long long long long example of description"));
+        for (int i = 0; i < 10; i++) {
+            deckList.add(new FolderItem("Deck" + Integer.toString(i), "It is a long long long long long long long long long example of description for folder" + Integer.toString(folder_id)));
         }
         Context context = getActivity();
-        adapter = new FolderAdapter(folderList);
+        adapter = new FolderAdapter(deckList);
         folder_viewer.setAdapter(adapter);
         adapter.setOnItemClickLitener(new FolderAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-                Deck deck = new Deck(position);
-                FragmentManager studyFrontManager = getFragmentManager();
-                studyFrontManager.beginTransaction()
-                        .replace(R.id.layoutFolder, deck)
-                        .commit();
-                System.out.println(position);
+                MainActivity main = (MainActivity) getActivity();
+                main.changeToStudy();
             }
         });
         folder_viewer.setLayoutManager(new LinearLayoutManager(context));
@@ -160,4 +149,10 @@ public class Folder extends Fragment {
         });
         return rootView;
     }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+    }
+
 }
