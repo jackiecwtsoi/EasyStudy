@@ -4,29 +4,261 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.Add">
+    <TextView
+        android:id='@+id/add_actionbar'
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Create Deck"
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"
+        />
 
     <!-- TODO: Update blank fragment layout -->
     <ImageView
         android:id="@+id/add_img"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/add_actionbar"
         android:src="@drawable/add_first"
-        android:layout_marginTop="40dp"/>
-
+        android:layout_marginTop="20dp"/>
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textSize="15sp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/add_img"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp" />
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id = "@+id/select_folder"
         android:layout_below="@+id/add_img"
-        android:text="Select Folder"
-        android:textSize="26dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/add_deck_name"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Schedule"
+        android:textSize="15sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/add_deck_name"
+        android:layout_marginStart="20dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/add_deck_name"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:id="@+id/add_select_schedule"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentEnd="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="daily"
+            android:textSize="15sp"
+            android:id="@+id/add_daily"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="weekly"
+            android:layout_marginLeft="3dp"
+            android:textSize="15sp"
+            android:id="@+id/add_weekly"
+            android:layout_marginStart="3dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="monthly"
+            android:textSize="15sp"
+            android:id="@+id/add_monthly"
+            android:layout_marginLeft="3dp"
+            android:layout_marginStart="3dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_select_schedule"
+        android:layout_marginTop="20dp"
+        android:id="@+id/add_select_days"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:text="Mon"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:id="@+id/add_mon"
+            android:background="@drawable/corner_icon_smaller"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp" />
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:text="Tue"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:id="@+id/add_tue"
+            android:background="@drawable/corner_icon_smaller"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" />
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:text="Wen"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:id="@+id/add_wen"
+            android:background="@drawable/corner_icon_smaller"
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp" />
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:text="Thu"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:id="@+id/add_thu"
+            android:background="@drawable/corner_icon_smaller"
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp" />
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:text="Fri"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:id="@+id/add_fri"
+            android:background="@drawable/corner_icon_smaller"
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp" />
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:text="Sat"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:id="@+id/add_sat"
+            android:background="@drawable/corner_icon_smaller"
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp" />
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:text="Sun"
+            android:gravity="center"
+            android:id="@+id/add_sun"
+            android:textSize="15sp"
+            android:background="@drawable/corner_icon_smaller"
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Period of time"
+        android:textSize="15sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/add_select_days"
+        android:layout_marginStart="20dp" />
+    <SeekBar
+        android:id="@+id/add_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_select_days"
+        android:layout_marginTop="60dp"
+        android:maxHeight="2dp"
+        android:minHeight="2dp"
+        android:paddingBottom="3dp"
+        android:paddingLeft="12dp"
+        android:max="30"
+        android:progress="1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:progressDrawable="@drawable/layer_progress"
+        android:thumb="@drawable/shape_circle"
+        android:paddingStart="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_select_days"
         android:layout_marginTop="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+
+        android:layout_marginRight="30dp"
+        android:id="@+id/add_progress_text"
+        android:text="1 days"
+        android:textSize="15sp"
+        android:layout_marginEnd="30dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reminder"
+        android:textSize="15sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/add_progress"
+        android:layout_marginStart="20dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/add_progress"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:id="@+id/add_reminder"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Remind me"
+            android:textSize="15sp"
+            android:id="@+id/add_reminder_true"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No reminder"
+            android:textSize="15sp"
+            android:id="@+id/add_reminder_false"
+            android:layout_marginLeft="3dp"
+            />
+    </LinearLayout>
+    <TextView
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id = "@+id/select_folder"
+        android:layout_above="@+id/add_create_deck"
+        android:text="Select Folder"
+        android:textSize="26sp"
+        android:layout_marginBottom="20dp"
         android:gravity="center_horizontal"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:background="@drawable/corner_icon"
         android:textColor="#ffffff"
         />
+
+
 <!--    <TextView-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->
@@ -41,24 +273,10 @@
         android:layout_height="wrap_content"
         android:id = "@+id/add_create_deck"
         android:text="Create new deck"
-        android:textSize="26dp"
+        android:textSize="26sp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="60dp"
         android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:background="@drawable/corner_icon"
-        android:textColor="#ffffff"
-        />
-    <TextView
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:id = "@+id/add_folder"
-        android:text="Add Folder"
-        android:textSize="26dp"
-        android:layout_above="@+id/add_create_deck"
-        android:layout_marginBottom="30dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
         android:gravity="center_horizontal"
         android:background="@drawable/corner_icon"
         android:textColor="#ffffff"

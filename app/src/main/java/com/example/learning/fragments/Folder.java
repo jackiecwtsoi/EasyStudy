@@ -1,10 +1,12 @@
 package com.example.learning.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -40,6 +44,8 @@ public class Folder extends Fragment {
     FolderAdapter adapter;
     private View rootView;
     private SearchView searchView;
+    private ImageView addFolder;
+    private View addView;
     List<FolderItem> folderList = new ArrayList<FolderItem>();
 
     public Folder() {
@@ -85,8 +91,12 @@ public class Folder extends Fragment {
             }
         }
         rootView = inflater.inflate(R.layout.fragment_folder, container, false);
+        addView = inflater.inflate(R.layout.create_folder,container,false);
+        addView.setBackgroundColor(Color.WHITE);
         folder_viewer = rootView.findViewById(R.id.foler_viewer);
         searchView = rootView.findViewById(R.id.folder_search);
+        addFolder = rootView.findViewById(R.id.folder_add);
+
         for (int i = 0; i < 10; i++){
             folderList.add(new FolderItem("Folder" + Integer.toString(i), "It is a long long long long long long long long long example of description"));
         }
@@ -105,6 +115,33 @@ public class Folder extends Fragment {
             public boolean onQueryTextChange(String s) {
                 adapter.filter(s);
                 return true;
+            }
+        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
+        final AlertDialog dialog = builder.create();
+        // dialog.setTitle("Add folder");
+
+        dialog.setView(addView);
+        addFolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.show();
+                TextView cancel = addView.findViewById(R.id.add_folder_cancel);
+                TextView save = addView.findViewById(R.id.add_folder_save);
+                final EditText title = addView.findViewById(R.id.create_folder_input);
+                EditText description = addView.findViewById(R.id.create_folder_description);
+                save.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
         return rootView;

@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,13 +49,33 @@ public class Add extends Fragment {
     private String mParam1;
     private String mParam2;
     private TextView select;
-    private  TextView add;
+    private TextView add;
     private View addView;
     private View rootView;
     private TextView createDeck;
+    private SeekBar addSeekBar;
+    private TextView seekDaysText;
     private String selectedFolder = "Folder 1";
-//    TextView selected;
-    private static  String[] PLANETS = new String[]{"Folder1", "Folder2", "Folder3", "Folder4", "Folder5", "Folder6", "Folder7", "Folder8"};
+    private TextView monday;
+    private TextView tuesday;
+    private TextView wednesday;
+    private TextView thursday;
+    private TextView friday;
+    private TextView saturaday;
+    private TextView sunday;
+    private TextView dailyText;
+    private TextView weeklyText;
+    private Context context;
+    private TextView monthly;
+    private TextView remindMe;
+    private TextView notRemindMe;
+    private int reminder = 0;
+    private int daily = 0;
+    private TextView lastSelectedDays;
+    List<Boolean> whetherDaySelect = new ArrayList<Boolean>();
+    List<TextView> selectedDays = new ArrayList<TextView>();
+    //    TextView selected;
+    private static String[] PLANETS = new String[]{"Folder1", "Folder2", "Folder3", "Folder4", "Folder5", "Folder6", "Folder7", "Folder8"};
     private ArrayList<String> folderList = new ArrayList<String>();
 
     private static final String TAG = Add.class.getSimpleName();
@@ -94,20 +117,110 @@ public class Add extends Fragment {
                              Bundle savedInstanceState) {
         System.out.println("add view created");
         isCreated = true;
-        if (rootView != null){
+        if (rootView != null) {
             ViewGroup parent = (ViewGroup) rootView.getParent();
-            if (parent != null){
+            if (parent != null) {
                 parent.removeView(rootView);
             }
         }
+        context = this.getContext();
         folderList.addAll(Arrays.asList(PLANETS));
         rootView = inflater.inflate(R.layout.fragment_add, container, false);
-        addView = inflater.inflate(R.layout.create_folder,container,false);
-        addView.setBackgroundColor(Color.WHITE);
         select = rootView.findViewById(R.id.select_folder);
-        add = rootView.findViewById(R.id.add_folder);
         createDeck = rootView.findViewById(R.id.add_create_deck);
-        add.setTextColor(Color.WHITE);
+        addSeekBar = rootView.findViewById(R.id.add_progress);
+        seekDaysText = rootView.findViewById(R.id.add_progress_text);
+        monday = rootView.findViewById(R.id.add_mon);
+        tuesday = rootView.findViewById(R.id.add_tue);
+        wednesday = rootView.findViewById(R.id.add_wen);
+        thursday = rootView.findViewById(R.id.add_thu);
+        friday = rootView.findViewById(R.id.add_fri);
+        saturaday = rootView.findViewById(R.id.add_sat);
+        sunday = rootView.findViewById(R.id.add_sun);
+        dailyText = rootView.findViewById(R.id.add_daily);
+        weeklyText = rootView.findViewById(R.id.add_weekly);
+        monthly = rootView.findViewById(R.id.add_monthly);
+        remindMe = rootView.findViewById(R.id.add_reminder_true);
+        notRemindMe = rootView.findViewById(R.id.add_reminder_false);
+        setDaily();
+        setReminder();
+        selectedDays.add(monday);
+        whetherDaySelect.add(false);
+        selectedDays.add(tuesday);
+        whetherDaySelect.add(false);
+        selectedDays.add(wednesday);
+        whetherDaySelect.add(false);
+        selectedDays.add(thursday);
+        whetherDaySelect.add(false);
+        selectedDays.add(friday);
+        whetherDaySelect.add(false);
+        selectedDays.add(saturaday);
+        whetherDaySelect.add(false);
+        selectedDays.add(sunday);
+        whetherDaySelect.add(false);
+
+        for (final TextView day : selectedDays) {
+            day.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (reminder == 0){
+                        Toast toast = Toast.makeText(context, "you have selected no reminder", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                    else {
+                        if (daily == 0) {
+                            if (!whetherDaySelect.get(selectedDays.indexOf(day))) {
+                                day.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
+                                whetherDaySelect.set(selectedDays.indexOf(day), true);
+
+                            } else {
+                                day.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller));
+                                whetherDaySelect.set(selectedDays.indexOf(day), false);
+                            }
+                        } else if (daily == 1) {
+                            day.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
+                            whetherDaySelect.set(selectedDays.indexOf(day), true);
+                            if (lastSelectedDays == null) {
+                                lastSelectedDays = day;
+                            } else if (lastSelectedDays.getText() != day.getText()) {
+                                lastSelectedDays.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller));
+                                whetherDaySelect.set(selectedDays.indexOf(lastSelectedDays), false);
+                                lastSelectedDays = day;
+                            }
+                        } else {
+                            Toast toast = Toast.makeText(context, "You should select days directly as you choose to remind you monthly", Toast.LENGTH_LONG);
+                            toast.show();
+                        }
+                    }
+                }
+            });
+        }
+        addSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (reminder == 0){
+                    Toast toast = Toast.makeText(context, "you have selected no reminder", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                else{
+                seekDaysText.setText(Integer.toString(progress) + " days");}
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (reminder == 0){
+                    Toast toast = Toast.makeText(context, "you have selected no reminder", Toast.LENGTH_LONG);
+                    toast.show();
+                    seekBar.setProgress(0);
+                }
+            }
+        });
+
         //add.setBackgroundColor(Color.BLUE);
 //        selected = rootView.findViewById(R.id.selected_folder);
         select.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +242,7 @@ public class Add extends Fragment {
                 new AlertDialog.Builder(rootView.getContext())
                         .setTitle("Select your folder")
                         .setView(outerView)
-                        .setPositiveButton("OK",new DialogInterface.OnClickListener(){
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -139,33 +252,7 @@ public class Add extends Fragment {
                         .show();
             }
         });
-        AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
-        final AlertDialog dialog = builder.create();
-        // dialog.setTitle("Add folder");
-        dialog.setView(addView);
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.show();
-                TextView cancel = addView.findViewById(R.id.add_folder_cancel);
-                TextView save = addView.findViewById(R.id.add_folder_save);
-                final EditText title = addView.findViewById(R.id.create_folder_input);
-                EditText description = addView.findViewById(R.id.create_folder_description);
-                save.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        folderList.add(title.getText().toString());
-                        dialog.dismiss();
-                    }
-                });
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-            }
-        });
+
         createDeck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -176,6 +263,89 @@ public class Add extends Fragment {
         return rootView;
     }
 
+    private void setDaily() {
+        dailyText.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
+        dailyText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (reminder == 0){
+                    Toast toast = Toast.makeText(context, "you have selected no reminder", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                else {
+                    dailyText.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
+                    weeklyText.setBackgroundResource(0);
+                    monthly.setBackgroundResource(0);
+                    daily = 0;
+                }
+            }
+
+        });
+        weeklyText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (reminder == 0){
+                    Toast toast = Toast.makeText(context, "you have selected no reminder", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                else {
+                    dailyText.setBackgroundResource(0);
+                    weeklyText.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
+                    monthly.setBackgroundResource(0);
+                    daily = 1;
+                    clearSelectDays();
+                }
+            }
+        });
+        monthly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (reminder == 0){
+                    Toast toast = Toast.makeText(context, "you have selected no reminder", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                {
+                    dailyText.setBackgroundResource(0);
+                    weeklyText.setBackgroundResource(0);
+                    monthly.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
+                    daily = 2;
+                    clearSelectDays();
+                }
+            }
+        });
+    }
+    private void clearSelectDays(){
+        for (TextView day: selectedDays){
+            day.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller));
+            whetherDaySelect.set(selectedDays.indexOf(day), false);
+            seekDaysText.setText(Integer.toString(0) + " days");
+            addSeekBar.setProgress(0);
+        }
+    }
+    private void setReminder(){
+        reminder = 1;
+        remindMe.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
+        remindMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                remindMe.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
+                notRemindMe.setBackgroundResource(0);
+                reminder = 1;
+            }
+        });
+        notRemindMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                notRemindMe.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
+                remindMe.setBackgroundResource(0);
+                reminder = 0;
+                dailyText.setBackgroundResource(0);
+                weeklyText.setBackgroundResource(0);
+                monthly.setBackgroundResource(0);
+                clearSelectDays();
+            }
+        });
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -184,10 +354,11 @@ public class Add extends Fragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         System.out.println("Add on resume");
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
