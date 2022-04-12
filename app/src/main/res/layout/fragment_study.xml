@@ -6,59 +6,148 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.Study"
-    android:background="@android:color/background_light">
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardStudyOverall"
-        android:layout_width="320dp"
-        android:layout_height="308dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.567"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.323">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pieTodayProgress"
-                android:layout_width='303dp'
-                android:layout_height="198dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTodayProgress" />
-
-            <TextView
-                android:id="@+id/textTodayProgress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Today's Progress"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="12dp">
 
     <Button
-        android:id="@+id/btnReviewAll"
-        android:layout_width="211dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Review All"
+        android:id="@+id/btnReviewAllCards"
+        android:layout_width="194dp"
+        android:layout_height="50dp"
+        android:background="@drawable/circleuphome"
+        android:text="Review All Cards"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgTasksToday"
+        app:layout_constraintVertical_bias="0.253" />
+
+    <TextView
+        android:id="@+id/textHiUser"
+        android:layout_width="203dp"
+        android:layout_height="52dp"
+        android:text="Hi, User!"
+        android:textColor="#10348E"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.31"
+        app:layout_constraintStart_toEndOf="@+id/imgUserPhoto"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <ImageView
+        android:id="@+id/imgUserPhoto"
+        android:layout_width="73dp"
+        android:layout_height="52dp"
+        android:src="@drawable/avatar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.147"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardStudyOverall"
-        app:layout_constraintVertical_bias="0.235" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <Button
+        android:id="@+id/btnOpenLastOpenDeck"
+        android:layout_width="232dp"
+        android:layout_height="41dp"
+        android:background="@drawable/circleuphome"
+        android:text="Review unfinished cards"
+        android:textColor="#F6F5F5"
+        app:layout_constraintBottom_toBottomOf="@+id/imgLastOpenDeck"
+        app:layout_constraintEnd_toEndOf="@+id/imgLastOpenDeck"
+        app:layout_constraintStart_toStartOf="@+id/imgLastOpenDeck"
+        app:layout_constraintTop_toBottomOf="@+id/textLastOpenDeckName"
+        app:layout_constraintVertical_bias="0.413"></Button>
+
+    <ImageView
+        android:id="@+id/imgLastOpenDeck"
+        android:layout_width="288dp"
+        android:layout_height="141dp"
+        android:layout_weight="1"
+        android:alpha="0.85"
+        android:src="@mipmap/ju2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.288" />
+
+    <TextView
+        android:id="@+id/textLastOpenDeck"
+        android:layout_width="138dp"
+        android:layout_height="24dp"
+        android:text="Last open deck"
+        android:textColor="#457C99"
+        app:layout_constraintBottom_toTopOf="@+id/imgLastOpenDeck"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.183"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textHiUser"
+        app:layout_constraintVertical_bias="0.692" />
+
+    <TextView
+        android:id="@+id/textLastOpenDeckName"
+        android:layout_width="195dp"
+        android:layout_height="50dp"
+        android:text="deck name"
+        android:textColor="#F6F5F5"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgLastOpenDeck"
+        app:layout_constraintEnd_toEndOf="@+id/imgLastOpenDeck"
+        app:layout_constraintHorizontal_bias="0.322"
+        app:layout_constraintStart_toStartOf="@+id/imgLastOpenDeck"
+        app:layout_constraintTop_toTopOf="@+id/imgLastOpenDeck"
+        app:layout_constraintVertical_bias="0.23" />
+
+    <ImageView
+        android:id="@+id/imgTasksToday"
+        android:layout_width="289dp"
+        android:layout_height="290dp"
+        android:src="@drawable/corner_create_folder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgLastOpenDeck"
+        app:layout_constraintVertical_bias="0.131" />
+
+    <TextView
+        android:id="@+id/textTasksToday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tasks for Today"
+        android:textColor="#457C99"
+        app:layout_constraintBottom_toBottomOf="@+id/imgTasksToday"
+        app:layout_constraintEnd_toEndOf="@+id/imgTasksToday"
+        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintStart_toStartOf="@+id/imgTasksToday"
+        app:layout_constraintTop_toTopOf="@+id/imgTasksToday"
+        app:layout_constraintVertical_bias="0.092" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listTasksToday"
+        android:layout_width="91dp"
+        android:layout_height="196dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgTasksToday"
+        app:layout_constraintEnd_toEndOf="@+id/imgTasksToday"
+        app:layout_constraintHorizontal_bias="0.095"
+        app:layout_constraintStart_toStartOf="@+id/imgTasksToday"
+        app:layout_constraintTop_toBottomOf="@+id/textTasksToday"
+        app:layout_constraintVertical_bias="0.34" />
+
+    <ImageView
+        android:id="@+id/imgStudyHome"
+        android:layout_width="70dp"
+        android:layout_height="82dp"
+        android:src="@drawable/study_home"
+        app:layout_constraintBottom_toBottomOf="@+id/imgTasksToday"
+        app:layout_constraintEnd_toEndOf="@+id/imgTasksToday"
+        app:layout_constraintHorizontal_bias="0.925"
+        app:layout_constraintStart_toStartOf="@+id/imgTasksToday"
+        app:layout_constraintTop_toTopOf="@+id/imgTasksToday"
+        app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

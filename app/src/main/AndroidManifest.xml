@@ -10,16 +10,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".StudyDone"
+            android:exported="false" />
+        <activity
             android:name=".create_database"
-            android:exported="true"
-            >
+            android:exported="true">
 
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login">
-
-        </activity>
+            android:label="@string/title_activity_login"></activity>
         <activity android:name=".AddCardActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
