@@ -1,30 +1,40 @@
 package com.example.learning.fragments;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.learning.AddCardActivity;
+import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.example.learning.customizeview.WheelView;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,7 +80,12 @@ public class Add extends Fragment {
     private TextView remindMe;
     private TextView notRemindMe;
     private int reminder = 0;
+    private TextView publicText;
+    private TextView privateText;
+    private int whetherPublic = 0;
     private int daily = 0;
+    private TextView browser;
+    private ImageView selectedImg;
     private TextView lastSelectedDays;
     List<Boolean> whetherDaySelect = new ArrayList<Boolean>();
     List<TextView> selectedDays = new ArrayList<TextView>();
@@ -142,8 +157,14 @@ public class Add extends Fragment {
         monthly = rootView.findViewById(R.id.add_monthly);
         remindMe = rootView.findViewById(R.id.add_reminder_true);
         notRemindMe = rootView.findViewById(R.id.add_reminder_false);
+        publicText = rootView.findViewById(R.id.add_public_true);
+        privateText = rootView.findViewById(R.id.add_public_false);
+        browser = rootView.findViewById(R.id.add_browse_button);
+        selectedImg = rootView.findViewById(R.id.add_selected_img);
         setDaily();
         setReminder();
+        setPublic();
+        selectImg();
         selectedDays.add(monday);
         whetherDaySelect.add(false);
         selectedDays.add(tuesday);
@@ -346,6 +367,59 @@ public class Add extends Fragment {
             }
         });
     }
+    private void setPublic(){
+        whetherPublic = 1;
+        publicText.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
+        publicText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                publicText.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
+                privateText.setBackgroundResource(0);
+                whetherPublic = 1;
+            }
+        });
+        privateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                privateText.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
+                publicText.setBackgroundResource(0);
+                whetherPublic = 0;
+            }
+        });
+
+    }
+    private void selectImg(){
+        browser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openAlbum();
+            }
+        });
+    }
+    private void openAlbum() {
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, 1);//1是resultcode 我们自己定义
+
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1)
+        {
+            if (data!=null)
+            {
+                try {
+                    Bitmap bitmap= BitmapFactory.decodeStream
+                            (getActivity().getContentResolver().openInputStream(data.getData()));
+                    selectedImg.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
