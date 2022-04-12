@@ -134,8 +134,6 @@ public class StudyFront extends Fragment {
         textCardQuestionContent.setText(STUDY_LIST.get(rowIdx).get(1));
         textStudyProgress.setText("Card " + String.valueOf(rowIdx+1) + " / " + String.valueOf(STUDY_LIST.size()));
 
-
-        System.out.println("What do we need to study? " + ALL_CARDS);
         btnNextCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

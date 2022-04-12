@@ -174,7 +174,7 @@ public class StudyDone extends Fragment {
         this.pieTodayProgress.invalidate();
 
 
-        System.out.printf("%d %d %d %d\n",nEasy, nForgot, nHard, nIncomplete);
+        System.out.printf("%d %d %d %d\n",nEasy, nHard, nForgot, nIncomplete);
 
     }
 
