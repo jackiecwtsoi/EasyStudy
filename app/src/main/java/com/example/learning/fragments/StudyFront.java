@@ -41,8 +41,8 @@ public class StudyFront extends Fragment {
     TextView textCardQuestionContent;
     TextView textStudyProgress;
     CardView cardStudyFront;
-    Button btnNextCard;
-    Button btnPreviousCard;
+    Button btnNextCard, btnPreviousCard;
+    Boolean ALL_CARDS = true; // indicates whether we study ALL CARDS from the database
 
     static int rowIdx; // index for locating a row in the study list
 
@@ -105,9 +105,9 @@ public class StudyFront extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            ALL_CARDS = bundle.getBoolean("ALL_CARDS");
         }
     }
 
@@ -147,10 +147,10 @@ public class StudyFront extends Fragment {
                     rowIdx = STUDY_LIST.size();
 
                     // change to Study fragment
-                    Study study = new Study();
+                    StudyDone studyDone = new StudyDone();
                     FragmentManager studyManager = getFragmentManager();
                     studyManager.beginTransaction()
-                            .replace(R.id.layoutStudyFront, study)
+                            .replace(R.id.layoutStudyFront, studyDone)
                             .commit();
                 }
             }

@@ -8,12 +8,12 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardStudyBack"
-        android:layout_width="364dp"
-        android:layout_height="400dp"
-        android:layout_marginTop="140dp"
+        android:layout_width="374dp"
+        android:layout_height="507dp"
         android:clickable="true"
         android:focusable="true"
         app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -62,41 +62,43 @@
 
             <Button
                 android:id="@+id/btnEasy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_width="234dp"
+                android:layout_height="42dp"
+                android:background="@drawable/corner_icon"
                 android:text="Easy"
-                app:layout_constraintBottom_toTopOf="@+id/textCardFlipFromBack"
-                app:layout_constraintEnd_toStartOf="@+id/btnHard"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/btnHard"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textRate"
+                app:layout_constraintVertical_bias="0.653" />
 
             <Button
                 android:id="@+id/btnHard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_width="234dp"
+                android:layout_height="42dp"
+                android:background="@drawable/corner_icon"
                 android:text="Hard"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/textCardFlipFromBack"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textCardAnswerContent"
+                app:layout_constraintVertical_bias="0.606" />
 
             <Button
                 android:id="@+id/btnForgot"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_width="234dp"
+                android:layout_height="42dp"
                 android:layout_marginBottom="16dp"
+                android:background="@drawable/corner_icon"
                 android:text="Forgot!"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/textCardFlipFromBack"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnHard" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnHard"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/textRate"
@@ -109,7 +111,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/btnHard"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textCardAnswerContent" />
+                app:layout_constraintTop_toBottomOf="@+id/textCardAnswerContent"
+                app:layout_constraintVertical_bias="0.03" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
