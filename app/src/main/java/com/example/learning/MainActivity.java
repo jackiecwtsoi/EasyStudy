@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private HonrizonViewPager viewPager;
     private TabLayout tabLayout;
     private static final String TAG = "luchixiang";
+    private  SQLiteDatabase db;
+    private MyDBOpenHelper myDBHelper;
     FragmentTransaction fragmentTransaction;
 
     @Override
@@ -53,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        // connect to the database
+        myDBHelper = new MyDBOpenHelper(MainActivity.this, "elearning.db", null, 1);
+        db = myDBHelper.getWritableDatabase();
+
         mcHome = findViewById(R.id.home_text);
         mcFolder = findViewById(R.id.folders_text);
         mcAdd = findViewById(R.id.add_text);
@@ -60,11 +67,11 @@ public class MainActivity extends AppCompatActivity {
         mcStats = findViewById(R.id.stats_text);
         mcContainer = findViewById(R.id.vp_container);
         fragmentList = new ArrayList<Fragment>();
-        fragmentList.add(new Home());
-        fragmentList.add(new Folder());
-        fragmentList.add(new Add());
-        fragmentList.add(new Study());
-        fragmentList.add(new Statistic());
+        fragmentList.add(new Home(db));
+        fragmentList.add(new Folder(db));
+        fragmentList.add(new Add(db));
+        fragmentList.add(new Study(db));
+        fragmentList.add(new Statistic(db));
 
         textViewList = new ArrayList<ImageView>();
         textViewList.add(mcHome);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -65,7 +66,7 @@ public class Add extends Fragment {
     private TextView createDeck;
     private SeekBar addSeekBar;
     private TextView seekDaysText;
-    private String selectedFolder = "Folder 1";
+    private String selectedFolder = "FolderEntity 1";
     private TextView monday;
     private TextView tuesday;
     private TextView wednesday;
@@ -89,6 +90,7 @@ public class Add extends Fragment {
     private TextView lastSelectedDays;
     List<Boolean> whetherDaySelect = new ArrayList<Boolean>();
     List<TextView> selectedDays = new ArrayList<TextView>();
+    SQLiteDatabase db;
     //    TextView selected;
     private static String[] PLANETS = new String[]{"Folder1", "Folder2", "Folder3", "Folder4", "Folder5", "Folder6", "Folder7", "Folder8"};
     private ArrayList<String> folderList = new ArrayList<String>();
@@ -96,7 +98,8 @@ public class Add extends Fragment {
     private static final String TAG = Add.class.getSimpleName();
     private OnFragmentInteractionListener mListener;
 
-    public Add() {
+    public Add(SQLiteDatabase db) {
+        this.db = db;
         // Required empty public constructor
     }
 
@@ -109,8 +112,8 @@ public class Add extends Fragment {
      * @return A new instance of fragment Add.
      */
     // TODO: Rename and change types and number of parameters
-    public static Add newInstance(String param1, String param2) {
-        Add fragment = new Add();
+    public static Add newInstance(String param1, String param2, SQLiteDatabase db) {
+        Add fragment = new Add(db);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

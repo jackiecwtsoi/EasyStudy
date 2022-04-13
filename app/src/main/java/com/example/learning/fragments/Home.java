@@ -1,6 +1,7 @@
 package com.example.learning.fragments;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -31,8 +32,9 @@ public class Home extends Fragment {
     private String mParam2;
     private View rootView;
     private OnFragmentInteractionListener mListener;
+    SQLiteDatabase db;
 
-    public Home() {
+    public Home(SQLiteDatabase db) {
         // Required empty public constructor
     }
 
@@ -45,8 +47,8 @@ public class Home extends Fragment {
      * @return A new instance of fragment Home.
      */
     // TODO: Rename and change types and number of parameters
-    public static Home newInstance(String param1, String param2) {
-        Home fragment = new Home();
+    public static Home newInstance(String param1, String param2, SQLiteDatabase db) {
+        Home fragment = new Home(db);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

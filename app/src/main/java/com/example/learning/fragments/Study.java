@@ -1,5 +1,6 @@
 package com.example.learning.fragments;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.constraintlayout.solver.state.State;
@@ -34,9 +35,11 @@ public class Study extends Fragment {
     View rootView;
     Button btnOpenLastOpenDeck, btnTasksToday;
     Boolean ALL_CARDS = true; // indicates whether we study ALL CARDS from the database
+    SQLiteDatabase db;
 
-    public Study() {
+    public Study(SQLiteDatabase db) {
         // Required empty public constructor
+        this.db = db;
     }
 
     /**
@@ -48,8 +51,8 @@ public class Study extends Fragment {
      * @return A new instance of fragment Study.
      */
     // TODO: Rename and change types and number of parameters
-    public static Study newInstance(String param1, String param2) {
-        Study fragment = new Study();
+    public static Study newInstance(String param1, String param2, SQLiteDatabase db) {
+        Study fragment = new Study(db);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -84,7 +87,7 @@ public class Study extends Fragment {
         btnOpenLastOpenDeck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StudyFront studyFront = new StudyFront();
+                StudyFront studyFront = new StudyFront(db);
 
                 Bundle bundle = new Bundle();
                 ALL_CARDS = false; // since we do not want to study ALL CARDS from the database
@@ -103,7 +106,7 @@ public class Study extends Fragment {
         btnTasksToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StudyFront studyFront = new StudyFront();
+                StudyFront studyFront = new StudyFront(db);
 
                 Bundle bundle = new Bundle();
                 ALL_CARDS = true; // since we do not want to study ALL CARDS from the database

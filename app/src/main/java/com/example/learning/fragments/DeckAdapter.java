@@ -12,30 +12,31 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.learning.DeckEntity;
 import com.example.learning.FolderEntity;
 import com.example.learning.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
+public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.VH>{
     static class VH extends RecyclerView.ViewHolder{
         TextView tv1;
         TextView tv2;
         LinearLayout item;
-         VH(@NonNull View itemView) {
+        VH(@NonNull View itemView) {
             super(itemView);
             item = itemView.findViewById(R.id.folder_item);
             tv1 = itemView.findViewById(R.id.folder_name);
             tv2 = itemView.findViewById(R.id.folder_pro);
             tv2.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
             tv2.getPaint().setAntiAlias(true);
-         }
+        }
 
     }
-    private List<FolderEntity> dataList;
-    private List<FolderEntity> dataListCopy = new ArrayList<>();
-    public FolderAdapter(List<FolderEntity> dataList) {
+    private List<DeckEntity> dataList;
+    private List<DeckEntity> dataListCopy = new ArrayList<>();
+    public DeckAdapter(List<DeckEntity> dataList) {
         this.dataList = dataList;
         this.dataListCopy.addAll(dataList);
     }
@@ -58,9 +59,9 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, final int position) {
-        FolderEntity c = dataList.get(position);
-        holder.tv1.setText(c.getFolderName());
-        holder.tv2.setText(c.getFolderDescription());
+        DeckEntity c = dataList.get(position);
+        holder.tv1.setText(c.getDeckName());
+        holder.tv2.setText(c.getDeckDescription());
         if (mOnItemClickLitener != null) {
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -80,8 +81,8 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
             dataList.addAll(dataListCopy);
         } else{
             text = text.toLowerCase();
-            for(FolderEntity item: dataListCopy){
-                if(item.getFolderName().toLowerCase().contains(text) || item.getFolderDescription().toLowerCase().contains(text)){
+            for(DeckEntity item: dataListCopy){
+                if(item.getDeckName().toLowerCase().contains(text) || item.getDeckDescription().toLowerCase().contains(text)){
                     dataList.add(item);
                 }
             }

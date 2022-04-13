@@ -1,11 +1,10 @@
 package com.example.learning.fragments;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -21,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.example.learning.DbApi;
+import com.example.learning.FolderEntity;
 import com.example.learning.R;
 
 import java.util.ArrayList;
@@ -49,9 +50,12 @@ public class Folder extends Fragment {
     private ImageView addFolder;
     private View addView;
     ViewPager mcContainer;
-    List<FolderItem> folderList = new ArrayList<FolderItem>();
+    private SQLiteDatabase db;
+    private DbApi dbApi;
+    private ArrayList<FolderEntity> folders;
 
-    public Folder() {
+    public Folder(SQLiteDatabase db) {
+        this.db = db;
         // Required empty public constructor
     }
 
@@ -61,11 +65,11 @@ public class Folder extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Folder.
+     * @return A new instance of fragment FolderEntity.
      */
     // TODO: Rename and change types and number of parameters
-    public static Folder newInstance(String param1, String param2) {
-        Folder fragment = new Folder();
+    public static Folder newInstance(String param1, String param2, SQLiteDatabase db) {
+        Folder fragment = new Folder(db);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -86,30 +90,28 @@ public class Folder extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        if (rootView != null){
+        if (rootView != null) {
             ViewGroup parent = (ViewGroup) rootView.getParent();
-            if (parent != null){
+            if (parent != null) {
                 parent.removeView(rootView);
             }
         }
         rootView = inflater.inflate(R.layout.fragment_folder, container, false);
-        addView = inflater.inflate(R.layout.create_folder,container,false);
+        getFolderList();
+        addView = inflater.inflate(R.layout.create_folder, container, false);
         addView.setBackgroundColor(Color.WHITE);
         folder_viewer = rootView.findViewById(R.id.foler_viewer);
         searchView = rootView.findViewById(R.id.folder_search);
         addFolder = rootView.findViewById(R.id.folder_add);
-
-        for (int i = 0; i < 10; i++){
-            folderList.add(new FolderItem("Folder" + Integer.toString(i), "It is a long long long long long long long long long example of description"));
-        }
         Context context = getActivity();
-        adapter = new FolderAdapter(folderList);
+        adapter = new FolderAdapter(folders);
         folder_viewer.setAdapter(adapter);
         adapter.setOnItemClickLitener(new FolderAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-                Deck deck = new Deck(position);
+                Deck deck = new Deck(folders.get(position).getFolderID(), db);
                 FragmentManager studyFrontManager = getFragmentManager();
                 studyFrontManager.beginTransaction()
                         .replace(R.id.layoutFolder, deck)
@@ -159,5 +161,10 @@ public class Folder extends Fragment {
             }
         });
         return rootView;
+    }
+
+    private void getFolderList() {
+        dbApi = new DbApi(db);
+        folders = dbApi.queryFolder(1);
     }
 }

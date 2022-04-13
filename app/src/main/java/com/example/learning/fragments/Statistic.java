@@ -1,6 +1,7 @@
 package com.example.learning.fragments;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -54,12 +55,14 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
     int mYear=0;//年
     int mMonth=0;//月
     int mDay=0;//日
+    SQLiteDatabase db;
 
 
     private OnFragmentInteractionListener mListener;
 
-    public Statistic() {
+    public Statistic(SQLiteDatabase db) {
         // Required empty public constructor
+        this.db = db;
     }
 
     /**
@@ -71,8 +74,8 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
      * @return A new instance of fragment Statistic.
      */
     // TODO: Rename and change types and number of parameters
-    public static Statistic newInstance(String param1, String param2) {
-        Statistic fragment = new Statistic();
+    public static Statistic newInstance(String param1, String param2, SQLiteDatabase db) {
+        Statistic fragment = new Statistic(db);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

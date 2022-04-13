@@ -324,21 +324,21 @@
                     android:id="@+id/c_d_title"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="Most Challenged decks:"
+                    android:text="Most Challenged deckEntities:"
                     android:textAlignment="center"
                     android:textSize="18dp"/>
                 <TextView
                     android:id="@+id/c_d_1"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:text="deck title 1"
+                    android:text="deckEntity title 1"
                     android:textSize="15dp"
                     android:textAlignment="center"/>
                 <TextView
                     android:id="@+id/c_d_2"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:text="deck title 2"
+                    android:text="deckEntity title 2"
                     android:textSize="15dp"
                     android:textAlignment="center"/>
 

@@ -1,6 +1,7 @@
 package com.example.learning.fragments;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.example.learning.DbApi;
+import com.example.learning.DeckEntity;
 import com.example.learning.MainActivity;
 import com.example.learning.R;
 
@@ -35,16 +38,18 @@ public class Deck extends Fragment {
     private String mParam1;
     private String mParam2;
     RecyclerView folder_viewer;
-    FolderAdapter adapter;
+    DeckAdapter adapter;
     private View rootView;
     private SearchView searchView;
     private ImageView addFolder;
     private View addView;
-    List<FolderItem> deckList = new ArrayList<FolderItem>();
+    List<DeckEntity> deckList;
     private int folder_id;
-
-    public Deck(int folder) {
+    SQLiteDatabase db;
+    DbApi dbApi;
+    public Deck(int folder, SQLiteDatabase db) {
         this.folder_id = folder;
+        this.db = db;
         // Required empty public constructor
     }
 
@@ -54,11 +59,11 @@ public class Deck extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Deck.
+     * @return A new instance of fragment DeckEntity.
      */
     // TODO: Rename and change types and number of parameters
-    public static Deck newInstance(String param1, String param2, int folder_id) {
-        Deck fragment = new Deck(folder_id);
+    public static Deck newInstance(String param1, String param2, int folder_id, SQLiteDatabase db) {
+        Deck fragment = new Deck(folder_id, db);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -86,6 +91,7 @@ public class Deck extends Fragment {
                 parent.removeView(rootView);
             }
         }
+        getDeckList();
         rootView = inflater.inflate(R.layout.fragment_folder, container, false);
         addView = inflater.inflate(R.layout.create_folder, container, false);
         addView.setBackgroundColor(Color.WHITE);
@@ -93,13 +99,11 @@ public class Deck extends Fragment {
         searchView = rootView.findViewById(R.id.folder_search);
         addFolder = rootView.findViewById(R.id.folder_add);
 
-        for (int i = 0; i < 10; i++) {
-            deckList.add(new FolderItem("Deck" + Integer.toString(i), "It is a long long long long long long long long long example of description for folder" + Integer.toString(folder_id)));
-        }
+
         Context context = getActivity();
-        adapter = new FolderAdapter(deckList);
+        adapter = new DeckAdapter(deckList);
         folder_viewer.setAdapter(adapter);
-        adapter.setOnItemClickLitener(new FolderAdapter.OnItemClickLitener() {
+        adapter.setOnItemClickLitener(new DeckAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 MainActivity main = (MainActivity) getActivity();
@@ -153,6 +157,10 @@ public class Deck extends Fragment {
     public void onDetach() {
         super.onDetach();
 
+    }
+    private void getDeckList(){
+        dbApi = new DbApi(db);
+        deckList = dbApi.queryDeck(folder_id, 1);
     }
 
 }

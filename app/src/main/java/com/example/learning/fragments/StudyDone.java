@@ -1,5 +1,6 @@
 package com.example.learning.fragments;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -50,8 +51,10 @@ public class StudyDone extends Fragment {
     static boolean INTERACT_ENABLE = false; // do not allow interaction with pie chart
     static boolean DESCRIPTION_ENABLE = false; // do not enable description in the pie chart
     static boolean LEGEND_ENABLE = false; // do not enable legends in the pie chart
+    SQLiteDatabase db;
 
-    public StudyDone() {
+    public StudyDone(SQLiteDatabase db) {
+        this.db = db;
         // Required empty public constructor
     }
 
@@ -64,8 +67,8 @@ public class StudyDone extends Fragment {
      * @return A new instance of fragment StudyOverall.
      */
     // TODO: Rename and change types and number of parameters
-    public static StudyDone newInstance(String param1, String param2) {
-        StudyDone fragment = new StudyDone();
+    public static StudyDone newInstance(String param1, String param2, SQLiteDatabase db) {
+        StudyDone fragment = new StudyDone(db);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -99,7 +102,7 @@ public class StudyDone extends Fragment {
             public void onClick(View view) {
                 clearRatings(CLEAR_RATINGS); // clear all ratings in STUDY_LIST
 
-                StudyFront studyFront = new StudyFront();
+                StudyFront studyFront = new StudyFront(db);
                 FragmentManager studyFrontManager = getFragmentManager();
                 studyFrontManager.beginTransaction()
                         .replace(R.id.layoutStudyDone, studyFront)
@@ -113,7 +116,7 @@ public class StudyDone extends Fragment {
             public void onClick(View view) {
                 clearRatings(CLEAR_RATINGS);
 
-                Study study = new Study();
+                Study study = new Study(db);
                 FragmentManager studyManager = getFragmentManager();
                 studyManager.beginTransaction()
                         .replace(R.id.layoutStudyDone, study)

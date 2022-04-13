@@ -1,5 +1,6 @@
 package com.example.learning.fragments;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -79,8 +80,10 @@ public class StudyFront extends Fragment {
     }};
 
     private OnFragmentInteractionListener mListener;
+    SQLiteDatabase db;
 
-    public StudyFront() {
+    public StudyFront(SQLiteDatabase db) {
+        this.db = db;
         // Required empty public constructor
     }
 
@@ -93,8 +96,8 @@ public class StudyFront extends Fragment {
      * @return A new instance of fragment Study.
      */
     // TODO: Rename and change types and number of parameters
-    public static Study newInstance(String param1, String param2) {
-        Study fragment = new Study();
+    public static Study newInstance(String param1, String param2, SQLiteDatabase db) {
+        Study fragment = new Study(db);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -147,7 +150,7 @@ public class StudyFront extends Fragment {
                     rowIdx = STUDY_LIST.size();
 
                     // change to Study fragment
-                    StudyDone studyDone = new StudyDone();
+                    StudyDone studyDone = new StudyDone(db);
                     FragmentManager studyManager = getFragmentManager();
                     studyManager.beginTransaction()
                             .replace(R.id.layoutStudyFront, studyDone)
