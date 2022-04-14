@@ -40,6 +40,9 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 "  deck_name TEXT(1000)," +
                 "  deck_description TEXT(1000)," +
                 " completion INTEGER, " +
+                "frequency INTEGER, "+
+                "day_of_week TEXT,"+
+                "interval INTEGER, "+
                 "  time TEXT(1000)," +
                 "  CONSTRAINT folder_id FOREIGN KEY (folder_id) REFERENCES folder (folder_id) ON DELETE CASCADE ON UPDATE CASCADE," +
                 "  CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE" +
@@ -125,8 +128,30 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 for (int m = 0; m < 6; m++) {
                     String deckName = decks.get(m) + " for " + folderName;
                     String deckDescription = "This is the description for " + deckName;
-
-                    long deckid = dbApi.insertDeck(deckName, deckDescription, 0, j + 1, i + 1);
+                    int frequency = -1;
+                    String dayOfWeek = "";
+                    int interval = 0;
+                    if (m == 5){
+                        frequency = -1;
+                        dayOfWeek = "";
+                        interval = 0;
+                    }
+                    else if (m % 3 == 0){
+                        frequency = 0;
+                        dayOfWeek = "Monday;Thursday";
+                        interval = 0;
+                    }
+                    else if(m % 3 == 1){
+                        frequency = 1;
+                        dayOfWeek = "Monday;";
+                        interval = 0;
+                    }
+                    else{
+                        frequency = 2;
+                        dayOfWeek = "";
+                        interval = 4;
+                    }
+                    long deckid = dbApi.insertDeck(deckName, deckDescription, 0, frequency, dayOfWeek, interval, (int)folderid, i + 1);
                     Random r = new Random();
                     for (int n = 0; n < 4; n++) {
                         String cardName = "Card" + Integer.toString(n) + " for " + deckName;
@@ -135,8 +160,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                         String cardQuestion = Integer.toString(a) + '+' + Integer.toString(b) + "= ? ";
                         String cardAnswer = Integer.toString(a + b);
                         int hardness = r.nextInt(2);
-                        dbApi.insertCard(cardName, cardQuestion, cardAnswer, hardness, m + 1, j+1, i + 1);
-
+                        dbApi.insertCard(cardName, cardQuestion, cardAnswer, hardness, (int)deckid, (int)folderid, i + 1);
                     }
                 }
             }

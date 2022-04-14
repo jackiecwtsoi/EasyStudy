@@ -76,7 +76,10 @@ public class DbApi {
                     @SuppressLint("Range") String description = fcursor.getString(fcursor.getColumnIndex("deck_description"));
                     @SuppressLint("Range") String time = fcursor.getString(fcursor.getColumnIndex("time"));
                     @SuppressLint("Range") int completion = fcursor.getInt(fcursor.getColumnIndex("completion"));
-                    DeckEntity deckEntity = new DeckEntity(name, completion, description, time, fid, userID, folderID);
+                    @SuppressLint("Range") int frequency = fcursor.getInt(fcursor.getColumnIndex("frequency"));
+                    @SuppressLint("Range") String dayOfWeek = fcursor.getString(fcursor.getColumnIndex("day_of_week"));
+                    @SuppressLint("Range") int interval = fcursor.getInt(fcursor.getColumnIndex("interval"));
+                    DeckEntity deckEntity = new DeckEntity(name, completion, description, time, frequency, dayOfWeek, interval, fid, userID, folderID);
                     deckEntities.add(deckEntity);
                 }
             } while (fcursor.moveToNext());
@@ -158,7 +161,7 @@ public class DbApi {
         return id;
     }
 
-    public long insertDeck(String deckName, String deckDescription, int completion, int folderID, int userID) {
+    public long insertDeck(String deckName, String deckDescription, int completion, int frequency, String dayofWeek, int interval, int folderID, int userID) {
         int[] arrary = new int[1000];
         boolean justice = false;
         int count = 0;
@@ -185,6 +188,9 @@ public class DbApi {
             values2.put("folder_id", folderID);
             values2.put("completion", completion);
             values2.put("u_id", userID);
+            values2.put("frequency", frequency);
+            values2.put("dayofWeek", dayofWeek);
+            values2.put("interval", interval);
             String time = getDate();
             values2.put("time", time);
             id = db.insert("deck", null, values2);
@@ -196,7 +202,7 @@ public class DbApi {
         return id;
     }
 
-    public void insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int folderID, int userID) {
+    public long insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int folderID, int userID) {
 
         int[] arrary = new int[1000];
         boolean justice = false;

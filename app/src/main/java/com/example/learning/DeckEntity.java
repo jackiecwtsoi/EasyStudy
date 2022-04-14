@@ -8,6 +8,9 @@ public class DeckEntity {
     private int deckID;
     private int folderId;
     private int userId;
+    int frequency;
+    int interval;
+    String dayOfWeek;
 
     public String getDeckName() {
         return deckName;
@@ -49,7 +52,31 @@ public class DeckEntity {
         this.userId = userId;
     }
 
-    public DeckEntity(String deckName, int completion, String deckDescription, String time, int deckID, int userId, int folderId) {
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
+    }
+
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
+
+    public String getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    public DeckEntity(String deckName, int completion, String deckDescription, String time, int frequency, String dayOfWeek, int interval, int deckID, int userId, int folderId) {
         this.deckName = deckName;
         this.completion = completion;
         this.deckDescription = deckDescription;
@@ -57,6 +84,9 @@ public class DeckEntity {
         this.deckID = deckID;
         this.folderId = folderId;
         this.userId = userId;
+        this.frequency = frequency;
+        this.dayOfWeek = dayOfWeek;
+        this.interval = interval;
     }
 
     public String getTime() {

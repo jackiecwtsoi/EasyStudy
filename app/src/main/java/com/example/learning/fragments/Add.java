@@ -298,7 +298,6 @@ public class Add extends Fragment {
                     String name = deckName.getText().toString().trim();
                     String description = "This is the description for " + name;
                     long id = dbApi.insertDeck(name, description, 0, selectedFolderId, userid);
-
                     Intent intent = new Intent(rootView.getContext(), AddCardActivity.class);
                     intent.putExtra("deck_id", (int)id);
                     intent.putExtra("user_id", userid);
