@@ -13,7 +13,7 @@ public class DbApi {
     private SQLiteDatabase db;
 
     public DbApi(SQLiteDatabase db) {
-       this.db = db;
+        this.db = db;
     }
 
     public String getDate() {
@@ -37,7 +37,7 @@ public class DbApi {
         return name;
     }
 
-    public ArrayList<Card> queryCard(int deckID, int userID) {
+    public ArrayList<Card> queryCard(int deckID, int userID, int folderID) {
         ArrayList<Card> cards = new ArrayList<>();
 
         Cursor fcursor = db.query("card", null, null, null, null, null, null);
@@ -45,13 +45,14 @@ public class DbApi {
             do {
                 @SuppressLint("Range") int uid = fcursor.getInt(fcursor.getColumnIndex("u_id"));
                 @SuppressLint("Range") int deck_id = fcursor.getInt(fcursor.getColumnIndex("deck_id"));
-                if (userID == uid && deck_id == deckID) {
+                @SuppressLint("Range") int folder_id = fcursor.getInt(fcursor.getColumnIndex("folder_id"));
+                if (userID == uid && deck_id == deckID && folder_id == folderID) {
                     @SuppressLint("Range") int fid = fcursor.getInt(fcursor.getColumnIndex("card_id"));
                     @SuppressLint("Range") String question = fcursor.getString(fcursor.getColumnIndex("card_question"));
                     @SuppressLint("Range") String answer = fcursor.getString(fcursor.getColumnIndex("card_answer"));
                     @SuppressLint("Range") String time = fcursor.getString(fcursor.getColumnIndex("time"));
                     @SuppressLint("Range") int level = fcursor.getInt(fcursor.getColumnIndex("level"));
-                    Card card = new Card(question, answer, fid, level, time);
+                    Card card = new Card(question, answer, fid, level, time, folderID, userID, deckID);
                     cards.add(card);
                 }
             } while (fcursor.moveToNext());
@@ -74,7 +75,7 @@ public class DbApi {
                     @SuppressLint("Range") String description = fcursor.getString(fcursor.getColumnIndex("deck_description"));
                     @SuppressLint("Range") String time = fcursor.getString(fcursor.getColumnIndex("time"));
                     @SuppressLint("Range") int completion = fcursor.getInt(fcursor.getColumnIndex("completion"));
-                    DeckEntity deckEntity = new DeckEntity(name, completion, description, time, fid);
+                    DeckEntity deckEntity = new DeckEntity(name, completion, description, time, fid, userID, folderID);
                     deckEntities.add(deckEntity);
                 }
             } while (fcursor.moveToNext());
@@ -95,7 +96,7 @@ public class DbApi {
                     @SuppressLint("Range") String name = fcursor.getString(fcursor.getColumnIndex("folder_name"));
                     @SuppressLint("Range") String description = fcursor.getString(fcursor.getColumnIndex("folder_description"));
                     @SuppressLint("Range") String time = fcursor.getString(fcursor.getColumnIndex("time"));
-                    FolderEntity folder = new FolderEntity(name, description, fid, time);
+                    FolderEntity folder = new FolderEntity(name, description, fid, time, userID);
                     folders.add(folder);
                 }
             } while (fcursor.moveToNext());
@@ -141,6 +142,7 @@ public class DbApi {
         }
         return id;
     }
+
     public long insertUser(String User_name) {
         long id = -1;
         if (User_name != null) {
@@ -154,6 +156,7 @@ public class DbApi {
         }
         return id;
     }
+
     public long insertDeck(String deckName, String deckDescription, int completion, int folderID, int userID) {
         int[] arrary = new int[1000];
         boolean justice = false;
@@ -193,7 +196,7 @@ public class DbApi {
         return id;
     }
 
-    public long insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int userID) {
+    public long insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int userID, int folderID) {
         int[] arrary = new int[1000];
         boolean justice = false;
         int count = 0;
@@ -222,6 +225,7 @@ public class DbApi {
             values2.put("deck_id", deckID);
             values2.put("level", hardness);
             values2.put("u_id", userID);
+            values2.put("folder_id", folderID);
             String time = getDate();
             values2.put("time", time);
             id = db.insert("card", null, values2);

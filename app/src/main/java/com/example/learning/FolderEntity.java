@@ -5,6 +5,7 @@ public class FolderEntity {
     private String folderDescription;
     private int folderID;
     private String time;
+    private int userId;
 
     public String getFolderName() {
         return folderName;
@@ -22,11 +23,20 @@ public class FolderEntity {
         this.folderDescription = folderDescription;
     }
 
-    public FolderEntity(String folderName, String folderDescription, int folderID, String time) {
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public FolderEntity(String folderName, String folderDescription, int folderID, String time, int userId) {
         this.folderName = folderName;
         this.folderDescription = folderDescription;
         this.folderID = folderID;
         this.time = time;
+        this.userId = userId;
     }
 
     public int getFolderID() {

@@ -302,6 +302,7 @@ public class Add extends Fragment {
                     Intent intent = new Intent(rootView.getContext(), AddCardActivity.class);
                     intent.putExtra("deck_id", (int)id);
                     intent.putExtra("user_id", userid);
+                    intent.putExtra("folder_id", selectedFolderId);
                     startActivity(intent);
                 }
             }

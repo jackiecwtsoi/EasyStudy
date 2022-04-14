@@ -34,6 +34,7 @@ public class AddCardActivity extends AppCompatActivity {
     int deck_id = -1;
     DbApi dbApi;
     int userId = -1;
+    int folerId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class AddCardActivity extends AppCompatActivity {
         Intent intent = getIntent();
         deck_id = intent.getIntExtra("deck_id", -1);
         userId = intent.getIntExtra("user_id", -1);
+        folerId = intent.getIntExtra("folder_id", -1);
         title = findViewById(R.id.card_input_area);
         tap_front = findViewById(R.id.tap_to_filp);
         save = findViewById(R.id.save_deck);
@@ -104,7 +106,7 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     private void addCard() {
-        dbApi.insertCard("name", title.getText().toString(), answer.getText().toString(), 0, deck_id, userId);
+        dbApi.insertCard("name", title.getText().toString(), answer.getText().toString(), 0, deck_id, userId, folerId);
     }
 
     private void flipAnimation(int question) {
