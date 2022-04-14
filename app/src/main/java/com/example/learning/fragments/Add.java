@@ -68,7 +68,7 @@ public class Add extends Fragment {
     private TextView createDeck;
     private SeekBar addSeekBar;
     private TextView seekDaysText;
-    private String selectedFolder = "Folder 1";
+    private String selectedFolder;
     private EditText deckName;
     private TextView monday;
     private TextView tuesday;
@@ -260,17 +260,19 @@ public class Add extends Fragment {
                 for (FolderEntity folder : folderList) {
                     folderNames.add(folder.getFolderName());
                 }
+                selectedFolder = folderNames.get(0);
+                selectedFolderId = 0;
                 View outerView = LayoutInflater.from(rootView.getContext()).inflate(R.layout.folder_wheel_view, null);
                 WheelView wv = (WheelView) outerView.findViewById(R.id.foler_wheel_view);
                 wv.setOffset(2);
                 wv.setItems(folderNames);
-                wv.setSeletion(3);
+                wv.setSeletion(0);
                 wv.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
                     @Override
                     public void onSelected(int selectedIndex, String item) {
                         Log.d(TAG, "[Dialog]selectedIndex: " + selectedIndex + ", item: " + item);
                         selectedFolder = item;
-                        selectedFolderId = folderList.get(selectedIndex).getFolderID();
+                        selectedFolderId = folderList.get(selectedIndex-2).getFolderID();
                     }
                 });
 
@@ -294,10 +296,11 @@ public class Add extends Fragment {
             public void onClick(View view) {
                 if (selectedFolderId == -1) {
                     Toast.makeText(context, "Please select a folder to add the deck", Toast.LENGTH_LONG);
+                    System.out.println(1);
                 } else {
                     String name = deckName.getText().toString().trim();
                     String description = "This is the description for " + name;
-                    long id = dbApi.insertDeck(name, description, 0, selectedFolderId, userid);
+                    long id = dbApi.insertDeck(name, description, 0, 0, "Monday", 0,selectedFolderId, userid);
                     Intent intent = new Intent(rootView.getContext(), AddCardActivity.class);
                     intent.putExtra("deck_id", (int)id);
                     intent.putExtra("user_id", userid);

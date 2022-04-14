@@ -189,7 +189,7 @@ public class DbApi {
             values2.put("completion", completion);
             values2.put("u_id", userID);
             values2.put("frequency", frequency);
-            values2.put("dayofWeek", dayofWeek);
+            values2.put("day_of_week", dayofWeek);
             values2.put("interval", interval);
             String time = getDate();
             values2.put("time", time);

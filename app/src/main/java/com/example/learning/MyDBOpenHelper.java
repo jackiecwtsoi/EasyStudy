@@ -50,7 +50,6 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE card(" +
                 "  card_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "  deck_id INTEGER NOT NULL," +
-                "  folder_id INTEGER NOT NULL," +
                 "  u_id INTEGER NOT NULL," +
                 "  folder_id INTEGER NOT NULL,"+
                 "  card_question TEXT(1000)," +
@@ -59,7 +58,6 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 "  level INTEGER," +
                 "  CONSTRAINT folder_id FOREIGN KEY (folder_id) REFERENCES folder (folder_id) ON DELETE CASCADE ON UPDATE CASCADE," +
                 "  CONSTRAINT deck_id FOREIGN KEY (deck_id) REFERENCES deck (deck_id) ON DELETE CASCADE ON UPDATE CASCADE," +
-                "  CONSTRAINT folder_id FOREIGN KEY (folder_id) REFERENCES folder (folder_id) ON DELETE CASCADE ON UPDATE CASCADE," +
                 "  CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE" +
                 ")");
         db.execSQL("CREATE TABLE comment(" +
