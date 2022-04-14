@@ -18,10 +18,10 @@
 
 - queryFolder(int userID): 给userId,返回一个 FolderEntity 的ArrayList， list中的每一个元素代表了一个第二点中FolderEntity的对象，可以用for循环遍历然后通过比如getName或者每一个Folder的名字
 - queryDeck(int userID, int folderID)  给userId 和folderID, 返回一个 DeckEntity 的ArrayList， list中的每一个元素代表了一个第二点中DeckEntity的对象，可以用for循环遍历然后通过比如getName或者每一个Deck的名字
-- queryCard(int userID, int deckID)给userId 和deckID, 返回一个 Card 的ArrayList， list中的每一个元素代表了一个第二点中Card的对象，可以用for循环遍历然后通过比如getQuestion或者每一个Card的问题
-- insertFolder(String folderName, String folderDescription, int userID) 像数据库中插入一条folder，要求给名字，描述，userid
-- insertDeck(String deckName, String deckDescription, int completion, int folderID, int userID)像数据库中插入一条deck，要求给名字，描述，userid, 完成度，folderid
-- insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int userID) 像数据库中插入一条card，要求给问题，答案，userid, 难度，deckid
+- queryCard(int userID, int deckID)给userId 和deckID, 返回一个 Card 的ArrayList， list中的每一个元素代表了一个第二点中Card的对象，可以用for循环遍历然后通过比如getQuestion或者每一个Card的问题，
+- insertFolder(String folderName, String folderDescription, int userID) 像数据库中插入一条folder，要求给名字，描述，userid，返回生成的folderid
+- insertDeck(String deckName, String deckDescription, int completion, int folderID, int userID)像数据库中插入一条deck，要求给名字，描述，userid, 完成度，folderid，返回生成的deckid
+- insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int userID) 像数据库中插入一条card，要求给问题，答案，userid, 难度，deckid,返回生成的userid
 
 
 

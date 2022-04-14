@@ -375,7 +375,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/corner_icon"
                 android:gravity="center_horizontal"
-                android:text="Create new deckEntity"
+                android:text="Create new deck"
                 android:textColor="#ffffff"
                 android:textSize="26sp" />
         </RelativeLayout>

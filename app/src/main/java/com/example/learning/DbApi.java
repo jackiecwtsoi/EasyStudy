@@ -104,7 +104,8 @@ public class DbApi {
         return folders;
     }
 
-    public void insertFolder(String folderName, String folderDescription, int userID) {
+    public long insertFolder(String folderName, String folderDescription, int userID) {
+        long id = -1;
         int[] arrary = new int[1000];
         boolean justice = false;
         int count = 0;
@@ -132,29 +133,32 @@ public class DbApi {
             values2.put("u_id", userID);
             String time = getDate();
             values2.put("time", time);
-            db.insert("folder", null, values2);
+            id = db.insert("folder", null, values2);
             System.out.println("create folder: " + folderName + "with description: " + folderDescription + "for user:" + userID);
 
         } else {
             System.out.println("not create folder: " + folderName + "with description: " + folderDescription + "for user:" + userID);
         }
+        return id;
     }
-    public void insertUser(String User_name) {
+    public long insertUser(String User_name) {
+        long id = -1;
         if (User_name != null) {
             ContentValues values1 = new ContentValues();
             values1.put("name", User_name);
-            db.insert("user", null, values1);
+            id = db.insert("user", null, values1);
             System.out.println("create user: " + User_name);
 
         } else {
             System.out.println("not create user: " + User_name);
         }
+        return id;
     }
-    public void insertDeck(String deckName, String deckDescription, int completion, int folderID, int userID) {
+    public long insertDeck(String deckName, String deckDescription, int completion, int folderID, int userID) {
         int[] arrary = new int[1000];
         boolean justice = false;
         int count = 0;
-
+        long id = -1;
         Cursor check_cursor = db.query("folder", null, null, null, null, null, null);
         if (check_cursor.moveToFirst()) {
             do {
@@ -180,19 +184,20 @@ public class DbApi {
             values2.put("u_id", userID);
             String time = getDate();
             values2.put("time", time);
-            db.insert("deck", null, values2);
+            id = db.insert("deck", null, values2);
             System.out.println("create folder: " + deckName + "with description: " + deckDescription + "for user:" + folderID);
 
         } else {
             System.out.println("not create folder: " + deckName + "with description: " + deckDescription + "for user:" + folderID);
         }
+        return id;
     }
 
-    public void insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int userID) {
+    public long insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int userID) {
         int[] arrary = new int[1000];
         boolean justice = false;
         int count = 0;
-
+        long id = -1;
         Cursor check_cursor = db.query("deck", null, null, null, null, null, null);
         if (check_cursor.moveToFirst()) {
             do {
@@ -219,11 +224,13 @@ public class DbApi {
             values2.put("u_id", userID);
             String time = getDate();
             values2.put("time", time);
-            db.insert("card", null, values2);
+            id = db.insert("card", null, values2);
             System.out.println("create folder: " + cardName + "with anwer: " + cardAnswer + "for user:" + deckID);
 
         } else {
             System.out.println("not create folder: " + cardName + "with description: " + cardAnswer + "for user:" + deckID);
         }
+        return id;
     }
+
 }
