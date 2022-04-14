@@ -70,6 +70,7 @@ public class Add extends Fragment {
     private TextView seekDaysText;
     private String selectedFolder;
     private EditText deckName;
+    private EditText deckDescription;
     private TextView monday;
     private TextView tuesday;
     private TextView wednesday;
@@ -148,6 +149,7 @@ public class Add extends Fragment {
         }
         dbApi = new DbApi(db);
         context = this.getContext();
+        selectedFolderId = -1;
         getFolderList();
         rootView = inflater.inflate(R.layout.fragment_add, container, false);
         select = rootView.findViewById(R.id.select_folder);
@@ -171,6 +173,7 @@ public class Add extends Fragment {
         browser = rootView.findViewById(R.id.add_browse_button);
         selectedImg = rootView.findViewById(R.id.add_selected_img);
         deckName = rootView.findViewById(R.id.add_deck_name);
+        deckDescription = rootView.findViewById(R.id.add_deck_description);
         setDaily();
         setReminder();
         setPublic();
@@ -225,6 +228,7 @@ public class Add extends Fragment {
                 }
             });
         }
+
         addSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -250,7 +254,7 @@ public class Add extends Fragment {
                 }
             }
         });
-
+        addSeekBar.setProgress(0);
         //add.setBackgroundColor(Color.BLUE);
 //        selected = rootView.findViewById(R.id.selected_folder);
         select.setOnClickListener(new View.OnClickListener() {
@@ -295,12 +299,44 @@ public class Add extends Fragment {
             @Override
             public void onClick(View view) {
                 if (selectedFolderId == -1) {
-                    Toast.makeText(context, "Please select a folder to add the deck", Toast.LENGTH_LONG);
+                    Toast.makeText(context, "Please select a folder to add the deck", Toast.LENGTH_LONG).show();
                     System.out.println(1);
-                } else {
+                }
+                else if(deckName.getText().toString().equals("")){
+                    Toast.makeText(context, "Please input the folder name", Toast.LENGTH_LONG).show();
+                    System.out.println(1);
+                }
+                else {
                     String name = deckName.getText().toString().trim();
-                    String description = "This is the description for " + name;
-                    long id = dbApi.insertDeck(name, description, 0, 0, "Monday", 0,selectedFolderId, userid);
+
+                    String description = deckDescription.getText().toString().trim();
+                    if (description.equals("")){
+                        description = "This is the description for " + name;
+                    }
+                    int frequency = -1;
+                    String dayOfWeek = "";
+                    int interval = 0;
+                    if (reminder == 1){
+                        // select the remind me button
+                        frequency = daily;
+                        ArrayList<String> days = new ArrayList<>(Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"));
+                        if(frequency == 0 || frequency == 1){
+                            StringBuilder sb = new StringBuilder();
+                            for(int i = 0; i < 7; i++){
+                                if(whetherDaySelect.get(i)){
+                                    String day = days.get(i) + ";";
+                                    sb.append(day);
+                                }
+                                dayOfWeek = sb.toString();
+                            }
+                        }
+                        else{
+                            frequency = 2;
+                            interval = addSeekBar.getProgress();
+                        }
+
+                    }
+                    long id = dbApi.insertDeck(name, description, 0, frequency, dayOfWeek, interval,selectedFolderId, userid);
                     Intent intent = new Intent(rootView.getContext(), AddCardActivity.class);
                     intent.putExtra("deck_id", (int)id);
                     intent.putExtra("user_id", userid);

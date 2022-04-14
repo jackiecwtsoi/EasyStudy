@@ -27,6 +27,7 @@ public class AddCardActivity extends AppCompatActivity {
     TextView lastQuestion;
     TextView lastTapFront;
     TextView lastTapEnd;
+    TextView lastAnswer;
     SQLiteDatabase db;
     EditText question;
     EditText answer;
@@ -60,6 +61,7 @@ public class AddCardActivity extends AppCompatActivity {
         lastQuestion = findViewById(R.id.last_qeustion_front);
         lastTapFront = findViewById(R.id.tap_to_filp_last_front);
         lastTapEnd = findViewById(R.id.tap_to_filp_last_end);
+        lastAnswer = findViewById(R.id.last_qeustion_back);
         tap_back = findViewById(R.id.tap_to_filp_back);
         backCard.setRotationY(-90f);
         lastCardEnd.setRotationY(-90f);
@@ -91,9 +93,13 @@ public class AddCardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 addCard();
+                System.out.println('1');
                 lastQuestion.setText(title.getText());
+                lastAnswer.setText(answer.getText());
                 title.getText().clear();
+                answer.getText().clear();
                 lastCardFront.setVisibility(View.VISIBLE);
+
             }
         });
         save.setOnClickListener(new View.OnClickListener() {

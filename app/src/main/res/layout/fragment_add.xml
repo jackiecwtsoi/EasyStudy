@@ -51,11 +51,29 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="20dp" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/add_deck_name"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Description"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/add_deck_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_deck_name"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_deck_description"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
@@ -66,13 +84,14 @@
                 android:id="@+id/add_select_schedule"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/add_deck_name"
+                android:layout_below="@+id/add_deck_description"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@drawable/corner_icon_smaller">
 
                 <TextView
                     android:id="@+id/add_daily"
@@ -249,7 +268,8 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@drawable/corner_icon_smaller">
 
                 <TextView
                     android:id="@+id/add_reminder_true"
@@ -297,7 +317,7 @@
                 android:layout_width="200dp"
                 android:layout_height="160dp"
                 android:id="@+id/add_selected_img"
-                android:src="@drawable/add_first"
+                android:src="@drawable/SpringShowers"
                 android:layout_below="@+id/add_browse_button"
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"/>
@@ -320,7 +340,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-
+                android:background="@drawable/corner_icon_smaller"
                 android:layout_marginRight="20dp"
                 android:orientation="horizontal">
 
@@ -373,7 +393,7 @@
                 android:layout_below="@+id/select_folder"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="30dp"
                 android:background="@drawable/corner_icon"
                 android:gravity="center_horizontal"
                 android:text="Create new deck"

@@ -75,9 +75,8 @@
         android:background="@drawable/corner_create_folder"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="280dp"
         android:id="@+id/last_card_front"
-        android:layout_below="@+id/front_card"
         android:visibility="gone"
        >
         <TextView
@@ -86,7 +85,8 @@
             android:text="Last Question"
             android:textSize="20sp"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
             android:text="Last question"
             android:layout_marginLeft="20dp"
             android:textSize="18sp"
-            />
+            android:layout_marginStart="20dp" />
         <TextView
             android:id="@+id/tap_to_filp_last_front"
             android:layout_width="match_parent"
@@ -112,18 +112,27 @@
         android:background="@drawable/corner_create_folder"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="280dp"
         android:id="@+id/last_card_end"
-        android:layout_below="@+id/front_card"
         android:visibility="gone"
         >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Last Question"
-            android:textSize="20dp"
+            android:text="Last Answer"
+            android:textSize="20sp"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:id="@+id/last_qeustion_back"
+            android:text="Last Answer"
+            android:layout_marginLeft="20dp"
+            android:textSize="18sp"
+            android:layout_marginStart="20dp" />
         <TextView
             android:id="@+id/tap_to_filp_last_end"
             android:layout_width="match_parent"
@@ -132,7 +141,7 @@
             android:layout_marginBottom="24dp"
             android:gravity="center_horizontal"
             android:text="tap to flip over"
-            android:textSize="18dp" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <TextView
@@ -144,15 +153,15 @@
         android:layout_marginBottom="40dp"
         android:background="@drawable/corner_icon"
         android:gravity="center_horizontal"
-        android:text="Save deckEntity"
+        android:text="Save deck"
         android:textColor="#ffffff"
-        android:textSize="26dp" />
+        android:textSize="26sp" />
     <TextView
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:id = "@+id/add_another_card"
         android:text="Add another card"
-        android:textSize="26dp"
+        android:textSize="26sp"
         android:layout_above="@+id/save_deck"
         android:layout_marginBottom="30dp"
         android:layout_centerHorizontal="true"

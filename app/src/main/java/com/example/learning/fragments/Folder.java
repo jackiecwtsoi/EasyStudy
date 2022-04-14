@@ -50,7 +50,6 @@ public class Folder extends Fragment {
     private SearchView searchView;
     private ImageView addFolder;
     private View addView;
-    ViewPager mcContainer;
     private SQLiteDatabase db;
     private DbApi dbApi;
     private ArrayList<FolderEntity> folders = new ArrayList<>();
