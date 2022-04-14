@@ -8,15 +8,30 @@
     tools:context=".fragments.StudyFront">
 
     <TextView
-        android:id="@+id/textStudyProgress"
+        android:id="@+id/textDeckTitle"
+        android:layout_width="355dp"
+        android:layout_height="27dp"
+        android:layout_marginBottom="8dp"
+        android:text="deckEntity"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/progressBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textFolderTitle"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textFolderTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="Card "
-        android:textSize="20sp"
+        android:layout_marginTop="28dp"
+        android:text="folderEntity"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.083"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardStudyFront" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnPreviousCard"
@@ -24,11 +39,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginLeft="64dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:text="Previous Card"
         android:background="@drawable/circleuphome"
+        android:text="Previous Card"
         app:layout_constraintEnd_toStartOf="@+id/btnNextCard"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,48 +53,52 @@
         android:id="@+id/btnNextCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="64dp"
         android:layout_marginRight="64dp"
-        android:text="Next Card"
         android:background="@drawable/circleuphome"
+        android:text="Next Card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textStudyProgress" />
 
-    <TextView
-        android:id="@+id/textStudy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="Study"
-        android:textSize="24sp"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="364dp"
+        android:layout_height="62dp"
+        android:progressTint="#FEC959"
+        android:scaleY="6"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.164" />
 
     <TextView
-        android:id="@+id/textFolderTitle"
+        android:id="@+id/textStudyProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="[deckEntity/folder title]"
+        android:layout_marginTop="40dp"
+        android:text="Card "
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textStudy" />
+        app:layout_constraintTop_toBottomOf="@+id/cardStudyFront" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardStudyFront"
         android:layout_width="364dp"
         android:layout_height="344dp"
-        android:layout_marginTop="32dp"
         android:clickable="true"
         android:focusable="true"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textFolderTitle">
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
