@@ -31,6 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.learning.AddCardActivity;
+import com.example.learning.DbApi;
+import com.example.learning.FolderEntity;
 import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.example.learning.customizeview.WheelView;
@@ -66,7 +68,8 @@ public class Add extends Fragment {
     private TextView createDeck;
     private SeekBar addSeekBar;
     private TextView seekDaysText;
-    private String selectedFolder = "FolderEntity 1";
+    private String selectedFolder = "Folder 1";
+    private EditText deckName;
     private TextView monday;
     private TextView tuesday;
     private TextView wednesday;
@@ -88,12 +91,14 @@ public class Add extends Fragment {
     private TextView browser;
     private ImageView selectedImg;
     private TextView lastSelectedDays;
+    private DbApi dbApi;
+    private int userid;
     List<Boolean> whetherDaySelect = new ArrayList<Boolean>();
     List<TextView> selectedDays = new ArrayList<TextView>();
     SQLiteDatabase db;
+    private int selectedFolderId = -1;
     //    TextView selected;
-    private static String[] PLANETS = new String[]{"Folder1", "Folder2", "Folder3", "Folder4", "Folder5", "Folder6", "Folder7", "Folder8"};
-    private ArrayList<String> folderList = new ArrayList<String>();
+    private ArrayList<FolderEntity> folderList = new ArrayList<FolderEntity>();
 
     private static final String TAG = Add.class.getSimpleName();
     private OnFragmentInteractionListener mListener;
@@ -141,8 +146,9 @@ public class Add extends Fragment {
                 parent.removeView(rootView);
             }
         }
+        dbApi = new DbApi(db);
         context = this.getContext();
-        folderList.addAll(Arrays.asList(PLANETS));
+        getFolderList();
         rootView = inflater.inflate(R.layout.fragment_add, container, false);
         select = rootView.findViewById(R.id.select_folder);
         createDeck = rootView.findViewById(R.id.add_create_deck);
@@ -164,6 +170,7 @@ public class Add extends Fragment {
         privateText = rootView.findViewById(R.id.add_public_false);
         browser = rootView.findViewById(R.id.add_browse_button);
         selectedImg = rootView.findViewById(R.id.add_selected_img);
+        deckName = rootView.findViewById(R.id.add_deck_name);
         setDaily();
         setReminder();
         setPublic();
@@ -187,11 +194,10 @@ public class Add extends Fragment {
             day.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (reminder == 0){
+                    if (reminder == 0) {
                         Toast toast = Toast.makeText(context, "you have selected no reminder", Toast.LENGTH_LONG);
                         toast.show();
-                    }
-                    else {
+                    } else {
                         if (daily == 0) {
                             if (!whetherDaySelect.get(selectedDays.indexOf(day))) {
                                 day.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
@@ -222,12 +228,12 @@ public class Add extends Fragment {
         addSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (reminder == 0){
+                if (reminder == 0) {
                     Toast toast = Toast.makeText(context, "you have selected no reminder", Toast.LENGTH_LONG);
                     toast.show();
+                } else {
+                    seekDaysText.setText(Integer.toString(progress) + " days");
                 }
-                else{
-                seekDaysText.setText(Integer.toString(progress) + " days");}
             }
 
             @Override
@@ -237,7 +243,7 @@ public class Add extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if (reminder == 0){
+                if (reminder == 0) {
                     Toast toast = Toast.makeText(context, "you have selected no reminder", Toast.LENGTH_LONG);
                     toast.show();
                     seekBar.setProgress(0);
@@ -250,16 +256,21 @@ public class Add extends Fragment {
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final ArrayList<String> folderNames = new ArrayList<>();
+                for (FolderEntity folder : folderList) {
+                    folderNames.add(folder.getFolderName());
+                }
                 View outerView = LayoutInflater.from(rootView.getContext()).inflate(R.layout.folder_wheel_view, null);
                 WheelView wv = (WheelView) outerView.findViewById(R.id.foler_wheel_view);
                 wv.setOffset(2);
-                wv.setItems(folderList);
+                wv.setItems(folderNames);
                 wv.setSeletion(3);
                 wv.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
                     @Override
                     public void onSelected(int selectedIndex, String item) {
                         Log.d(TAG, "[Dialog]selectedIndex: " + selectedIndex + ", item: " + item);
                         selectedFolder = item;
+                        selectedFolderId = folderList.get(selectedIndex).getFolderID();
                     }
                 });
 
@@ -271,6 +282,7 @@ public class Add extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 select.setText(selectedFolder);
+
                             }
                         })
                         .show();
@@ -280,11 +292,28 @@ public class Add extends Fragment {
         createDeck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(rootView.getContext(), AddCardActivity.class);
-                startActivity(intent);
+                if (selectedFolderId == -1) {
+                    Toast.makeText(context, "Please select a folder to add the deck", Toast.LENGTH_LONG);
+                } else {
+                    String name = deckName.getText().toString().trim();
+                    String description = "This is the description for " + name;
+                    long id = dbApi.insertDeck(name, description, 0, selectedFolderId, userid);
+
+                    Intent intent = new Intent(rootView.getContext(), AddCardActivity.class);
+                    intent.putExtra("deck_id", (int)id);
+                    intent.putExtra("user_id", userid);
+                    intent.putExtra("folder_id", selectedFolderId);
+                    startActivity(intent);
+                }
             }
         });
         return rootView;
+    }
+
+    private void getFolderList() {
+        MainActivity main = (MainActivity) getActivity();
+        userid = main.getLoginUserId();
+        folderList.addAll(dbApi.queryFolder(userid));
     }
 
     private void setDaily() {
@@ -292,11 +321,10 @@ public class Add extends Fragment {
         dailyText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (reminder == 0){
+                if (reminder == 0) {
                     Toast toast = Toast.makeText(context, "you have selected no reminder", Toast.LENGTH_LONG);
                     toast.show();
-                }
-                else {
+                } else {
                     dailyText.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
                     weeklyText.setBackgroundResource(0);
                     monthly.setBackgroundResource(0);
@@ -308,11 +336,10 @@ public class Add extends Fragment {
         weeklyText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (reminder == 0){
+                if (reminder == 0) {
                     Toast toast = Toast.makeText(context, "you have selected no reminder", Toast.LENGTH_LONG);
                     toast.show();
-                }
-                else {
+                } else {
                     dailyText.setBackgroundResource(0);
                     weeklyText.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
                     monthly.setBackgroundResource(0);
@@ -324,7 +351,7 @@ public class Add extends Fragment {
         monthly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (reminder == 0){
+                if (reminder == 0) {
                     Toast toast = Toast.makeText(context, "you have selected no reminder", Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -338,15 +365,17 @@ public class Add extends Fragment {
             }
         });
     }
-    private void clearSelectDays(){
-        for (TextView day: selectedDays){
+
+    private void clearSelectDays() {
+        for (TextView day : selectedDays) {
             day.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller));
             whetherDaySelect.set(selectedDays.indexOf(day), false);
             seekDaysText.setText(Integer.toString(0) + " days");
             addSeekBar.setProgress(0);
         }
     }
-    private void setReminder(){
+
+    private void setReminder() {
         reminder = 1;
         remindMe.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
         remindMe.setOnClickListener(new View.OnClickListener() {
@@ -370,7 +399,8 @@ public class Add extends Fragment {
             }
         });
     }
-    private void setPublic(){
+
+    private void setPublic() {
         whetherPublic = 1;
         publicText.setBackground(ContextCompat.getDrawable(context, R.drawable.corner_icon_smaller_selected));
         publicText.setOnClickListener(new View.OnClickListener() {
@@ -391,7 +421,8 @@ public class Add extends Fragment {
         });
 
     }
-    private void selectImg(){
+
+    private void selectImg() {
         browser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -399,21 +430,21 @@ public class Add extends Fragment {
             }
         });
     }
+
     private void openAlbum() {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType("image/*");
         startActivityForResult(intent, 1);//1是resultcode 我们自己定义
 
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==1)
-        {
-            if (data!=null)
-            {
+        if (requestCode == 1) {
+            if (data != null) {
                 try {
-                    Bitmap bitmap= BitmapFactory.decodeStream
+                    Bitmap bitmap = BitmapFactory.decodeStream
                             (getActivity().getContentResolver().openInputStream(data.getData()));
                     selectedImg.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {

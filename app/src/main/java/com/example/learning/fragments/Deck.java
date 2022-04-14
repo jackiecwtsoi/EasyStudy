@@ -47,6 +47,7 @@ public class Deck extends Fragment {
     private int folder_id;
     SQLiteDatabase db;
     DbApi dbApi;
+    int userID;
     public Deck(int folder, SQLiteDatabase db) {
         this.folder_id = folder;
         this.db = db;
@@ -159,8 +160,10 @@ public class Deck extends Fragment {
 
     }
     private void getDeckList(){
+        MainActivity main = (MainActivity) getActivity();
+        userID = main.getLoginUserId();
         dbApi = new DbApi(db);
-        deckList = dbApi.queryDeck(folder_id, 1);
+        deckList = dbApi.queryDeck(folder_id, userID);
     }
 
 }

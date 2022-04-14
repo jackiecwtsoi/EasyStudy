@@ -13,7 +13,7 @@ public class DbApi {
     private SQLiteDatabase db;
 
     public DbApi(SQLiteDatabase db) {
-       this.db = db;
+        this.db = db;
     }
 
     public String getDate() {
@@ -38,6 +38,7 @@ public class DbApi {
     }
 
     public ArrayList<Card> queryCard(int deckID, int folderID, int userID) {
+
         ArrayList<Card> cards = new ArrayList<>();
 
         Cursor fcursor = db.query("card", null, null, null, null, null, null);
@@ -52,7 +53,7 @@ public class DbApi {
                     @SuppressLint("Range") String answer = fcursor.getString(fcursor.getColumnIndex("card_answer"));
                     @SuppressLint("Range") String time = fcursor.getString(fcursor.getColumnIndex("time"));
                     @SuppressLint("Range") int level = fcursor.getInt(fcursor.getColumnIndex("level"));
-                    Card card = new Card(question, answer, fid, level, time);
+                    Card card = new Card(question, answer, fid, level, time, folderID, userID, deckID);
                     cards.add(card);
                 }
             } while (fcursor.moveToNext());
@@ -75,7 +76,7 @@ public class DbApi {
                     @SuppressLint("Range") String description = fcursor.getString(fcursor.getColumnIndex("deck_description"));
                     @SuppressLint("Range") String time = fcursor.getString(fcursor.getColumnIndex("time"));
                     @SuppressLint("Range") int completion = fcursor.getInt(fcursor.getColumnIndex("completion"));
-                    DeckEntity deckEntity = new DeckEntity(name, completion, description, time, fid);
+                    DeckEntity deckEntity = new DeckEntity(name, completion, description, time, fid, userID, folderID);
                     deckEntities.add(deckEntity);
                 }
             } while (fcursor.moveToNext());
@@ -96,7 +97,7 @@ public class DbApi {
                     @SuppressLint("Range") String name = fcursor.getString(fcursor.getColumnIndex("folder_name"));
                     @SuppressLint("Range") String description = fcursor.getString(fcursor.getColumnIndex("folder_description"));
                     @SuppressLint("Range") String time = fcursor.getString(fcursor.getColumnIndex("time"));
-                    FolderEntity folder = new FolderEntity(name, description, fid, time);
+                    FolderEntity folder = new FolderEntity(name, description, fid, time, userID);
                     folders.add(folder);
                 }
             } while (fcursor.moveToNext());
@@ -105,7 +106,8 @@ public class DbApi {
         return folders;
     }
 
-    public void insertFolder(String folderName, String folderDescription, int userID) {
+    public long insertFolder(String folderName, String folderDescription, int userID) {
+        long id = -1;
         int[] arrary = new int[1000];
         boolean justice = false;
         int count = 0;
@@ -133,29 +135,34 @@ public class DbApi {
             values2.put("u_id", userID);
             String time = getDate();
             values2.put("time", time);
-            db.insert("folder", null, values2);
+            id = db.insert("folder", null, values2);
             System.out.println("create folder: " + folderName + "with description: " + folderDescription + "for user:" + userID);
 
         } else {
             System.out.println("not create folder: " + folderName + "with description: " + folderDescription + "for user:" + userID);
         }
+        return id;
     }
-    public void insertUser(String User_name) {
+
+    public long insertUser(String User_name) {
+        long id = -1;
         if (User_name != null) {
             ContentValues values1 = new ContentValues();
             values1.put("name", User_name);
-            db.insert("user", null, values1);
+            id = db.insert("user", null, values1);
             System.out.println("create user: " + User_name);
 
         } else {
             System.out.println("not create user: " + User_name);
         }
+        return id;
     }
-    public void insertDeck(String deckName, String deckDescription, int completion, int folderID, int userID) {
+
+    public long insertDeck(String deckName, String deckDescription, int completion, int folderID, int userID) {
         int[] arrary = new int[1000];
         boolean justice = false;
         int count = 0;
-
+        long id = -1;
         Cursor check_cursor = db.query("folder", null, null, null, null, null, null);
         if (check_cursor.moveToFirst()) {
             do {
@@ -180,19 +187,21 @@ public class DbApi {
             values2.put("u_id", userID);
             String time = getDate();
             values2.put("time", time);
-            db.insert("deck", null, values2);
+            id = db.insert("deck", null, values2);
             System.out.println("create folder: " + deckName + "with description: " + deckDescription + "for user:" + folderID);
 
         } else {
             System.out.println("not create folder: " + deckName + "with description: " + deckDescription + "for user:" + folderID);
         }
+        return id;
     }
 
     public void insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int folderID, int userID) {
+
         int[] arrary = new int[1000];
         boolean justice = false;
         int count = 0;
-
+        long id = -1;
         Cursor check_cursor = db.query("deck", null, null, null, null, null, null);
         if (check_cursor.moveToFirst()) {
             do {
@@ -218,14 +227,17 @@ public class DbApi {
             values2.put("folder_id", folderID);
             values2.put("level", hardness);
             values2.put("u_id", userID);
+            values2.put("folder_id", folderID);
             String time = getDate();
             values2.put("time", time);
-            db.insert("card", null, values2);
-            System.out.println("create folder: " + cardName + "with answer: " + cardAnswer + "for user:" + deckID);
+
+            id = db.insert("card", null, values2);
+            System.out.println("create folder: " + cardName + "with anwer: " + cardAnswer + "for user:" + deckID);
 
         } else {
             System.out.println("not create folder: " + cardName + "with description: " + cardAnswer + "for user:" + deckID);
         }
+        return id;
     }
 
     public ArrayList<Row> getAllCards(int userID) {
@@ -243,5 +255,6 @@ public class DbApi {
         }
         return allCards;
     }
+
 
 }

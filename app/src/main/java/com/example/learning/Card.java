@@ -6,6 +6,9 @@ public class Card {
     private int cardID;
     private int level;
     private String time;
+    private int folderId;
+    private int userId;
+    private int deckId;
 
     public String getCardQuestion() {
         return cardQuestion;
@@ -31,12 +34,40 @@ public class Card {
         this.cardID = cardID;
     }
 
-    public Card(String cardQuestion, String cardAnswer, int cardID, int level, String time) {
+    public int getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(int folderId) {
+        this.folderId = folderId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getDeckId() {
+        return deckId;
+    }
+
+    public void setDeckId(int deckId) {
+        this.deckId = deckId;
+    }
+
+    public Card(String cardQuestion, String cardAnswer, int cardID, int level, String time, int folderId, int userId, int deckId) {
         this.cardQuestion = cardQuestion;
         this.cardAnswer = cardAnswer;
         this.cardID = cardID;
         this.level = level;
         this.time = time;
+        this.deckId = deckId;
+        this.userId = userId;
+        this.folderId = folderId;
+
     }
 
     public int getLevel() {

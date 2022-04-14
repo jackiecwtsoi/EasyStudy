@@ -49,10 +49,12 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 "  deck_id INTEGER NOT NULL," +
                 "  folder_id INTEGER NOT NULL," +
                 "  u_id INTEGER NOT NULL," +
+                "  folder_id INTEGER NOT NULL,"+
                 "  card_question TEXT(1000)," +
                 "  card_answer TEXT(1000)," +
                 "  time TEXT(1000)," +
                 "  level INTEGER," +
+                "  CONSTRAINT folder_id FOREIGN KEY (folder_id) REFERENCES folder (folder_id) ON DELETE CASCADE ON UPDATE CASCADE," +
                 "  CONSTRAINT deck_id FOREIGN KEY (deck_id) REFERENCES deck (deck_id) ON DELETE CASCADE ON UPDATE CASCADE," +
                 "  CONSTRAINT folder_id FOREIGN KEY (folder_id) REFERENCES folder (folder_id) ON DELETE CASCADE ON UPDATE CASCADE," +
                 "  CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE" +
@@ -119,12 +121,12 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
             for (int j = 0; j < 6; j++) {
                 String folderName = folders.get(j) + " for " + names.get(i);
                 String folderDescription = "This is the description for " + folderName;
-                dbApi.insertFolder(folderName, folderDescription, i + 1);
+                long folderid = dbApi.insertFolder(folderName, folderDescription, i + 1);
                 for (int m = 0; m < 6; m++) {
                     String deckName = decks.get(m) + " for " + folderName;
                     String deckDescription = "This is the description for " + deckName;
-                    dbApi.insertDeck(deckName, deckDescription, 0, j + 1, i + 1);
 
+                    long deckid = dbApi.insertDeck(deckName, deckDescription, 0, j + 1, i + 1);
                     Random r = new Random();
                     for (int n = 0; n < 4; n++) {
                         String cardName = "Card" + Integer.toString(n) + " for " + deckName;
@@ -134,6 +136,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                         String cardAnswer = Integer.toString(a + b);
                         int hardness = r.nextInt(2);
                         dbApi.insertCard(cardName, cardQuestion, cardAnswer, hardness, m + 1, j+1, i + 1);
+
                     }
                 }
             }

@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private HonrizonViewPager viewPager;
     private TabLayout tabLayout;
     private static final String TAG = "luchixiang";
-    private  SQLiteDatabase db;
+    private SQLiteDatabase db;
     private MyDBOpenHelper myDBHelper;
     FragmentTransaction fragmentTransaction;
 
@@ -133,6 +133,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeToStudy() {
         mcContainer.setCurrentItem(3);
+    }
+
+    public int getLoginUserId() {
+        return 1;
     }
 
 }

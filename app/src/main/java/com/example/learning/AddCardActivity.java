@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -25,15 +27,32 @@ public class AddCardActivity extends AppCompatActivity {
     TextView lastQuestion;
     TextView lastTapFront;
     TextView lastTapEnd;
+    SQLiteDatabase db;
+    EditText question;
+    EditText answer;
+    MyDBOpenHelper myDBOpenHelper;
+    int deck_id = -1;
+    DbApi dbApi;
+    int userId = -1;
+    int folerId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_card);
+        myDBOpenHelper = new MyDBOpenHelper(AddCardActivity.this, "elearning.db", null, 1);
+        db = myDBOpenHelper.getWritableDatabase();
+        dbApi = new DbApi(db);
+        Intent intent = getIntent();
+        deck_id = intent.getIntExtra("deck_id", -1);
+        userId = intent.getIntExtra("user_id", -1);
+        folerId = intent.getIntExtra("folder_id", -1);
         title = findViewById(R.id.card_input_area);
         tap_front = findViewById(R.id.tap_to_filp);
         save = findViewById(R.id.save_deck);
         addAnotherCard = findViewById(R.id.add_another_card);
+
+        answer = findViewById(R.id.card_answer_area);
         frontCard = findViewById(R.id.front_card);
         backCard = findViewById(R.id.back_card);
         lastCardEnd = findViewById(R.id.last_card_end);
@@ -71,6 +90,7 @@ public class AddCardActivity extends AppCompatActivity {
         addAnotherCard.setOnClickListener(new View.OnClickListener() { //todo: add the question and deck into the file
             @Override
             public void onClick(View view) {
+                addCard();
                 lastQuestion.setText(title.getText());
                 title.getText().clear();
                 lastCardFront.setVisibility(View.VISIBLE);
@@ -79,18 +99,23 @@ public class AddCardActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                addCard();
                 finish();
             }
         });
     }
+
+    private void addCard() {
+        dbApi.insertCard("name", title.getText().toString(), answer.getText().toString(), 0, deck_id, userId, folerId);
+    }
+
     private void flipAnimation(int question) {
         View frontCardView;
         View endCardView;
-        if (question == 0){
+        if (question == 0) {
             frontCardView = frontCard;
             endCardView = backCard;
-        }
-        else{
+        } else {
             frontCardView = lastCardFront;
             endCardView = lastCardEnd;
         }

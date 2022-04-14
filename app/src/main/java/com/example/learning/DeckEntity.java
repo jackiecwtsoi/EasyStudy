@@ -6,6 +6,8 @@ public class DeckEntity {
     private String deckDescription;
     private String time;
     private int deckID;
+    private int folderId;
+    private int userId;
 
     public String getDeckName() {
         return deckName;
@@ -31,12 +33,30 @@ public class DeckEntity {
         this.deckDescription = deckDescription;
     }
 
-    public DeckEntity(String deckName, int completion, String deckDescription, String time, int deckID) {
+    public int getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(int folderId) {
+        this.folderId = folderId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public DeckEntity(String deckName, int completion, String deckDescription, String time, int deckID, int userId, int folderId) {
         this.deckName = deckName;
         this.completion = completion;
         this.deckDescription = deckDescription;
         this.time = time;
         this.deckID = deckID;
+        this.folderId = folderId;
+        this.userId = userId;
     }
 
     public String getTime() {
