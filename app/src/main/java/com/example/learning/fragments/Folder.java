@@ -52,7 +52,7 @@ public class Folder extends Fragment {
     ViewPager mcContainer;
     private SQLiteDatabase db;
     private DbApi dbApi;
-    private ArrayList<FolderEntity> folders;
+    private ArrayList<FolderEntity> folders = new ArrayList<>();
 
     public Folder(SQLiteDatabase db) {
         this.db = db;
@@ -165,6 +165,6 @@ public class Folder extends Fragment {
 
     private void getFolderList() {
         dbApi = new DbApi(db);
-        folders = dbApi.queryFolder(1);
+        folders.addAll(dbApi.queryFolder(1));
     }
 }
