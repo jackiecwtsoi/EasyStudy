@@ -7,6 +7,7 @@ import androidx.constraintlayout.solver.state.State;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ public class Study extends Fragment {
     // define variables
     View rootView;
     Button btnOpenLastOpenDeck, btnTasksToday;
+    RecyclerView listTasksToday;
     Boolean ALL_CARDS = true; // indicates whether we study ALL CARDS from the database
     SQLiteDatabase db;
 
@@ -82,6 +84,10 @@ public class Study extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_study, container, false);
         btnOpenLastOpenDeck = rootView.findViewById(R.id.btnOpenLastOpenDeck);
         btnTasksToday = rootView.findViewById(R.id.btnReviewAllCards);
+        listTasksToday = rootView.findViewById(R.id.listTasksToday);
+
+
+
 
         // when the "Review Unfinished Cards" button is pressed, we only show the unfinished cards
         btnOpenLastOpenDeck.setOnClickListener(new View.OnClickListener() {

@@ -12,9 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.learning.Card;
+import com.example.learning.DbApi;
+import com.example.learning.DeckEntity;
+import com.example.learning.FolderEntity;
 import com.example.learning.R;
+import com.example.learning.Row;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
 
@@ -39,48 +46,53 @@ public class StudyFront extends Fragment {
     // define variables
     View rootView;
     TextView textFolderTitle;
+    TextView textDeckTitle;
     TextView textCardQuestionContent;
     TextView textStudyProgress;
     CardView cardStudyFront;
     Button btnNextCard, btnPreviousCard;
+    ProgressBar progressBar;
     Boolean ALL_CARDS = true; // indicates whether we study ALL CARDS from the database
 
     static int rowIdx; // index for locating a row in the study list
 
-    // define a hashmap that represents the nested data (folders and then questions)
-    // data is a list of rows
-    // each row contains: folderName, cardQuestion, cardAnswer
-    static ArrayList<String> row1 = new ArrayList<String> () {{
-        add("Computer Science");
-        add("What is the content of COMP7506?");
-        add("Smartphone apps development");
-    }};
-    static ArrayList<String> row2 = new ArrayList<String> () {{
-       add("Computer Science");
-       add("Who is the professor for COMP7506?");
-       add("T. W. Chim");
-    }};
-    static ArrayList<String> row3 = new ArrayList<String> () {{
-        add("Mathematics");
-        add("1 + 1 = ");
-        add("2");
-    }};
-    static ArrayList<String> row4 = new ArrayList<String> () {{
-        add("Mathematics");
-        add("2 + 2 = ");
-        add("4");
-    }};
-    static ArrayList<String> row5 = new ArrayList<String> () {{
-        add("Mathematics");
-        add("3 + 3 = ");
-        add("6");
-    }};
-    static ArrayList<ArrayList<String>> STUDY_LIST = new ArrayList<ArrayList<String>> () {{
-        add(row1); add(row2); add(row3); add(row4); add(row5);
-    }};
+//    // define a hashmap that represents the nested data (folders and then questions)
+//    // data is a list of rows
+//    // each row contains: folderName, cardQuestion, cardAnswer
+//    static ArrayList<String> row1 = new ArrayList<String> () {{
+//        add("Computer Science");
+//        add("What is the content of COMP7506?");
+//        add("Smartphone apps development");
+//    }};
+//    static ArrayList<String> row2 = new ArrayList<String> () {{
+//       add("Computer Science");
+//       add("Who is the professor for COMP7506?");
+//       add("T. W. Chim");
+//    }};
+//    static ArrayList<String> row3 = new ArrayList<String> () {{
+//        add("Mathematics");
+//        add("1 + 1 = ");
+//        add("2");
+//    }};
+//    static ArrayList<String> row4 = new ArrayList<String> () {{
+//        add("Mathematics");
+//        add("2 + 2 = ");
+//        add("4");
+//    }};
+//    static ArrayList<String> row5 = new ArrayList<String> () {{
+//        add("Mathematics");
+//        add("3 + 3 = ");
+//        add("6");
+//    }};
+//    static ArrayList<ArrayList<String>> STUDY_LIST = new ArrayList<ArrayList<String>> () {{
+//        add(row1); add(row2); add(row3); add(row4); add(row5);
+//    }};
+
+    static ArrayList<Row> STUDY_LIST;
 
     private OnFragmentInteractionListener mListener;
     SQLiteDatabase db;
+    int userId = 1; // define the specific user id
 
     public StudyFront(SQLiteDatabase db) {
         this.db = db;
@@ -123,28 +135,52 @@ public class StudyFront extends Fragment {
         }
         rootView = inflater.inflate(R.layout.fragment_study_front, container, false);
 
-        textFolderTitle = rootView.findViewById(R.id.textFolderTitle);
+        DbApi dbapi = new DbApi(this.db);
+
+        textFolderTitle = rootView.findViewById(R.id.textDeckTitle);
+        textDeckTitle = rootView.findViewById(R.id.textDeckTitle);
         textCardQuestionContent = rootView.findViewById(R.id.textCardQuestionContent);
         textStudyProgress = rootView.findViewById(R.id.textStudyProgress);
         cardStudyFront = rootView.findViewById(R.id.cardStudyFront);
         btnNextCard = rootView.findViewById(R.id.btnNextCard);
         btnPreviousCard = rootView.findViewById(R.id.btnPreviousCard);
+        progressBar = rootView.findViewById(R.id.progressBar);
+
 
         // initialize the first card to be the first in the to-study list
         rowIdx = 0;
 
-        textFolderTitle.setText(STUDY_LIST.get(rowIdx).get(0));
-        textCardQuestionContent.setText(STUDY_LIST.get(rowIdx).get(1));
+        if (ALL_CARDS == true) {
+            STUDY_LIST = dbapi.getAllCards(userId);
+        }
+        else {
+            STUDY_LIST = dbapi.getAllCards(userId);
+        }
+
+        // define progress bar
+        progressBar.setMax(STUDY_LIST.size());
+        progressBar.setProgress(1); // initialize progress
+
+        textFolderTitle.setText(STUDY_LIST.get(rowIdx).getFolder().getFolderName());
+        textDeckTitle.setText(STUDY_LIST.get(rowIdx).getDeck().getDeckName());
+        textCardQuestionContent.setText(STUDY_LIST.get(rowIdx).getCard().getCardQuestion());
+//        textFolderTitle.setText(STUDY_LIST.get(rowIdx).get(0));
+//        textCardQuestionContent.setText(STUDY_LIST.get(rowIdx).get(1));
         textStudyProgress.setText("Card " + String.valueOf(rowIdx+1) + " / " + String.valueOf(STUDY_LIST.size()));
 
         btnNextCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (rowIdx < STUDY_LIST.size()-1) {
-                    ArrayList<String> row = STUDY_LIST.get(++rowIdx);
-                    textFolderTitle.setText(row.get(0));
-                    textCardQuestionContent.setText(row.get(1));
+                    Row row = STUDY_LIST.get(++rowIdx);
+                    textFolderTitle.setText(row.getFolder().getFolderName());
+                    textDeckTitle.setText(row.getDeck().getDeckName());
+                    textCardQuestionContent.setText(row.getCard().getCardQuestion());
+//                    ArrayList<String> row = STUDY_LIST.get(++rowIdx);
+//                    textFolderTitle.setText(row.get(0));
+//                    textCardQuestionContent.setText(row.get(1));
                     textStudyProgress.setText("Card " + String.valueOf(rowIdx+1) + " / " + String.valueOf(STUDY_LIST.size()));
+                    progressBar.setProgress(rowIdx+1);
                 }
                 else {
                     rowIdx = STUDY_LIST.size();
@@ -163,16 +199,22 @@ public class StudyFront extends Fragment {
            @Override
            public void onClick(View view) {
                if (rowIdx > 0) {
-                   ArrayList<String> row = STUDY_LIST.get(--rowIdx);
-                   textFolderTitle.setText(row.get(0));
-                   textCardQuestionContent.setText(row.get(1));
+                   Row row = STUDY_LIST.get(--rowIdx);
+                   textFolderTitle.setText(row.getFolder().getFolderName());
+                   textDeckTitle.setText(row.getDeck().getDeckName());
+                   textCardQuestionContent.setText(row.getCard().getCardQuestion());
+//                   ArrayList<String> row = STUDY_LIST.get(--rowIdx);
+//                   textFolderTitle.setText(row.get(0));
+//                   textCardQuestionContent.setText(row.get(1));
                    textStudyProgress.setText("Card " + String.valueOf(rowIdx+1) + " / " + String.valueOf(STUDY_LIST.size()));
+                   progressBar.setProgress(rowIdx+1);
                }
                else {
                    rowIdx = -1;
                    textFolderTitle.setText("You have reached the start of the decks.");
                    textCardQuestionContent.setText("You have reached the start of the cards.");
                    textStudyProgress.setText("Card " + String.valueOf(rowIdx+1) + " / " + String.valueOf(STUDY_LIST.size()));
+                   progressBar.setProgress(rowIdx+1);
                }
            }
         });

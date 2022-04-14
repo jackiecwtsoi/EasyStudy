@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.learning.Difficulty;
 import com.example.learning.R;
+import com.example.learning.Row;
 
 import java.util.ArrayList;
 
@@ -24,7 +26,7 @@ public class StudyBack extends DialogFragment {
     CardView cardStudyBack;
     Button btnEasy, btnHard, btnForgot;
 
-    static ArrayList<ArrayList<String>> STUDY_LIST = StudyFront.STUDY_LIST;
+    static ArrayList<Row> STUDY_LIST = StudyFront.STUDY_LIST;
     int rowIdx;
     // define variables that come from the bundle
 //    static int rowIdx = StudyFront.rowIdx;
@@ -48,8 +50,9 @@ public class StudyBack extends DialogFragment {
         btnForgot = rootView.findViewById(R.id.btnForgot);
 
         if ((rowIdx >= 0) && (rowIdx < STUDY_LIST.size())) {
-            ArrayList<String> row = STUDY_LIST.get(rowIdx);
-            textCardAnswerContent.setText(row.get(2));
+            Row row = STUDY_LIST.get(rowIdx);
+            textCardAnswerContent.setText(row.getCard().getCardAnswer());
+//            textCardAnswerContent.setText(row.get(2));
         }
 
         // tap on the popup fragment returns user back to the front card (question side)
@@ -64,31 +67,28 @@ public class StudyBack extends DialogFragment {
         btnEasy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (STUDY_LIST.get(rowIdx).size() >= 4) {
-                    STUDY_LIST.get(rowIdx).remove(3);
-                }
-                STUDY_LIST.get(rowIdx).add("Easy");
+                Row row = STUDY_LIST.get(rowIdx);
+                row.setRating(Difficulty.EASY);
+//                if (STUDY_LIST.get(rowIdx).size() >= 4) {
+//                    STUDY_LIST.get(rowIdx).remove(3);
+//                }
+//                STUDY_LIST.get(rowIdx).add("Easy");
                 dismiss();
             }
         });
         btnHard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (STUDY_LIST.get(rowIdx).size() >= 4) {
-                    STUDY_LIST.get(rowIdx).remove(3);
-
-                }
-                STUDY_LIST.get(rowIdx).add("Hard");
+                Row row = STUDY_LIST.get(rowIdx);
+                row.setRating(Difficulty.HARD);
                 dismiss();
             }
         });
         btnForgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (STUDY_LIST.get(rowIdx).size() >= 4) {
-                    STUDY_LIST.get(rowIdx).remove(3);
-                }
-                STUDY_LIST.get(rowIdx).add("Forgot");
+                Row row = STUDY_LIST.get(rowIdx);
+                row.setRating(Difficulty.FORGOT);
                 dismiss();
             }
         });

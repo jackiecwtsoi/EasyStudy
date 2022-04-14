@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.learning.Difficulty;
 import com.example.learning.R;
+import com.example.learning.Row;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -46,7 +48,7 @@ public class StudyDone extends Fragment {
     List<PieEntry> pieEntryList;
     int nEasy=0, nHard=0, nForgot=0, nComplete=0, nIncomplete=0;
 
-    static ArrayList<ArrayList<String>> STUDY_LIST = StudyFront.STUDY_LIST;
+    static ArrayList<Row> STUDY_LIST = StudyFront.STUDY_LIST;
     static boolean CLEAR_RATINGS = true; // clear all ratings every time we review all
     static boolean INTERACT_ENABLE = false; // do not allow interaction with pie chart
     static boolean DESCRIPTION_ENABLE = false; // do not enable description in the pie chart
@@ -130,24 +132,20 @@ public class StudyDone extends Fragment {
     // method to pass data into the pie chart
     public void analyzeTodayProgress() {
         // iterate through to-study list to count statistics
-        for (ArrayList<String> row: STUDY_LIST) {
-            System.out.println(row);
-            if (row.size() < 4) {
-                this.nIncomplete++;
-            }
-            else {
-                String rating = row.get(3);
-                switch (rating) {
-                    case "Easy":
-                        this.nEasy++;
-                        break;
-                    case "Hard":
-                        this.nHard++;
-                        break;
-                    case "Forgot":
-                        this.nForgot++;
-                        break;
-                }
+        for (Row row: STUDY_LIST) {
+            switch (row.getRating()) {
+                case EASY:
+                    this.nEasy++;
+                    break;
+                case HARD:
+                    this.nHard++;
+                    break;
+                case FORGOT:
+                    this.nForgot++;
+                    break;
+                case NONE:
+                    this.nIncomplete++;
+                    break;
             }
         }
 
@@ -184,10 +182,8 @@ public class StudyDone extends Fragment {
     // method to clear all ratings in the STUDY_LIST
     public void clearRatings(boolean clear) {
         if (clear) {
-            for (ArrayList<String> row: STUDY_LIST) {
-                if (row.size() >= 4) { // remove rating if any
-                    row.remove(3);
-                }
+            for (Row row: STUDY_LIST) {
+                row.setRating(Difficulty.NONE);
             }
         }
     }

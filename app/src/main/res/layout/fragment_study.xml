@@ -21,7 +21,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgTasksToday"
-        app:layout_constraintVertical_bias="0.253" />
+        app:layout_constraintVertical_bias="0.358" />
 
     <TextView
         android:id="@+id/textHiUser"
@@ -39,15 +39,15 @@
 
     <ImageView
         android:id="@+id/imgUserPhoto"
-        android:layout_width="73dp"
-        android:layout_height="52dp"
+        android:layout_width="93dp"
+        android:layout_height="70dp"
         android:src="@drawable/avatar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.147"
+        app:layout_constraintHorizontal_bias="0.138"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.075" />
 
     <Button
         android:id="@+id/btnOpenLastOpenDeck"
@@ -64,8 +64,8 @@
 
     <ImageView
         android:id="@+id/imgLastOpenDeck"
-        android:layout_width="288dp"
-        android:layout_height="141dp"
+        android:layout_width="452dp"
+        android:layout_height="169dp"
         android:layout_weight="1"
         android:alpha="0.85"
         android:src="@mipmap/ju2"
@@ -78,16 +78,17 @@
 
     <TextView
         android:id="@+id/textLastOpenDeck"
-        android:layout_width="138dp"
-        android:layout_height="24dp"
+        android:layout_width="169dp"
+        android:layout_height="29dp"
         android:text="Last open deckEntity"
         android:textColor="#457C99"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/imgLastOpenDeck"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.183"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textHiUser"
-        app:layout_constraintVertical_bias="0.692" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textLastOpenDeckName"
@@ -105,7 +106,7 @@
 
     <ImageView
         android:id="@+id/imgTasksToday"
-        android:layout_width="289dp"
+        android:layout_width="329dp"
         android:layout_height="290dp"
         android:src="@drawable/corner_create_folder"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -120,12 +121,13 @@
         android:layout_height="wrap_content"
         android:text="Tasks for Today"
         android:textColor="#457C99"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/imgTasksToday"
         app:layout_constraintEnd_toEndOf="@+id/imgTasksToday"
-        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintHorizontal_bias="0.106"
         app:layout_constraintStart_toStartOf="@+id/imgTasksToday"
         app:layout_constraintTop_toTopOf="@+id/imgTasksToday"
-        app:layout_constraintVertical_bias="0.092" />
+        app:layout_constraintVertical_bias="0.048" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listTasksToday"

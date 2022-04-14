@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -11,8 +13,19 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
     private SQLiteDatabase db;
     private DbApi dbApi;
     private ArrayList<String> names = new ArrayList<>();
-    public MyDBOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
-                          int version) {super(context, "elearning.db", null, 1); }
+    public static SQLiteOpenHelper mInstance;
+    public static synchronized SQLiteOpenHelper getmInstance(Context context){
+        if (mInstance==null){
+            mInstance=new MyDBOpenHelper(context,"elearningDB.db",null,1);
+        }
+        return mInstance;
+
+    }
+
+    public MyDBOpenHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
+    }
+
     @Override
     //数据库第一次创建时被调用
     public void onCreate(SQLiteDatabase db) {
@@ -34,6 +47,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE card(" +
                 "  card_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "  deck_id INTEGER NOT NULL," +
+                "  folder_id INTEGER NOT NULL," +
                 "  u_id INTEGER NOT NULL," +
                 "  folder_id INTEGER NOT NULL,"+
                 "  card_question TEXT(1000)," +
@@ -42,6 +56,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 "  level INTEGER," +
                 "  CONSTRAINT folder_id FOREIGN KEY (folder_id) REFERENCES folder (folder_id) ON DELETE CASCADE ON UPDATE CASCADE," +
                 "  CONSTRAINT deck_id FOREIGN KEY (deck_id) REFERENCES deck (deck_id) ON DELETE CASCADE ON UPDATE CASCADE," +
+                "  CONSTRAINT folder_id FOREIGN KEY (folder_id) REFERENCES folder (folder_id) ON DELETE CASCADE ON UPDATE CASCADE," +
                 "  CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE" +
                 ")");
         db.execSQL("CREATE TABLE comment(" +
@@ -69,6 +84,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
         names.add("Mike");
         names.add("Jasper");
         names.add("Amy");
+        
         dbApi = new DbApi(db);
         generateFakeUsers();
         genrateFakeFolder();
@@ -100,6 +116,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
         decks.add("Section 4");
         decks.add("Section 5");
         decks.add("Section 6");
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 6; j++) {
                 String folderName = folders.get(j) + " for " + names.get(i);
@@ -108,6 +125,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 for (int m = 0; m < 6; m++) {
                     String deckName = decks.get(m) + " for " + folderName;
                     String deckDescription = "This is the description for " + deckName;
+
                     long deckid = dbApi.insertDeck(deckName, deckDescription, 0, j + 1, i + 1);
                     Random r = new Random();
                     for (int n = 0; n < 4; n++) {
@@ -117,7 +135,8 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                         String cardQuestion = Integer.toString(a) + '+' + Integer.toString(b) + "= ? ";
                         String cardAnswer = Integer.toString(a + b);
                         int hardness = r.nextInt(2);
-                        dbApi.insertCard(cardName, cardQuestion, cardAnswer, hardness, (int)deckid, i + 1, (int)folderid);
+                        dbApi.insertCard(cardName, cardQuestion, cardAnswer, hardness, m + 1, j+1, i + 1);
+
                     }
                 }
             }

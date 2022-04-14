@@ -27,9 +27,7 @@ public class create_database extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_database);
-
     }
-
 
     public void createDB(View view) {
 

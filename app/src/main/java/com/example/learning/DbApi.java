@@ -37,16 +37,17 @@ public class DbApi {
         return name;
     }
 
-    public ArrayList<Card> queryCard(int deckID, int userID, int folderID) {
+    public ArrayList<Card> queryCard(int deckID, int folderID, int userID) {
+
         ArrayList<Card> cards = new ArrayList<>();
 
         Cursor fcursor = db.query("card", null, null, null, null, null, null);
         if (fcursor.moveToFirst()) {
             do {
                 @SuppressLint("Range") int uid = fcursor.getInt(fcursor.getColumnIndex("u_id"));
-                @SuppressLint("Range") int deck_id = fcursor.getInt(fcursor.getColumnIndex("deck_id"));
                 @SuppressLint("Range") int folder_id = fcursor.getInt(fcursor.getColumnIndex("folder_id"));
-                if (userID == uid && deck_id == deckID && folder_id == folderID) {
+                @SuppressLint("Range") int deck_id = fcursor.getInt(fcursor.getColumnIndex("deck_id"));
+                if (userID == uid && folder_id == folderID && deck_id == deckID) {
                     @SuppressLint("Range") int fid = fcursor.getInt(fcursor.getColumnIndex("card_id"));
                     @SuppressLint("Range") String question = fcursor.getString(fcursor.getColumnIndex("card_question"));
                     @SuppressLint("Range") String answer = fcursor.getString(fcursor.getColumnIndex("card_answer"));
@@ -177,7 +178,6 @@ public class DbApi {
             }
         }
 
-
         if (justice == true) {
             ContentValues values2 = new ContentValues();
             values2.put("deck_name", deckName);
@@ -196,7 +196,8 @@ public class DbApi {
         return id;
     }
 
-    public long insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int userID, int folderID) {
+    public void insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int folderID, int userID) {
+
         int[] arrary = new int[1000];
         boolean justice = false;
         int count = 0;
@@ -223,11 +224,13 @@ public class DbApi {
             values2.put("card_question", cardQuestion);
             values2.put("card_answer", cardAnswer);
             values2.put("deck_id", deckID);
+            values2.put("folder_id", folderID);
             values2.put("level", hardness);
             values2.put("u_id", userID);
             values2.put("folder_id", folderID);
             String time = getDate();
             values2.put("time", time);
+
             id = db.insert("card", null, values2);
             System.out.println("create folder: " + cardName + "with anwer: " + cardAnswer + "for user:" + deckID);
 
@@ -236,5 +239,22 @@ public class DbApi {
         }
         return id;
     }
+
+    public ArrayList<Row> getAllCards(int userID) {
+        ArrayList<Row> allCards = new ArrayList<>();
+        ArrayList<FolderEntity> folders = queryFolder(userID);
+        for (FolderEntity folder : folders) {
+            ArrayList<DeckEntity> decks = queryDeck(folder.getFolderID(), userID);
+            for (DeckEntity deck : decks) {
+                ArrayList<Card> cards = queryCard(deck.getDeckID(), folder.getFolderID(), userID);
+                for (Card card : cards) {
+                    Row row = new Row(folder, deck, card);
+                    allCards.add(row);
+                }
+            }
+        }
+        return allCards;
+    }
+
 
 }
