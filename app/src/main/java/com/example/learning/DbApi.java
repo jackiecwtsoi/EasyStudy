@@ -139,7 +139,17 @@ public class DbApi {
             System.out.println("not create folder: " + folderName + "with description: " + folderDescription + "for user:" + userID);
         }
     }
+    public void insertUser(String User_name) {
+        if (User_name != null) {
+            ContentValues values1 = new ContentValues();
+            values1.put("name", User_name);
+            db.insert("user", null, values1);
+            System.out.println("create user: " + User_name);
 
+        } else {
+            System.out.println("not create user: " + User_name);
+        }
+    }
     public void insertDeck(String deckName, String deckDescription, int completion, int folderID, int userID) {
         int[] arrary = new int[1000];
         boolean justice = false;

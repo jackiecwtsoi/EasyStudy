@@ -4,7 +4,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class MyDBOpenHelper extends SQLiteOpenHelper {
+    private SQLiteDatabase db;
+    private DbApi dbApi;
+    private ArrayList<String> names = new ArrayList<>();
     public MyDBOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
                           int version) {super(context, "elearning.db", null, 1); }
     @Override
@@ -58,11 +64,61 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 "  CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE" +
                 ")");
 
-
+        names.add("Mike");
+        names.add("Jasper");
+        names.add("Amy");
+        dbApi = new DbApi(db);
+        generateFakeUsers();
+        genrateFakeFolder();
     }
     //软件版本号发生改变时调用
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+    private void generateFakeUsers(){
+        for (int i = 0; i < 3; i++) {
+            String name = names.get(i);
+            // names.add(name);
+            dbApi.insertUser(name);
+        }
+    }
+    private void genrateFakeFolder(){
+        ArrayList<String> folders = new ArrayList<>();
+        folders.add("English");
+        folders.add("Biology");
+        folders.add("Physics");
+        folders.add("Math");
+        folders.add("Chinese");
+        folders.add("Chemistry");
+        ArrayList<String> decks = new ArrayList<>();
+        decks.add("Section 1");
+        decks.add("Section 2");
+        decks.add("Section 3");
+        decks.add("Section 4");
+        decks.add("Section 5");
+        decks.add("Section 6");
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 6; j++) {
+                String folderName = folders.get(j) + " for " + names.get(i);
+                String folderDescription = "This is the description for " + folderName;
+                dbApi.insertFolder(folderName, folderDescription, i + 1);
+                for (int m = 0; m < 6; m++) {
+                    String deckName = decks.get(m) + " for " + folderName;
+                    String deckDescription = "This is the description for " + deckName;
+                    dbApi.insertDeck(deckName, deckDescription, 0, j + 1, i + 1);
+                    Random r = new Random();
+                    for (int n = 0; n < 4; n++) {
+                        String cardName = "Card" + Integer.toString(n) + " for " + deckName;
+                        int a = r.nextInt(10);
+                        int b = r.nextInt(10);
+                        String cardQuestion = Integer.toString(a) + '+' + Integer.toString(b) + "= ? ";
+                        String cardAnswer = Integer.toString(a + b);
+                        int hardness = r.nextInt(2);
+                        dbApi.insertCard(cardName, cardQuestion, cardAnswer, hardness, m + 1, i + 1);
+                    }
+                }
+            }
+        }
     }
 }

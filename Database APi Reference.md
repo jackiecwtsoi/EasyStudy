@@ -1,6 +1,6 @@
 ### Database APi Reference
 
-1. 把有假数据的数据库放进device file explorer中 data->data->com.example.learning-> databases中上传以下三个文件并覆盖，这三个文件就在github上，和这个readme同目录下
+1. 假数据会在第一次加载的时候自动生成
 
    ![image-20220413234937877](/Users/luchixiang/Library/Application Support/typora-user-images/image-20220413234937877.png)
 
@@ -27,5 +27,5 @@
 
 目前只有插入和查询功能，如果有需要其他功能或者其他属性，可以联系我。
 
-然后目前的数据库中有3个user， userid 分别是1，2，3，name分别为Mike, Jasper, Amy, 每个user有三个folder, 每个folder有三个deck,每个deck有三个问题。
+然后目前的数据库中有3个user， userid 分别是1，2，3，name分别为Mike, Jasper, Amy, 每个user有6个folder, 每个folder，分别是语数英物化生，有6个deck 分别为Section 1-6,每个deck有4个随机问题。
 
