@@ -1,6 +1,8 @@
 package com.example.learning;
 
-public class DeckEntity {
+import java.io.Serializable;
+
+public class DeckEntity implements Serializable {
     private String deckName;
     private int completion;
     private String deckDescription;

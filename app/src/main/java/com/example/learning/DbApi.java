@@ -5,8 +5,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.learning.fragments.Deck;
+
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class DbApi {
@@ -246,6 +250,8 @@ public class DbApi {
         return id;
     }
 
+
+    // get all cards given a user
     public ArrayList<Row> getAllCards(int userID) {
         ArrayList<Row> allCards = new ArrayList<>();
         ArrayList<FolderEntity> folders = queryFolder(userID);
@@ -254,7 +260,7 @@ public class DbApi {
             for (DeckEntity deck : decks) {
                 ArrayList<Card> cards = queryCard(deck.getDeckID(), folder.getFolderID(), userID);
                 for (Card card : cards) {
-                    Row row = new Row(folder, deck, card);
+                    Row row = new Row(deck, card);
                     allCards.add(row);
                 }
             }
@@ -262,5 +268,88 @@ public class DbApi {
         return allCards;
     }
 
+    // get all decks given a user
+    public ArrayList<DeckEntity> getAllDecks(int userID) {
+        ArrayList<DeckEntity> allDecks = new ArrayList<>();
+        ArrayList<FolderEntity> folders = queryFolder(userID);
+        for (FolderEntity folder : folders) {
+            ArrayList<DeckEntity> decks =  queryDeck(folder.getFolderID(), userID);
+            for (DeckEntity deck : decks) {
+                allDecks.add(deck);
+            }
+        }
+        return allDecks;
+    }
+
+    // get all cards inside a specific deck
+    public ArrayList<Row> getCardsFromDeck(DeckEntity deck) {
+        ArrayList<Row> cardsFromDeck = new ArrayList<>();
+        ArrayList<Card> cards = queryCard(deck.getDeckID(), deck.getFolderId(), deck.getUserId());
+        for (Card card : cards) {
+            Row row = new Row(deck, card);
+            cardsFromDeck.add(row);
+        }
+        return cardsFromDeck;
+    }
+
+    // get all the decks that need to be reminded for today
+    // input: today's week day number
+    public ArrayList<DeckEntity> getDecksForReminder(int userID, String todayDayOfWeek) {
+        // define list of decks as final output
+        ArrayList<DeckEntity> decksForReminder = new ArrayList<>();
+
+        /* filter principles:
+        - scenario 1: if frequency = 0 or 1
+            - include if dayOfWeek includes the value of todayDayOfWeek (i.e. today's day of week)
+        - scenario 2: if frequency = 2 (monthly)
+            - include if today minus the deck creation date is divisible by interval
+         */
+        ArrayList<DeckEntity> allDecks = getAllDecks(userID);
+        for (DeckEntity deck : allDecks) { // filter the decks by frequency level
+            // scenario 1
+            if (deck.getFrequency() == 0 | deck.getFrequency() == 1) {
+                ArrayList<String> dayOfWeek = new ArrayList<> ( // split dayOfWeek by ";" separator
+                        Arrays.asList(deck.getDayOfWeek().split(";")));
+                if (dayOfWeek.contains(todayDayOfWeek)) {
+                    decksForReminder.add(deck);
+                }
+            }
+            // TODO: scenario 2
+            else if (deck.getFrequency() == 2) {
+                //////////////////////////////
+            }
+        }
+
+        return decksForReminder;
+    }
+
+
+    public ArrayList<Row> getCardsForReminder(int userID, String todayDayOfWeek) {
+        ArrayList<Row> cardsForReminder = new ArrayList<>();
+        ArrayList<DeckEntity> allDecks = getAllDecks(userID);
+        ArrayList<DeckEntity> decksForReminder = getDecksForReminder(userID, todayDayOfWeek);
+        for (DeckEntity deck : decksForReminder) {
+            ArrayList<Card> cards = queryCard(deck.getDeckID(), deck.getFolderId(), userID);
+            for (Card card : cards) {
+                Row row = new Row(deck, card);
+                cardsForReminder.add(row);
+            }
+        }
+        return cardsForReminder;
+    }
+
+    public String getDayOfWeek(int intDayOfWeek) {
+        String dayOfWeek = "";
+        switch (intDayOfWeek) {
+            case 1: dayOfWeek="Sunday"; break;
+            case 2: dayOfWeek="Monday"; break;
+            case 3: dayOfWeek="Tuesday"; break;
+            case 4: dayOfWeek="Wednesday"; break;
+            case 5: dayOfWeek="Thursday"; break;
+            case 6: dayOfWeek="Friday"; break;
+            case 7: dayOfWeek="Saturday"; break;
+        }
+        return dayOfWeek;
+    }
 
 }

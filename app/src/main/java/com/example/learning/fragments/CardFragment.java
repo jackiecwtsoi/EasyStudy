@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -130,9 +131,10 @@ public class CardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 MainActivity main = (MainActivity) getActivity();
-                main.changeToStudy();
+                main.changeToStudy(deck);
             }
         });
+
         return rootView;
     }
 
