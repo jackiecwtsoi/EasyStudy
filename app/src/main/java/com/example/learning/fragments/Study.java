@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.learning.R;
+import com.example.learning.StudyType;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,9 +35,9 @@ public class Study extends Fragment {
 
     // define variables
     View rootView;
-    Button btnOpenLastOpenDeck, btnTasksToday;
+    Button btnReviewUnfinishedCards, btnReviewAllCards, btnReviewTodayCards;
     RecyclerView listTasksToday;
-    Boolean ALL_CARDS = true; // indicates whether we study ALL CARDS from the database
+    StudyType STUDY_TYPE = StudyType.ALL_CARDS; // indicates whether we study ALL CARDS from the database
     SQLiteDatabase db;
 
     public Study(SQLiteDatabase db) {
@@ -82,22 +83,21 @@ public class Study extends Fragment {
         }
 
         rootView = inflater.inflate(R.layout.fragment_study, container, false);
-        btnOpenLastOpenDeck = rootView.findViewById(R.id.btnOpenLastOpenDeck);
-        btnTasksToday = rootView.findViewById(R.id.btnReviewAllCards);
+        btnReviewUnfinishedCards = rootView.findViewById(R.id.btnOpenLastOpenDeck);
+        btnReviewTodayCards = rootView.findViewById(R.id.btnReviewTodayCards);
+        btnReviewAllCards = rootView.findViewById(R.id.btnReviewAllCards);
         listTasksToday = rootView.findViewById(R.id.listTasksToday);
 
 
-
-
         // when the "Review Unfinished Cards" button is pressed, we only show the unfinished cards
-        btnOpenLastOpenDeck.setOnClickListener(new View.OnClickListener() {
+        btnReviewUnfinishedCards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 StudyFront studyFront = new StudyFront(db);
 
                 Bundle bundle = new Bundle();
-                ALL_CARDS = false; // since we do not want to study ALL CARDS from the database
-                bundle.putBoolean("ALL_CARDS", ALL_CARDS);
+                STUDY_TYPE = StudyType.TODAY_REMAINING_CARDS; // since we do not want to study ALL CARDS from the database
+                bundle.putSerializable("STUDY_TYPE", STUDY_TYPE);
                 studyFront.setArguments(bundle);
 
                 FragmentManager studyFrontManager = getFragmentManager();
@@ -107,16 +107,35 @@ public class Study extends Fragment {
 
             }
         });
+
+        // when the "Review Today's Cards" button is pressed, we show the decks that need to be REMINDED TODAY
+        btnReviewTodayCards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StudyFront studyFront = new StudyFront(db);
+
+                Bundle bundle = new Bundle();
+                STUDY_TYPE = StudyType.TODAY_MUST_STUDY; // since we want to only study the decks for today
+                bundle.putSerializable("STUDY_TYPE", STUDY_TYPE);
+                studyFront.setArguments(bundle);
+
+                FragmentManager studyFrontManager = getFragmentManager();
+                studyFrontManager.beginTransaction()
+                        .replace(R.id.layoutStudy, studyFront)
+                        .commit();
+            }
+        });
+
 
         // when the "Review All Cards" button is pressed, we show EVERY CARD in the database
-        btnTasksToday.setOnClickListener(new View.OnClickListener() {
+        btnReviewAllCards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 StudyFront studyFront = new StudyFront(db);
 
                 Bundle bundle = new Bundle();
-                ALL_CARDS = true; // since we do not want to study ALL CARDS from the database
-                bundle.putBoolean("ALL_CARDS", ALL_CARDS);
+                STUDY_TYPE = StudyType.ALL_CARDS; // since we want to study ALL CARDS from the database
+                bundle.putSerializable("STUDY_TYPE", STUDY_TYPE);
                 studyFront.setArguments(bundle);
 
                 FragmentManager studyFrontManager = getFragmentManager();
@@ -125,7 +144,6 @@ public class Study extends Fragment {
                         .commit();
             }
         });
-
 
 
 

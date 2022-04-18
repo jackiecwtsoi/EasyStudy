@@ -19,8 +19,10 @@ import com.example.learning.Card;
 import com.example.learning.DbApi;
 import com.example.learning.DeckEntity;
 import com.example.learning.FolderEntity;
+import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.example.learning.Row;
+import com.example.learning.StudyType;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ public class StudyFront extends Fragment {
     CardView cardStudyFront;
     Button btnNextCard, btnPreviousCard;
     ProgressBar progressBar;
-    Boolean ALL_CARDS = true; // indicates whether we study ALL CARDS from the database
+    StudyType STUDY_TYPE; // indicates whether we study ALL CARDS from the database
 
     static int rowIdx; // index for locating a row in the study list
 
@@ -92,7 +94,8 @@ public class StudyFront extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     SQLiteDatabase db;
-    int userId = 1; // define the specific user id
+    MainActivity main;
+    int userId;
 
     public StudyFront(SQLiteDatabase db) {
         this.db = db;
@@ -122,7 +125,7 @@ public class StudyFront extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            ALL_CARDS = bundle.getBoolean("ALL_CARDS");
+            STUDY_TYPE = (StudyType) bundle.getSerializable("STUDY_TYPE");
         }
     }
 
@@ -146,14 +149,21 @@ public class StudyFront extends Fragment {
         btnPreviousCard = rootView.findViewById(R.id.btnPreviousCard);
         progressBar = rootView.findViewById(R.id.progressBar);
 
+        main = (MainActivity) getActivity();
+        userId = main.getLoginUserId();
 
         // initialize the first card to be the first in the to-study list
         rowIdx = 0;
 
-        if (ALL_CARDS == true) {
+        System.out.println(STUDY_TYPE);
+
+        if (STUDY_TYPE == StudyType.ALL_CARDS) {
             STUDY_LIST = dbapi.getAllCards(userId);
         }
-        else {
+        else if (STUDY_TYPE == StudyType.TODAY_MUST_STUDY) {
+            STUDY_LIST = dbapi.getCardsForReminder(userId, "Monday");
+        }
+        else if (STUDY_TYPE == StudyType.TODAY_REMAINING_CARDS) {
             STUDY_LIST = dbapi.getAllCards(userId);
         }
 
@@ -161,7 +171,9 @@ public class StudyFront extends Fragment {
         progressBar.setMax(STUDY_LIST.size());
         progressBar.setProgress(1); // initialize progress
 
-        textFolderTitle.setText(STUDY_LIST.get(rowIdx).getFolder().getFolderName());
+
+
+        //textFolderTitle.setText(STUDY_LIST.get(rowIdx).getFolder().getFolderName());
         textDeckTitle.setText(STUDY_LIST.get(rowIdx).getDeck().getDeckName());
         textCardQuestionContent.setText(STUDY_LIST.get(rowIdx).getCard().getCardQuestion());
 //        textFolderTitle.setText(STUDY_LIST.get(rowIdx).get(0));
@@ -173,7 +185,7 @@ public class StudyFront extends Fragment {
             public void onClick(View view) {
                 if (rowIdx < STUDY_LIST.size()-1) {
                     Row row = STUDY_LIST.get(++rowIdx);
-                    textFolderTitle.setText(row.getFolder().getFolderName());
+                    //textFolderTitle.setText(row.getFolder().getFolderName());
                     textDeckTitle.setText(row.getDeck().getDeckName());
                     textCardQuestionContent.setText(row.getCard().getCardQuestion());
 //                    ArrayList<String> row = STUDY_LIST.get(++rowIdx);
@@ -200,7 +212,7 @@ public class StudyFront extends Fragment {
            public void onClick(View view) {
                if (rowIdx > 0) {
                    Row row = STUDY_LIST.get(--rowIdx);
-                   textFolderTitle.setText(row.getFolder().getFolderName());
+                   //textFolderTitle.setText(row.getFolder().getFolderName());
                    textDeckTitle.setText(row.getDeck().getDeckName());
                    textCardQuestionContent.setText(row.getCard().getCardQuestion());
 //                   ArrayList<String> row = STUDY_LIST.get(--rowIdx);
