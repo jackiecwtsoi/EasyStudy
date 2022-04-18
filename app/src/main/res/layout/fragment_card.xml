@@ -17,16 +17,17 @@
         android:layout_marginTop="220dp"
         android:background="@drawable/card_corner"
         >
+
         <TextView
+            android:id="@+id/card_deck_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="30dp"
             android:text="Deck Title"
             android:textSize="26sp"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="60dp"
-            android:id="@+id/card_deck_title"
-            android:textStyle="bold"
-            android:layout_marginStart="60dp" />
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,8 +37,8 @@
             android:textStyle="bold"
             android:layout_below="@+id/card_deck_title"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="60dp"
-            android:layout_marginStart="60dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"
             android:id="@+id/card_card_num"/>
 
         <ImageView
