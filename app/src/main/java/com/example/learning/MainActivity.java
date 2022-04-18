@@ -2,6 +2,7 @@ package com.example.learning;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
@@ -27,8 +28,10 @@ import com.example.learning.fragments.Folder;
 import com.example.learning.fragments.Home;
 import com.example.learning.fragments.Statistic;
 import com.example.learning.fragments.Study;
+import com.example.learning.fragments.StudyFront;
 import com.google.android.material.tabs.TabLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -57,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     private MyDBOpenHelper myDBHelper;
     FragmentTransaction fragmentTransaction;
 
+    private DeckEntity selected_deck;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
         db = myDBHelper.getWritableDatabase();
 
         sendNotification(db);
-        // TODO: TO DELETE LATER
-        Toast.makeText(this, "test reminder set!", Toast.LENGTH_SHORT).show();
 
         mcHome = findViewById(R.id.home_text);
         mcFolder = findViewById(R.id.folders_text);
@@ -146,8 +149,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void changeToStudy() {
+    public void changeToStudy(DeckEntity selected_deck) {
+        this.selected_deck = selected_deck;
         mcContainer.setCurrentItem(3);
+    }
+
+    public void changeToFolder() {
+        mcContainer.setCurrentItem(1);
+    }
+
+    public DeckEntity getSelectedDeck() {
+        return this.selected_deck;
     }
 
     public int getLoginUserId() {

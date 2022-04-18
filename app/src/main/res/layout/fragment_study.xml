@@ -19,7 +19,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/imgTasksToday"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listTasksToday" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewTasksToday" />
 
     <Button
         android:id="@+id/btnReviewAllCards"
@@ -62,16 +62,16 @@
         app:layout_constraintVertical_bias="0.075" />
 
     <Button
-        android:id="@+id/btnOpenLastOpenDeck"
+        android:id="@+id/btnReviewSelectedDeck"
         android:layout_width="232dp"
         android:layout_height="41dp"
         android:background="@drawable/circleuphome"
-        android:text="Review unfinished cards"
+        android:text="Review Selected Deck"
         android:textColor="#F6F5F5"
         app:layout_constraintBottom_toBottomOf="@+id/imgLastOpenDeck"
         app:layout_constraintEnd_toEndOf="@+id/imgLastOpenDeck"
         app:layout_constraintStart_toStartOf="@+id/imgLastOpenDeck"
-        app:layout_constraintTop_toBottomOf="@+id/textLastOpenDeckName"
+        app:layout_constraintTop_toBottomOf="@+id/textSelectedDeckName"
         app:layout_constraintVertical_bias="0.413"></Button>
 
     <ImageView
@@ -89,10 +89,10 @@
         app:layout_constraintVertical_bias="0.288" />
 
     <TextView
-        android:id="@+id/textLastOpenDeck"
+        android:id="@+id/textSelectedDeck"
         android:layout_width="169dp"
         android:layout_height="29dp"
-        android:text="Last open deckEntity"
+        android:text="Last Selected Deck"
         android:textColor="#457C99"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/imgLastOpenDeck"
@@ -103,10 +103,10 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
-        android:id="@+id/textLastOpenDeckName"
+        android:id="@+id/textSelectedDeckName"
         android:layout_width="195dp"
         android:layout_height="50dp"
-        android:text="deckEntity name"
+        android:text="Selected Deck Name"
         android:textColor="#F6F5F5"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/imgLastOpenDeck"
@@ -131,7 +131,7 @@
         android:id="@+id/textTasksToday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tasks for Today"
+        android:text="Decks for Today"
         android:textColor="#457C99"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/imgTasksToday"
@@ -142,26 +142,24 @@
         app:layout_constraintVertical_bias="0.048" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listTasksToday"
-        android:layout_width="191dp"
-        android:layout_height="197dp"
+        android:id="@+id/recyclerViewTasksToday"
+        android:layout_width="284dp"
+        android:layout_height="188dp"
         app:layout_constraintBottom_toBottomOf="@+id/imgTasksToday"
         app:layout_constraintEnd_toEndOf="@+id/imgTasksToday"
-        app:layout_constraintHorizontal_bias="0.178"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="@+id/imgTasksToday"
         app:layout_constraintTop_toBottomOf="@+id/textTasksToday"
-        app:layout_constraintVertical_bias="0.033" />
+        app:layout_constraintVertical_bias="0.112" />
 
     <ImageView
         android:id="@+id/imgStudyHome"
-        android:layout_width="70dp"
-        android:layout_height="82dp"
+        android:layout_width="53dp"
+        android:layout_height="54dp"
+        android:layout_marginBottom="252dp"
         android:src="@drawable/study_home"
         app:layout_constraintBottom_toBottomOf="@+id/imgTasksToday"
         app:layout_constraintEnd_toEndOf="@+id/imgTasksToday"
-        app:layout_constraintHorizontal_bias="0.925"
-        app:layout_constraintStart_toStartOf="@+id/imgTasksToday"
-        app:layout_constraintTop_toTopOf="@+id/imgTasksToday"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="@+id/imgTasksToday" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

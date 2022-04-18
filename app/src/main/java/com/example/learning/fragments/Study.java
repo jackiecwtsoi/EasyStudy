@@ -1,21 +1,28 @@
 package com.example.learning.fragments;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
-import androidx.constraintlayout.solver.state.State;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.example.learning.DbApi;
+import com.example.learning.DeckEntity;
+import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.example.learning.StudyType;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,10 +42,19 @@ public class Study extends Fragment {
 
     // define variables
     View rootView;
-    Button btnReviewUnfinishedCards, btnReviewAllCards, btnReviewTodayCards;
-    RecyclerView listTasksToday;
-    StudyType STUDY_TYPE = StudyType.ALL_CARDS; // indicates whether we study ALL CARDS from the database
+    Button btnReviewSelectedDeck, btnReviewAllCards, btnReviewTodayCards;
+    RecyclerView recyclerViewTasksToday;
+    TextView textSelectedDeckName;
     SQLiteDatabase db;
+    int userId;
+    Calendar calendar = Calendar.getInstance();
+    String dayOfWeek;
+
+    StudyType STUDY_TYPE = StudyType.ALL_CARDS; // indicates whether we study ALL CARDS from the database
+    DeckEntity selected_deck;
+
+    ArrayList<DeckEntity> listTasksToday = new ArrayList<>();
+    TasksTodayAdapter adapter;
 
     public Study(SQLiteDatabase db) {
         // Required empty public constructor
@@ -66,10 +82,6 @@ public class Study extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -83,28 +95,54 @@ public class Study extends Fragment {
         }
 
         rootView = inflater.inflate(R.layout.fragment_study, container, false);
-        btnReviewUnfinishedCards = rootView.findViewById(R.id.btnOpenLastOpenDeck);
+        DbApi dbapi = new DbApi(this.db);
+        btnReviewSelectedDeck = rootView.findViewById(R.id.btnReviewSelectedDeck);
         btnReviewTodayCards = rootView.findViewById(R.id.btnReviewTodayCards);
         btnReviewAllCards = rootView.findViewById(R.id.btnReviewAllCards);
-        listTasksToday = rootView.findViewById(R.id.listTasksToday);
+        textSelectedDeckName = rootView.findViewById(R.id.textSelectedDeckName);
 
+        // recycler view
+        recyclerViewTasksToday = rootView.findViewById(R.id.recyclerViewTasksToday);
+        MainActivity main = (MainActivity) getActivity();
+        selected_deck = main.getSelectedDeck();
+        userId = main.getLoginUserId();
+        dayOfWeek = dbapi.getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
+        listTasksToday = dbapi.getDecksForReminder(userId, dayOfWeek);
+        adapter = new TasksTodayAdapter(listTasksToday);
+        recyclerViewTasksToday.setAdapter(adapter);
+        Context context = getActivity();
+        recyclerViewTasksToday.setLayoutManager(new LinearLayoutManager(context));
 
-        // when the "Review Unfinished Cards" button is pressed, we only show the unfinished cards
-        btnReviewUnfinishedCards.setOnClickListener(new View.OnClickListener() {
+        if (selected_deck == null) { // if no deck has been selected yet
+            textSelectedDeckName.setText("No selected deck yet");
+            btnReviewSelectedDeck.setText("Select A Deck");
+        }
+        else { // if deck has been selected
+            textSelectedDeckName.setText(selected_deck.getDeckName());
+        }
+
+        // when the "Review Selected Deck" button is pressed, we only show the unfinished cards
+        btnReviewSelectedDeck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StudyFront studyFront = new StudyFront(db);
+                if (selected_deck == null) { // if no selected deck yet, then the button goes to Folder tab
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    mainActivity.changeToFolder();
+                }
+                else { // if deck is selected, then the button goes to StudyFront fragment for that deck
+                    StudyFront studyFront = new StudyFront(db);
 
-                Bundle bundle = new Bundle();
-                STUDY_TYPE = StudyType.TODAY_REMAINING_CARDS; // since we do not want to study ALL CARDS from the database
-                bundle.putSerializable("STUDY_TYPE", STUDY_TYPE);
-                studyFront.setArguments(bundle);
+                    Bundle bundle = new Bundle();
+                    STUDY_TYPE = StudyType.SELECTED_DECK; // since we do not want to study ALL CARDS from the database
+                    bundle.putSerializable("STUDY_TYPE", STUDY_TYPE);
+                    bundle.putSerializable("selected_deck", selected_deck);
+                    studyFront.setArguments(bundle);
 
-                FragmentManager studyFrontManager = getFragmentManager();
-                studyFrontManager.beginTransaction()
-                        .replace(R.id.layoutStudy, studyFront)
-                        .commit();
-
+                    FragmentManager studyFrontManager = getFragmentManager();
+                    studyFrontManager.beginTransaction()
+                            .replace(R.id.layoutStudy, studyFront)
+                            .commit();
+                }
             }
         });
 

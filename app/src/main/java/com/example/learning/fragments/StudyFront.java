@@ -26,6 +26,7 @@ import com.example.learning.StudyType;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,15 +37,6 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class StudyFront extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     // define variables
     View rootView;
     TextView textFolderTitle;
@@ -55,47 +47,17 @@ public class StudyFront extends Fragment {
     Button btnNextCard, btnPreviousCard;
     ProgressBar progressBar;
     StudyType STUDY_TYPE; // indicates whether we study ALL CARDS from the database
+    DeckEntity selected_deck;
 
     static int rowIdx; // index for locating a row in the study list
-
-//    // define a hashmap that represents the nested data (folders and then questions)
-//    // data is a list of rows
-//    // each row contains: folderName, cardQuestion, cardAnswer
-//    static ArrayList<String> row1 = new ArrayList<String> () {{
-//        add("Computer Science");
-//        add("What is the content of COMP7506?");
-//        add("Smartphone apps development");
-//    }};
-//    static ArrayList<String> row2 = new ArrayList<String> () {{
-//       add("Computer Science");
-//       add("Who is the professor for COMP7506?");
-//       add("T. W. Chim");
-//    }};
-//    static ArrayList<String> row3 = new ArrayList<String> () {{
-//        add("Mathematics");
-//        add("1 + 1 = ");
-//        add("2");
-//    }};
-//    static ArrayList<String> row4 = new ArrayList<String> () {{
-//        add("Mathematics");
-//        add("2 + 2 = ");
-//        add("4");
-//    }};
-//    static ArrayList<String> row5 = new ArrayList<String> () {{
-//        add("Mathematics");
-//        add("3 + 3 = ");
-//        add("6");
-//    }};
-//    static ArrayList<ArrayList<String>> STUDY_LIST = new ArrayList<ArrayList<String>> () {{
-//        add(row1); add(row2); add(row3); add(row4); add(row5);
-//    }};
-
     static ArrayList<Row> STUDY_LIST;
 
     private OnFragmentInteractionListener mListener;
     SQLiteDatabase db;
     MainActivity main;
     int userId;
+    Calendar calendar = Calendar.getInstance();
+    String dayOfWeek;
 
     public StudyFront(SQLiteDatabase db) {
         this.db = db;
@@ -114,8 +76,6 @@ public class StudyFront extends Fragment {
     public static Study newInstance(String param1, String param2, SQLiteDatabase db) {
         Study fragment = new Study(db);
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -126,6 +86,9 @@ public class StudyFront extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             STUDY_TYPE = (StudyType) bundle.getSerializable("STUDY_TYPE");
+            if (STUDY_TYPE == StudyType.SELECTED_DECK) {
+                selected_deck = (DeckEntity) bundle.getSerializable("selected_deck");
+            }
         }
     }
 
@@ -151,29 +114,29 @@ public class StudyFront extends Fragment {
 
         main = (MainActivity) getActivity();
         userId = main.getLoginUserId();
+        dayOfWeek = dbapi.getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
 
         // initialize the first card to be the first in the to-study list
         rowIdx = 0;
 
-        System.out.println(STUDY_TYPE);
-
-        if (STUDY_TYPE == StudyType.ALL_CARDS) {
-            STUDY_LIST = dbapi.getAllCards(userId);
-        }
-        else if (STUDY_TYPE == StudyType.TODAY_MUST_STUDY) {
-            STUDY_LIST = dbapi.getCardsForReminder(userId, "Monday");
-        }
-        else if (STUDY_TYPE == StudyType.TODAY_REMAINING_CARDS) {
-            STUDY_LIST = dbapi.getAllCards(userId);
+        if (STUDY_TYPE != null) {
+            switch (STUDY_TYPE) {
+                case ALL_CARDS:
+                    STUDY_LIST = dbapi.getAllCards(userId);
+                    break;
+                case TODAY_MUST_STUDY:
+                    STUDY_LIST = dbapi.getCardsForReminder(userId, dayOfWeek);
+                    break;
+                case SELECTED_DECK:
+                    STUDY_LIST = dbapi.getCardsFromDeck(selected_deck);
+                    break;
+            }
         }
 
         // define progress bar
         progressBar.setMax(STUDY_LIST.size());
         progressBar.setProgress(1); // initialize progress
 
-
-
-        //textFolderTitle.setText(STUDY_LIST.get(rowIdx).getFolder().getFolderName());
         textDeckTitle.setText(STUDY_LIST.get(rowIdx).getDeck().getDeckName());
         textCardQuestionContent.setText(STUDY_LIST.get(rowIdx).getCard().getCardQuestion());
 //        textFolderTitle.setText(STUDY_LIST.get(rowIdx).get(0));
@@ -185,7 +148,6 @@ public class StudyFront extends Fragment {
             public void onClick(View view) {
                 if (rowIdx < STUDY_LIST.size()-1) {
                     Row row = STUDY_LIST.get(++rowIdx);
-                    //textFolderTitle.setText(row.getFolder().getFolderName());
                     textDeckTitle.setText(row.getDeck().getDeckName());
                     textCardQuestionContent.setText(row.getCard().getCardQuestion());
 //                    ArrayList<String> row = STUDY_LIST.get(++rowIdx);

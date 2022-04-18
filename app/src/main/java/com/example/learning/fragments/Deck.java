@@ -107,8 +107,14 @@ public class Deck extends Fragment {
         adapter.setOnItemClickLitener(new DeckAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-                MainActivity main = (MainActivity) getActivity();
-                main.changeToStudy();
+//                MainActivity main = (MainActivity) getActivity();
+//                main.changeToStudy();
+                CardFragment fragment = new CardFragment(db, deckList.get(position));
+                FragmentManager studyFrontManager = getFragmentManager();
+                studyFrontManager.beginTransaction()
+                        .replace(R.id.layoutFolder, fragment)
+                        .commit();
+                System.out.println(position);
             }
         });
         folder_viewer.setLayoutManager(new LinearLayoutManager(context));

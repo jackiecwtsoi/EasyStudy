@@ -6,6 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Icon;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -26,29 +29,20 @@ public class ReminderBroadcast extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        int userId = intent.getIntExtra("userId", 0);
-        Calendar calendar = Calendar.getInstance();
-        int intDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        String dayOfWeek = "";
-
-        switch (intDayOfWeek) {
-            case 1: dayOfWeek="Sunday"; break;
-            case 2: dayOfWeek="Monday"; break;
-            case 3: dayOfWeek="Tuesday"; break;
-            case 4: dayOfWeek="Wednesday"; break;
-            case 5: dayOfWeek="Thursday"; break;
-            case 6: dayOfWeek="Friday"; break;
-            case 7: dayOfWeek="Saturday"; break;
-        }
-
         MyDBOpenHelper myDBHelper = new MyDBOpenHelper(context, "elearning.db", null, 1);
         SQLiteDatabase db = myDBHelper.getWritableDatabase();
-
         DbApi dbapi = new DbApi(db);
-        ArrayList<DeckEntity> decksForReminder = dbapi.getDecksForReminder(userId, "Monday");
 
-        System.out.println(userId);
-        System.out.println(decksForReminder.size());
+        int userId = intent.getIntExtra("userId", 0);
+
+        Calendar calendar = Calendar.getInstance();
+        int intDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        String dayOfWeek = dbapi.getDayOfWeek(intDayOfWeek);
+
+        ArrayList<DeckEntity> decksForReminder = dbapi.getDecksForReminder(userId, dayOfWeek);
+
+        System.out.println("userId: " + userId);
+        System.out.println("decks to study for: " + decksForReminder.size());
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
@@ -58,11 +52,20 @@ public class ReminderBroadcast extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 100, repeatingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "notifyTest")
-                .setSmallIcon(R.drawable.avatar)
-                .setContentTitle("Monday")
-                .setContentText("Hi! The time is " + calendar.getTime() + ".")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.avatar))
+                .setContentTitle("Study Time!")
+//                .setContentText("Hello user " + userId + "! Today is " + dayOfWeek + ", and you have "  +
+//                        decksForReminder.size() + " unfinished decks to study for.\n" +
+//                        "Click this notification to start studying.")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(
+                        "Hello user " + userId + "! Today is " + dayOfWeek + ", and you have "  +
+                                decksForReminder.size() + " unfinished decks to study for. " +
+                                "Click this notification to start studying.")
+                )
                 .setAutoCancel(true);
 
         notificationManager.notify(100, builder.build());

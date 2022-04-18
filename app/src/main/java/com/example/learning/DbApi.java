@@ -281,6 +281,17 @@ public class DbApi {
         return allDecks;
     }
 
+    // get all cards inside a specific deck
+    public ArrayList<Row> getCardsFromDeck(DeckEntity deck) {
+        ArrayList<Row> cardsFromDeck = new ArrayList<>();
+        ArrayList<Card> cards = queryCard(deck.getDeckID(), deck.getFolderId(), deck.getUserId());
+        for (Card card : cards) {
+            Row row = new Row(deck, card);
+            cardsFromDeck.add(row);
+        }
+        return cardsFromDeck;
+    }
+
     // get all the decks that need to be reminded for today
     // input: today's week day number
     public ArrayList<DeckEntity> getDecksForReminder(int userID, String todayDayOfWeek) {
@@ -312,11 +323,6 @@ public class DbApi {
         return decksForReminder;
     }
 
-//    ArrayList<Card> cards = queryCard(deck.getDeckID(), folder.getFolderID(), userID);
-//                for (Card card : cards) {
-//        Row row = new Row(folder, deck, card);
-//        allCards.add(row);
-//    }
 
     public ArrayList<Row> getCardsForReminder(int userID, String todayDayOfWeek) {
         ArrayList<Row> cardsForReminder = new ArrayList<>();
@@ -330,6 +336,20 @@ public class DbApi {
             }
         }
         return cardsForReminder;
+    }
+
+    public String getDayOfWeek(int intDayOfWeek) {
+        String dayOfWeek = "";
+        switch (intDayOfWeek) {
+            case 1: dayOfWeek="Sunday"; break;
+            case 2: dayOfWeek="Monday"; break;
+            case 3: dayOfWeek="Tuesday"; break;
+            case 4: dayOfWeek="Wednesday"; break;
+            case 5: dayOfWeek="Thursday"; break;
+            case 6: dayOfWeek="Friday"; break;
+            case 7: dayOfWeek="Saturday"; break;
+        }
+        return dayOfWeek;
     }
 
 }
