@@ -46,6 +46,7 @@ public class CardFragment extends Fragment {
     DeckEntity deck;
     ArrayList<Card> cards = new ArrayList<>();
     TextView cardNum;
+    TextView decktile;
 
 
     public CardFragment(SQLiteDatabase db, DeckEntity deck) {
@@ -110,7 +111,6 @@ public class CardFragment extends Fragment {
         cnp_citcleNumberProgress = rootView.findViewById(R.id.card_deck_progress);
         increase();
         addCard = rootView.findViewById(R.id.card_add_card);
-
         addCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,6 +124,8 @@ public class CardFragment extends Fragment {
         });
         cardNum = rootView.findViewById(R.id.card_card_num);
         cardNum.setText(Integer.toString(cards.size())+ " cards |");
+        decktile = rootView.findViewById(R.id.card_deck_title);
+        decktile.setText(deck.getDeckName());
         changeToStudy = rootView.findViewById(R.id.card_to_study);
         changeToStudy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,8 +143,17 @@ public class CardFragment extends Fragment {
         handler.removeMessages(WHAT_INCREASE);
         handler.sendEmptyMessage(WHAT_INCREASE);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        qeuryCard();
+        cardNum.setText(Integer.toString(cards.size())+ " cards |");
+    }
+
     private void qeuryCard(){
         cards.clear();
+        System.out.println(deck.getDeckName());
         cards.addAll(dbApi.queryCard(deck.getDeckID(), deck.getFolderId(), deck.getUserId()));
     }
 }
