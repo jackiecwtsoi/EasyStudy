@@ -317,7 +317,7 @@
                 android:layout_width="200dp"
                 android:layout_height="160dp"
                 android:id="@+id/add_selected_img"
-                android:src="@drawable/springshowers"
+                android:src="@drawable/spring_showers"
                 android:layout_below="@+id/add_browse_button"
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"/>
