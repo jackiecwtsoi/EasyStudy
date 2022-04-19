@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.learning.MainActivity;
+import com.example.learning.MyDBOpenHelper;
 import com.example.learning.R;
 import com.example.learning.ui.login.LoginViewModel;
 import com.example.learning.ui.login.LoginViewModelFactory;
@@ -33,6 +35,8 @@ import com.example.learning.ui.login.LoginViewModelFactory;
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
+    private MyDBOpenHelper myDBHelper;
+    private SQLiteDatabase db;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
-
+        myDBHelper = new MyDBOpenHelper(LoginActivity.this, "elearning.db", null, 1);
+        db = myDBHelper.getWritableDatabase();
+        
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);

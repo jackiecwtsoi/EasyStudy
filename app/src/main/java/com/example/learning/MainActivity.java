@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     private MyDBOpenHelper myDBHelper;
     FragmentTransaction fragmentTransaction;
+    private int uid;
 
     private DeckEntity selected_deck;
 
@@ -69,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        uid = intent.getIntExtra("user_id", 1);
         createNotificationChannel();
 
         // connect to the database
@@ -163,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public int getLoginUserId() {
-        return 1;
+        return uid;
     }
 
     private void createNotificationChannel() {
