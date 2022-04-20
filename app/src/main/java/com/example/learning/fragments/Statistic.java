@@ -17,6 +17,8 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.learning.DbApi;
+import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.example.learning.SpecialCalendar;
 import com.github.mikephil.charting.charts.PieChart;
@@ -27,6 +29,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,6 +59,13 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
     int mMonth=0;//月
     int mDay=0;//日
     SQLiteDatabase db;
+    private DbApi dbApi;
+    private int userid;
+    private Statistic mContext;
+    private boolean check_sign;
+    private int present_num;
+    private TextView attendece_content;
+    private TextView Total_w_p_number;
 
 
     private OnFragmentInteractionListener mListener;
@@ -97,8 +107,33 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // 创建图表
         View view = inflater.inflate(R.layout.fragment_statistic, container, false);
+        dbApi = new DbApi(db);
+        MainActivity main = (MainActivity) getActivity();
+        userid = main.getLoginUserId();
+        String date = getSignDate();
+        //Visual of page number
+        check_sign = dbApi.checkSign(userid,date);
+        present_num = dbApi.getPresentdays(userid);
+        String present_days = Integer.toString(present_num);
+
+
+        attendece_content=(TextView)view.findViewById(R.id.attendece_content);
+        Total_w_p_number = (TextView)view.findViewById(R.id.Total_w_p_number);
+
+
+        if (check_sign==false){
+            attendece_content.setBackground(getResources().getDrawable(R.drawable.status_circle_red));
+            attendece_content.setText("No Sign");
+
+        }
+        Total_w_p_number.setText(present_days);
+
+
+
+
+        // 创建图表
+
         pie = (PieChart) view.findViewById(R.id.pie);
         list=new ArrayList<>();
 
@@ -117,9 +152,10 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
         registration_calendar_gv=(GridView)view.findViewById(R.id.registration_calendar_gv);
         today=(TextView)view.findViewById(R.id.Today);
 
+
         Calendar calendar=Calendar.getInstance();
         mYear = calendar.get(Calendar.YEAR); // 获取当前年份
-        mMonth = calendar.get(Calendar.MONTH) ;// 获取当前月份以（0开头）
+        mMonth = calendar.get(Calendar.MONTH)+1 ;// 获取当前月份以（0开头）
         mDay = calendar.get(Calendar.DAY_OF_MONTH) ;// 获取当前天以（0开头）
 
         SpecialCalendar mCalendar=new SpecialCalendar();
@@ -127,10 +163,11 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
         int mDays=mCalendar.getDaysOfMonth(isLeapYear,mMonth+1);
         int week =mCalendar.getWeekdayOfMonth(mYear,mMonth);
 
-        adapter=new RegistrationAdapter(mDays,week,mDay);
+        adapter=new RegistrationAdapter(mDays,week,mDay,mMonth,mYear);
         registration_calendar_gv.setAdapter(adapter);
         registration_calendar_gv.setOnItemClickListener(this);
         today.setText(mYear+"/"+mMonth+"/"+mDay);
+
 
         return view;
     }
@@ -159,12 +196,27 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
         String today=mYear+"-"+mMonth+"-"+l;
         if (l!=0){
             if (l==mDay){
-                TextView today_tv= (TextView) view.findViewById(R.id.day);
-                today_tv.setBackgroundResource(R.mipmap.member_ok);
-                today_tv.setTextColor(Color.BLACK);
-                today_tv.setText(l+"");
-                view.setBackgroundColor(Color.parseColor("#ffffff"));
-                Toast.makeText(view.getContext(),"签到成功",Toast.LENGTH_SHORT).show();
+
+
+
+
+                if (check_sign==false){
+                    long SignID = dbApi.insertSign(userid,"True");
+                    TextView today_tv= (TextView) view.findViewById(R.id.day);
+                    today_tv.setBackgroundResource(R.mipmap.member_ok);
+                    today_tv.setTextColor(Color.BLACK);
+                    today_tv.setText(l+"");
+                    view.setBackgroundColor(Color.parseColor("#ffffff"));
+                    UPdateAttendence();
+                    UpdatePresentDay();
+
+                    Toast.makeText(view.getContext(),"签到成功",Toast.LENGTH_SHORT).show();
+
+                }
+                else {
+                    Toast.makeText(view.getContext(),"您已经签到，亲~~waku waku",Toast.LENGTH_SHORT).show();
+                }
+
             }else{
                 Toast.makeText(view.getContext(),"您选择的日期："+today,Toast.LENGTH_SHORT).show();
 
@@ -178,11 +230,19 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
         private final int week;
         private int[] dayNumber;
         private final int day;
+        private int month;
+        private int year;
+        MainActivity main = (MainActivity) getActivity();
+        int user_id = main.getLoginUserId();
+        private String cal_date;
 
-        public RegistrationAdapter(int days, int week,int day) {
+
+        public RegistrationAdapter(int days, int week,int day,int month,int year) {
             this.days = days;
             this.week = week;
             this.day=day;
+            this.month = month;
+            this.year = year;
             getEveryDay();
         }
 
@@ -207,6 +267,24 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
         private ViewHolder viewHolder;
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
+            if (i<10){
+                if (month<10) {
+                    cal_date = year + "-" +0+ month + "-" + 0 + dayNumber[i];
+                }
+                else {
+                    cal_date = year + "-" + month + "-" + 0 + dayNumber[i];
+                }
+
+                }
+            else {
+                if (month<10) {
+                    cal_date = year + "-" +0+ month + "-" + dayNumber[i];
+                }
+                else {
+                    cal_date = year + "-" + month + "-" + dayNumber[i];
+                }
+            }
+
             if (null==view){
                 view= LayoutInflater.from(getContext()).inflate(R.layout.item_registrationadatper,null);
                 viewHolder=new ViewHolder(view);
@@ -215,13 +293,18 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
                 viewHolder= (ViewHolder) view.getTag();
             }
             viewHolder.day.setText(dayNumber[i]==0? "" : dayNumber[i]+"");
-            if (dayNumber[i]!=0&&dayNumber[i]<day&&dayNumber[i]%2==1){
+            boolean check = dbApi.checkSign(user_id,cal_date);
+//            if (dayNumber[i]!=0&&dayNumber[i]<day&&dayNumber[i]%2==1){
+            if (dayNumber[i]!=0&&dayNumber[i]<day&&check==true){
                 viewHolder.day.setBackgroundResource(R.mipmap.member_ok);
             }
-            if (dayNumber[i]==day){
+            if (dayNumber[i]==day&&check==false){
                 viewHolder.day.setText("今");
                 view.setBackgroundResource(R.color.colorPrimary);
                 viewHolder.day.setTextColor(Color.parseColor("#ffffff"));
+            }
+            if (dayNumber[i]==day&&check==true){
+                viewHolder.day.setBackgroundResource(R.mipmap.member_ok);
             }
 
             return view;
@@ -250,7 +333,24 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
             }
         }
     }
+    public String getSignDate(){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(System.currentTimeMillis());
+//        System.out.println(formatter.format(date));
+        return formatter.format(date);
 
+    }
+    public void UPdateAttendence(){
+        attendece_content.setBackground(getResources().getDrawable(R.drawable.status_circle));
+        attendece_content.setText("Present");
+
+    }
+    public void UpdatePresentDay(){
+        present_num = dbApi.getPresentdays(userid);
+        String present_days = Integer.toString(present_num);
+        Total_w_p_number.setText(present_days);
+
+    }
 
     /**
      * This interface must be implemented by activities that contain this

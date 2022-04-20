@@ -60,7 +60,7 @@ public class SpecialCalendar {
      */
     public int getWeekdayOfMonth( int mYear, int mMonth){
         Calendar cal=Calendar.getInstance();
-        cal.set(mYear,mMonth,1);
+        cal.set(mYear,mMonth-1,1);
         return cal.get(Calendar.DAY_OF_WEEK)-1;
     }
 }

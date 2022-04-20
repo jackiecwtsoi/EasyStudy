@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.example.learning.fragments.Deck;
 
@@ -26,6 +27,16 @@ public class DbApi {
 //        System.out.println(formatter.format(date));
         return formatter.format(date);
     }
+
+    //update by Zongwei Li,2022/4/20
+    public String getSignDate(){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(System.currentTimeMillis());
+//        System.out.println(formatter.format(date));
+        return formatter.format(date);
+
+    }
+
 
     public static String randomName(int min, int max) {
         String name;
@@ -305,6 +316,60 @@ public class DbApi {
             System.out.println("not create folder: " + cardName + "with description: " + cardAnswer + "for user:" + deckID);
         }
         return id;
+    }
+    public long insertSign(int u_id,String status){
+        int[] arrary = new int[1000];
+        boolean justice = false;
+        int count = 0;
+        long id = -1;
+        String date = getSignDate();
+        Cursor check_cursor = db.query("user", null, null, null, null, null, null);
+        if (check_cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int pid = check_cursor.getInt(check_cursor.getColumnIndex("u_id"));
+                arrary[count] = pid;
+                count = count + 1;
+            } while (check_cursor.moveToNext());
+
+        }
+        for (int i = 0; i < arrary.length; i++) {
+            if (arrary[i] == u_id) {
+                justice = true;
+            }
+        }
+
+        if (justice == true) {
+            ContentValues values2 = new ContentValues();
+            // values2.put("card_name", cardName);
+
+            values2.put("u_id", u_id);
+            values2.put("date", date);
+            values2.put("status", status);
+
+            id = db.insert("sign", null, values2);
+            System.out.println("User: " +u_id + " Sign in: " + date);
+
+
+        } else {
+            System.out.println("User: " +u_id + " No Sign in: " + date);
+        }
+        return id;
+
+    }
+
+    public boolean checkSign(int u_id,String checkdate){
+        String user_id=Integer.toString(u_id);
+        Cursor check_cursor = db.query("sign", null, "u_id =? and date=?", new String[]{user_id, checkdate}, null, null, null);
+        if (check_cursor.getCount()==0){
+            return false;
+        }
+        return true;
+
+    }
+    public int getPresentdays(int u_id){
+        String user_id=Integer.toString(u_id);
+        Cursor check_cursor = db.query("sign", null, "u_id =?", new String[]{user_id}, null, null, null);
+        return check_cursor.getCount();
     }
 
 
