@@ -39,7 +39,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="50dp"
             android:layout_marginStart="50dp"
-            android:id="@+id/card_card_num"/>
+            />
 
         <ImageView
             android:layout_width="40dp"
