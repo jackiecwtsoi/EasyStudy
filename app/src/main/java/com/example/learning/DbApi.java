@@ -162,12 +162,15 @@ public class DbApi {
         return id;
     }
 
-    public long insertUser(String User_name) {
+    public long insertUserFull(String User_name, String email, String password) {
         long id = -1;
         if (User_name != null) {
             ContentValues values1 = new ContentValues();
             values1.put("name", User_name);
+            values1.put("email", email);
+            values1.put("password", password);
             id = db.insert("user", null, values1);
+
             System.out.println("create user: " + User_name);
 
         } else {
@@ -182,6 +185,7 @@ public class DbApi {
         int count = 0;
         long id = -1;
         Cursor check_cursor = db.query("folder", null, null, null, null, null, null);
+
         if (check_cursor.moveToFirst()) {
             do {
                 @SuppressLint("Range") int pid = check_cursor.getInt(check_cursor.getColumnIndex("folder_id"));
@@ -215,6 +219,59 @@ public class DbApi {
             System.out.println("not create folder: " + deckName + "with description: " + deckDescription + "for user:" + folderID);
         }
         return id;
+    }
+
+    public int queryUser(String userName, String email, String password) {
+        String[] arrary = new String[1000];
+        String[] passwords = new String[1000];
+        String[] userNames = new String[1000];
+        int[] userIDs = new int[1000];
+        int count = 0;
+        Cursor check_cursor = db.query("user", null, null, null, null, null, null);
+        if (check_cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String email1 = check_cursor.getString(check_cursor.getColumnIndex("email"));
+                System.out.println(email1);
+                @SuppressLint("Range") String password1 = check_cursor.getString(check_cursor.getColumnIndex("password"));
+                @SuppressLint("Range") String userName1 = check_cursor.getString(check_cursor.getColumnIndex("name"));
+                @SuppressLint("Range") int pid = check_cursor.getInt(check_cursor.getColumnIndex("u_id"));
+                arrary[count] = email1;
+                passwords[count] = password1;
+                userNames[count] = userName1;
+                userIDs[count] = pid;
+                count = count + 1;
+            } while (check_cursor.moveToNext());
+        }
+        System.out.println(email);
+        for (int i = 0; i < arrary.length; i++) {
+            System.out.println(arrary[i]);
+            if (arrary[i].equals(email)) {
+
+                if (passwords[i].equals(password) && userNames[i].equals(userName)) {
+                    return userIDs[i];
+                } else {
+                    return -1;
+                }
+            }
+        }
+        return -2;
+    }
+
+    public String queryUserName(int uid) {
+        Cursor check_cursor = db.query("user", null, null, null, null, null, null);
+
+        if (check_cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int pid = check_cursor.getInt(check_cursor.getColumnIndex("u_id"));
+                if (pid == uid) {
+                    @SuppressLint("Range") String name = check_cursor.getString(check_cursor.getColumnIndex("name"));
+                    return name;
+                }
+
+            } while (check_cursor.moveToNext());
+
+        }
+        return "";
     }
 
     public long insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int folderID, int userID) {
@@ -338,7 +395,7 @@ public class DbApi {
         ArrayList<DeckEntity> allDecks = new ArrayList<>();
         ArrayList<FolderEntity> folders = queryFolder(userID);
         for (FolderEntity folder : folders) {
-            ArrayList<DeckEntity> decks =  queryDeck(folder.getFolderID(), userID);
+            ArrayList<DeckEntity> decks = queryDeck(folder.getFolderID(), userID);
             for (DeckEntity deck : decks) {
                 allDecks.add(deck);
             }
@@ -373,7 +430,7 @@ public class DbApi {
         for (DeckEntity deck : allDecks) { // filter the decks by frequency level
             // scenario 1
             if (deck.getFrequency() == 0 | deck.getFrequency() == 1) {
-                ArrayList<String> dayOfWeek = new ArrayList<> ( // split dayOfWeek by ";" separator
+                ArrayList<String> dayOfWeek = new ArrayList<>( // split dayOfWeek by ";" separator
                         Arrays.asList(deck.getDayOfWeek().split(";")));
                 if (dayOfWeek.contains(todayDayOfWeek)) {
                     decksForReminder.add(deck);
@@ -406,13 +463,27 @@ public class DbApi {
     public String getDayOfWeek(int intDayOfWeek) {
         String dayOfWeek = "";
         switch (intDayOfWeek) {
-            case 1: dayOfWeek="Sunday"; break;
-            case 2: dayOfWeek="Monday"; break;
-            case 3: dayOfWeek="Tuesday"; break;
-            case 4: dayOfWeek="Wednesday"; break;
-            case 5: dayOfWeek="Thursday"; break;
-            case 6: dayOfWeek="Friday"; break;
-            case 7: dayOfWeek="Saturday"; break;
+            case 1:
+                dayOfWeek = "Sunday";
+                break;
+            case 2:
+                dayOfWeek = "Monday";
+                break;
+            case 3:
+                dayOfWeek = "Tuesday";
+                break;
+            case 4:
+                dayOfWeek = "Wednesday";
+                break;
+            case 5:
+                dayOfWeek = "Thursday";
+                break;
+            case 6:
+                dayOfWeek = "Friday";
+                break;
+            case 7:
+                dayOfWeek = "Saturday";
+                break;
         }
         return dayOfWeek;
     }

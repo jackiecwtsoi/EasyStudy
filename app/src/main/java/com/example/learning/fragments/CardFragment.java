@@ -47,6 +47,7 @@ public class CardFragment extends Fragment {
     ArrayList<Card> cards = new ArrayList<>();
     TextView cardNum;
     TextView decktile;
+    TextView userNameText;
 
 
     public CardFragment(SQLiteDatabase db, DeckEntity deck) {
@@ -107,6 +108,7 @@ public class CardFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_card, container, false);
         dbApi = new DbApi(db);
+
         qeuryCard();
         cnp_citcleNumberProgress = rootView.findViewById(R.id.card_deck_progress);
         increase();
@@ -134,7 +136,8 @@ public class CardFragment extends Fragment {
                 main.changeToStudy(deck);
             }
         });
-
+        userNameText = rootView.findViewById(R.id.card_user_name);
+        userNameText.setText(dbApi.queryUserName(deck.getUserId()));
         return rootView;
     }
 

@@ -99,7 +99,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
         for (int i = 0; i < 3; i++) {
             String name = names.get(i);
             // names.add(name);
-            dbApi.insertUser(name);
+            dbApi.insertUserFull(name, name+"@gmail.com", "123456");
         }
     }
     private void genrateFakeFolder(){
