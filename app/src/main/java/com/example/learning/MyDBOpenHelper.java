@@ -81,6 +81,25 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 "  status TEXT," +
                 "  CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE" +
                 ")");
+        db.execSQL("CREATE TABLE message(" +
+                "  message_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "  u_id INTEGER NOT NULL," +
+                "  date TEXT(1000)," +
+                "  partner_id INTEGER NOT NULL," +
+                "  status TEXT," +
+                "  apply_content TEXT(1000)," +
+                "  CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE" +
+                ")");
+
+        db.execSQL("CREATE TABLE partner(" +
+                "  record_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "  u_id INTEGER NOT NULL," +
+                "  partner_id INTEGER NOT NULL," +
+                "  date TEXT(1000)," +
+                "  status TEXT," +
+                "  CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE" +
+                ")");
+
 
         names.add("Mike");
         names.add("Jasper");
