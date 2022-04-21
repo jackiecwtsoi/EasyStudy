@@ -253,7 +253,7 @@
                     android:id="@+id/Total_w_d_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total Working days:"
+                    android:text="Total decks:"
                     android:textColor="@color/white"
                     android:textSize="18dp"
                     android:layout_gravity="center_horizontal"

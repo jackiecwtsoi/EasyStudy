@@ -371,6 +371,24 @@ public class DbApi {
         Cursor check_cursor = db.query("sign", null, "u_id =?", new String[]{user_id}, null, null, null);
         return check_cursor.getCount();
     }
+    public int getDonenumber(int u_id){
+        String user_id=Integer.toString(u_id);
+        Cursor check_cursor = db.query("deck", null, "u_id =? and completion=?", new String[]{user_id,"1"}, null, null, null);
+        return check_cursor.getCount();
+
+    }
+    public int getOngoingnumber(int u_id){
+        String user_id=Integer.toString(u_id);
+        Cursor check_cursor = db.query("deck", null, "u_id =? and completion=?", new String[]{user_id,"0"}, null, null, null);
+        return check_cursor.getCount();
+
+    }
+    public int getDecknumber(int u_id){
+        String user_id=Integer.toString(u_id);
+        Cursor check_cursor = db.query("deck", null, "u_id =?", new String[]{user_id}, null, null, null);
+        return check_cursor.getCount();
+
+    }
 
 
     // get all cards given a user

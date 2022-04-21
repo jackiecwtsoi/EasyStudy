@@ -64,8 +64,14 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
     private Statistic mContext;
     private boolean check_sign;
     private int present_num;
+    private int done_num;
+    private int ongoing_num;
+    private int deck_num;
     private TextView attendece_content;
     private TextView Total_w_p_number;
+    private TextView Total_done_number;
+    private TextView Total_ongoing_number;
+    private TextView Total_w_d_number;
 
 
     private OnFragmentInteractionListener mListener;
@@ -116,10 +122,22 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
         check_sign = dbApi.checkSign(userid,date);
         present_num = dbApi.getPresentdays(userid);
         String present_days = Integer.toString(present_num);
+        done_num = dbApi.getDonenumber(userid);
+        ongoing_num = dbApi.getOngoingnumber(userid);
+        String done_number = Integer.toString(done_num);
+        String ongoing_number = Integer.toString(ongoing_num);
+        deck_num = dbApi.getDecknumber(userid);
+        String deck_number = Integer.toString(deck_num);
+
 
 
         attendece_content=(TextView)view.findViewById(R.id.attendece_content);
         Total_w_p_number = (TextView)view.findViewById(R.id.Total_w_p_number);
+        Total_done_number = (TextView)view.findViewById(R.id.Total_done_number);
+        Total_ongoing_number = (TextView)view.findViewById(R.id.Total_ongoing_number);
+        Total_w_d_number = (TextView)view.findViewById(R.id.Total_w_d_number);
+
+
 
 
         if (check_sign==false){
@@ -128,6 +146,9 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
 
         }
         Total_w_p_number.setText(present_days);
+        Total_done_number.setText(done_number);
+        Total_ongoing_number.setText(ongoing_number);
+        Total_w_d_number.setText(deck_number);
 
 
 
@@ -209,6 +230,8 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
                     view.setBackgroundColor(Color.parseColor("#ffffff"));
                     UPdateAttendence();
                     UpdatePresentDay();
+                    UpdateDonenumber();
+                    UpdateOngoingnumber();
 
                     Toast.makeText(view.getContext(),"签到成功",Toast.LENGTH_SHORT).show();
 
@@ -350,6 +373,19 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
         String present_days = Integer.toString(present_num);
         Total_w_p_number.setText(present_days);
 
+    }
+    public void UpdateDonenumber(){
+        done_num = dbApi.getDonenumber(userid);
+
+        String done_number = Integer.toString(done_num);
+        Total_done_number.setText(done_number);
+
+
+    }
+    public void UpdateOngoingnumber(){
+        ongoing_num = dbApi.getOngoingnumber(userid);
+        String ongoing_number = Integer.toString(ongoing_num);
+        Total_ongoing_number.setText(ongoing_number);
     }
 
     /**
