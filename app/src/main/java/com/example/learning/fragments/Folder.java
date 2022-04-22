@@ -117,6 +117,7 @@ public class Folder extends Fragment {
                 FragmentManager studyFrontManager = getFragmentManager();
                 studyFrontManager.beginTransaction()
                         .replace(R.id.layoutFolder, deck)
+                        .addToBackStack("tag")
                         .commit();
                 System.out.println(position);
             }
@@ -173,5 +174,9 @@ public class Folder extends Fragment {
         dbApi = new DbApi(db);
         folders.clear();
         folders.addAll(dbApi.queryFolder(userId));
+        for (FolderEntity folder : folders){
+            int deckNums = dbApi.queryDeck(folder.getFolderID(), userId).size();
+            folder.setDeckNums(deckNums);
+        }
     }
 }

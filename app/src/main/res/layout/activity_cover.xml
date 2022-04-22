@@ -27,7 +27,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="350dp"
-        android:src="@drawable/illustration"
+        android:src="@drawable/cover"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:id="@+id/cover_img"/>

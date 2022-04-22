@@ -1,6 +1,7 @@
 package com.example.learning.fragments;
 
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chauthai.swipereveallayout.SwipeRevealLayout;
+import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.learning.FolderEntity;
 import com.example.learning.R;
 
@@ -19,15 +22,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
+    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
     static class VH extends RecyclerView.ViewHolder{
         TextView tv1;
         TextView tv2;
+        TextView decktv;
         LinearLayout item;
+        SwipeRevealLayout swipeRevealLayout;
          VH(@NonNull View itemView) {
             super(itemView);
             item = itemView.findViewById(R.id.folder_item);
-            tv1 = itemView.findViewById(R.id.folder_name);
-            tv2 = itemView.findViewById(R.id.folder_pro);
+            tv1 = itemView.findViewById(R.id.item_folder_title);
+            tv2 = itemView.findViewById(R.id.item_folder_description);
+            decktv = itemView.findViewById(R.id.folder_item_deck_num);
+            swipeRevealLayout = itemView.findViewById(R.id.folder_swipereval);
+//            tv1 = itemView.findViewById(R.id.folder_name);
+//            tv2 = itemView.findViewById(R.id.folder_pro);
             tv2.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
             tv2.getPaint().setAntiAlias(true);
          }
@@ -59,8 +69,10 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
     @Override
     public void onBindViewHolder(@NonNull VH holder, final int position) {
         FolderEntity c = dataList.get(position);
+        viewBinderHelper.bind(holder.swipeRevealLayout, Integer.toString(c.getFolderID()));
         holder.tv1.setText(c.getFolderName());
         holder.tv2.setText(c.getFolderDescription());
+        holder.decktv.setText(Integer.toString(c.getDeckNums()) + " decks");
         if (mOnItemClickLitener != null) {
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -87,5 +99,12 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
             }
         }
         notifyDataSetChanged();
+    }
+    public void saveStates(Bundle outState) {
+        viewBinderHelper.saveStates(outState);
+    }
+
+    public void restoreStates(Bundle inState) {
+        viewBinderHelper.restoreStates(inState);
     }
 }

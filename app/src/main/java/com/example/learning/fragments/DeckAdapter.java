@@ -24,11 +24,13 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.VH>{
         TextView tv1;
         TextView tv2;
         LinearLayout item;
+        TextView decktv;
         VH(@NonNull View itemView) {
             super(itemView);
             item = itemView.findViewById(R.id.folder_item);
-            tv1 = itemView.findViewById(R.id.folder_name);
-            tv2 = itemView.findViewById(R.id.folder_pro);
+            tv1 = itemView.findViewById(R.id.item_folder_title);
+            tv2 = itemView.findViewById(R.id.item_folder_description);
+            decktv = itemView.findViewById(R.id.folder_item_deck_num);
             tv2.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
             tv2.getPaint().setAntiAlias(true);
         }
@@ -62,6 +64,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.VH>{
         DeckEntity c = dataList.get(position);
         holder.tv1.setText(c.getDeckName());
         holder.tv2.setText(c.getDeckDescription());
+        holder.decktv.setText(Integer.toString(c.getCardNum()) + " cards");
         if (mOnItemClickLitener != null) {
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override

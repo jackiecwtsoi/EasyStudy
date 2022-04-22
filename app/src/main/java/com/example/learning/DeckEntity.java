@@ -13,6 +13,15 @@ public class DeckEntity implements Serializable {
     int frequency;
     int interval;
     String dayOfWeek;
+    int cardNum;
+
+    public int getCardNum() {
+        return cardNum;
+    }
+
+    public void setCardNum(int cardNum) {
+        this.cardNum = cardNum;
+    }
 
     public String getDeckName() {
         return deckName;
