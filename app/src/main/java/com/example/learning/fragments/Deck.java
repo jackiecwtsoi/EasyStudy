@@ -99,6 +99,7 @@ public class Deck extends Fragment {
         folder_viewer = rootView.findViewById(R.id.foler_viewer);
         searchView = rootView.findViewById(R.id.folder_search);
         addFolder = rootView.findViewById(R.id.folder_add);
+        addFolder.setVisibility(View.GONE);
 
 
         Context context = getActivity();
@@ -113,6 +114,7 @@ public class Deck extends Fragment {
                 FragmentManager studyFrontManager = getFragmentManager();
                 studyFrontManager.beginTransaction()
                         .replace(R.id.layoutFolder, fragment)
+                        .addToBackStack("tag13")
                         .commit();
                 System.out.println(position);
             }
@@ -170,6 +172,10 @@ public class Deck extends Fragment {
         userID = main.getLoginUserId();
         dbApi = new DbApi(db);
         deckList = dbApi.queryDeck(folder_id, userID);
+        for(DeckEntity deck : deckList){
+            int deckNum = dbApi.queryCard(deck.getDeckID(), folder_id, userID).size();
+            deck.setCardNum(deckNum);
+        }
     }
 
 }

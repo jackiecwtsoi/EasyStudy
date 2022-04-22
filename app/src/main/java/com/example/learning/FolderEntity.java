@@ -6,6 +6,7 @@ public class FolderEntity {
     private int folderID;
     private String time;
     private int userId;
+    private int deckNums;
 
     public String getFolderName() {
         return folderName;
@@ -45,6 +46,14 @@ public class FolderEntity {
 
     public void setFolderID(int folderID) {
         this.folderID = folderID;
+    }
+
+    public int getDeckNums() {
+        return deckNums;
+    }
+
+    public void setDeckNums(int deckNums) {
+        this.deckNums = deckNums;
     }
 
     public String getTime() {
