@@ -7,11 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import com.example.learning.fragments.Deck;
+import com.example.learning.fragments.Friends;
 
 import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 public class DbApi {
@@ -213,10 +215,10 @@ public class DbApi {
             String time = getDate();
             values2.put("time", time);
             id = db.insert("deck", null, values2);
-            System.out.println("create folder: " + deckName + "with description: " + deckDescription + "for user:" + folderID);
+            System.out.println("create folder: " + deckName + "with description: " + deckDescription + "for folder: " + folderID);
 
         } else {
-            System.out.println("not create folder: " + deckName + "with description: " + deckDescription + "for user:" + folderID);
+            System.out.println("not create folder: " + deckName + "with description: " + deckDescription + "for folder: " + folderID);
         }
         return id;
     }
@@ -310,10 +312,10 @@ public class DbApi {
             values2.put("time", time);
 
             id = db.insert("card", null, values2);
-            System.out.println("create folder: " + cardName + "with anwer: " + cardAnswer + "for user:" + deckID);
+            System.out.println("create folder: " + cardName + "with answer: " + cardAnswer + "for deck:" + deckID);
 
         } else {
-            System.out.println("not create folder: " + cardName + "with description: " + cardAnswer + "for user:" + deckID);
+            System.out.println("not create folder: " + cardName + "with description: " + cardAnswer + "for deck:" + deckID);
         }
         return id;
     }
@@ -504,6 +506,126 @@ public class DbApi {
                 break;
         }
         return dayOfWeek;
+    }
+
+    // functions for friends
+    public ArrayList<FriendEntity> queryFriends(int userId) {
+        ArrayList<FriendEntity> friends = new ArrayList<>();
+        Cursor cursor = db.query("friend", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int uid = cursor.getInt(cursor.getColumnIndex("u_id"));
+                if (userId == uid) {
+                    @SuppressLint("Range") int friendId = cursor.getInt(cursor.getColumnIndex("friend_id"));
+                    @SuppressLint("Range") String friendStatusString = cursor.getString(cursor.getColumnIndex("status"));
+                    String friendName = queryUserName(friendId);
+                    String friendPicture = ""; //TODO: friend profile picture
+                    @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex("date"));
+
+                    FriendEntity friend = new FriendEntity(friendId, friendStatusString, friendName, friendPicture, date);
+                    friends.add(friend);
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        Collections.reverse(friends); // reverse the order of the list because we want most recent friends to appear first
+        return friends;
+    }
+
+    public long insertFriend(int userId, int friendId, FriendStatus status) {
+        long id = -1;
+        int[] array = new int[1000];
+        boolean justice = false;
+        int count = 0;
+
+        Cursor cursor = db.query("user", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int pid = cursor.getInt(cursor.getColumnIndex("u_id"));
+                array[count] = pid;
+                count = count + 1;
+            } while (cursor.moveToNext());
+        }
+
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == userId) {
+                justice = true;
+            }
+        }
+
+        if (justice == true) {
+            ContentValues values = new ContentValues();
+            values.put("u_id", userId);
+            values.put("friend_id", friendId);
+            String date = getDate();
+            values.put("date", date);
+            values.put("status", status.name());
+            id = db.insert("friend", null, values);
+            System.out.println("user " + userId + " created friend connection with another user " + friendId);
+        } else {
+            System.out.println("no friend connection created.");
+        }
+        return id;
+    }
+
+    public ArrayList<FriendEntity> getConfirmedFriends(int userId) {
+        ArrayList<FriendEntity> friends = queryFriends(userId);
+        ArrayList<FriendEntity> confirmedFriends = new ArrayList<>();
+        for (FriendEntity friend : friends) {
+            if (friend.getFriendStatus() == FriendStatus.FRIEND) {
+                confirmedFriends.add(friend);
+            }
+        }
+        return confirmedFriends;
+    }
+
+    public ArrayList<FriendEntity> getIncomingFriendRequests(int userId) {
+        ArrayList<FriendEntity> friends = queryFriends(userId);
+        ArrayList<FriendEntity> incomingFriendRequests = new ArrayList<>();
+        for (FriendEntity friend : friends) {
+            if (friend.getFriendStatus() == FriendStatus.FRIEND_REQUESTED) {
+                incomingFriendRequests.add(friend);
+            }
+        }
+        return incomingFriendRequests;
+    }
+
+    public ArrayList<FriendEntity> getOutgoingFriendRequests(int userId) {
+        ArrayList<FriendEntity> friends = queryFriends(userId);
+        ArrayList<FriendEntity> outgoingFriendRequests = new ArrayList<>();
+        for (FriendEntity friend : friends) {
+            if (friend.getFriendStatus() == FriendStatus.USER_REQUESTED) {
+                outgoingFriendRequests.add(friend);
+            }
+        }
+        return outgoingFriendRequests;
+    }
+
+    public void updateFriendStatus(int userId, FriendEntity friend, FriendStatus newStatus) {
+        String query = "UPDATE friend SET status = '" + newStatus.name() +
+                "', date = '" + getDate() +
+                "' WHERE u_id = " + userId +
+                " AND friend_id = " + friend.getFriendId();
+        db.execSQL(query);
+    }
+
+    public void deleteFriend(int userId, FriendEntity friend) {
+        String query = "DELETE FROM friend WHERE u_id = " + userId +
+                " AND friend_id = " + friend.getFriendId();
+        db.execSQL(query);
+    }
+
+    public int queryUserByEmail(String email) {
+        String query = "SELECT u_id FROM user WHERE email = '" + email + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int userId = cursor.getInt(cursor.getColumnIndex("u_id"));
+                return userId;
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return -1;
     }
 
 }

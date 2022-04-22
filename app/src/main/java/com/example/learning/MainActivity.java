@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
     FragmentTransaction fragmentTransaction;
     private int uid;
 
-    private DeckEntity selected_deck;
+    private DeckEntity selectedDeck;
+    private int selectedFriendId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,16 +154,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void changeToStudy(DeckEntity selected_deck) {
-        this.selected_deck = selected_deck;
+        this.selectedDeck = selected_deck;
         mcContainer.setCurrentItem(3);
     }
 
-    public void changeToFolder() {
+    public void changeToFolder(int selectedFriendId) {
+        this.selectedFriendId = selectedFriendId;
         mcContainer.setCurrentItem(1);
     }
 
     public DeckEntity getSelectedDeck() {
-        return this.selected_deck;
+        return this.selectedDeck;
     }
 
     public int getLoginUserId() {

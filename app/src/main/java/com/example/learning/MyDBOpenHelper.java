@@ -85,16 +85,16 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 "  message_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "  u_id INTEGER NOT NULL," +
                 "  date TEXT(1000)," +
-                "  partner_id INTEGER NOT NULL," +
+                "  friend_id INTEGER NOT NULL," +
                 "  status TEXT," +
                 "  apply_content TEXT(1000)," +
                 "  CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE" +
                 ")");
 
-        db.execSQL("CREATE TABLE partner(" +
+        db.execSQL("CREATE TABLE friend(" +
                 "  record_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "  u_id INTEGER NOT NULL," +
-                "  partner_id INTEGER NOT NULL," +
+                "  friend_id INTEGER NOT NULL," +
                 "  date TEXT(1000)," +
                 "  status TEXT," +
                 "  CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE" +
@@ -104,10 +104,14 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
         names.add("Mike");
         names.add("Jasper");
         names.add("Amy");
+        names.add("Ben");
+        names.add("Ethan");
+        names.add("Damon");
         
         dbApi = new DbApi(db);
         generateFakeUsers();
-        genrateFakeFolder();
+        generateFakeFolder();
+        generateFakeFriends();
     }
     //软件版本号发生改变时调用
     @Override
@@ -115,13 +119,13 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
 
     }
     private void generateFakeUsers(){
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 6; i++) {
             String name = names.get(i);
             // names.add(name);
             dbApi.insertUserFull(name, name+"@gmail.com", "123456");
         }
     }
-    private void genrateFakeFolder(){
+    private void generateFakeFolder(){
         ArrayList<String> folders = new ArrayList<>();
         folders.add("English");
         folders.add("Biology");
@@ -137,7 +141,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
         decks.add("Section 5");
         decks.add("Section 6");
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 String folderName = folders.get(j) + " for " + names.get(i);
                 String folderDescription = "This is the description for " + folderName;
@@ -182,5 +186,13 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 }
             }
         }
+    }
+
+    private void generateFakeFriends(){
+        dbApi.insertFriend(1, 2, FriendStatus.USER_REQUESTED); // Jasper
+        dbApi.insertFriend(1, 4, FriendStatus.USER_REQUESTED); // Ben
+        dbApi.insertFriend(1, 3, FriendStatus.FRIEND_REQUESTED); // Amy
+        dbApi.insertFriend(1, 6, FriendStatus.FRIEND_REQUESTED); // Damon
+        dbApi.insertFriend(1, 5, FriendStatus.FRIEND); // Ethan is already a friend
     }
 }

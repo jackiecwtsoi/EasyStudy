@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutFriendSearch"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.StudyBack">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardFriendSearch"
+        android:layout_width="374dp"
+        android:layout_height="507dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textFriendUsername"
+                android:layout_width="144dp"
+                android:layout_height="22dp"
+                android:layout_marginBottom="168dp"
+                android:gravity="center_vertical"
+                android:text="Username"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.169"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/editFriendUsername"
+                android:layout_width="300dp"
+                android:layout_height="34dp"
+                android:layout_marginBottom="120dp"
+                android:inputType="textPersonName"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.527"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btnFriendSearch"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/corner_icon"
+                android:text="Search"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.795"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editFriendUsername" />
+
+            <Button
+                android:id="@+id/btnCancelFriendSearch"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="36dp"
+                android:layout_marginRight="36dp"
+                android:background="@drawable/corner_icon"
+                android:text="Cancel"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toStartOf="@+id/btnFriendSearch"
+                app:layout_constraintTop_toBottomOf="@+id/editFriendUsername" />
+
+            <TextView
+                android:id="@+id/textCardFriendSearch"
+                android:layout_width="145dp"
+                android:layout_height="31dp"
+                android:layout_marginTop="224dp"
+                android:gravity="center_vertical"
+                android:text="Email"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.17"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/editFriendEmail"
+                android:layout_width="296dp"
+                android:layout_height="37dp"
+                android:layout_marginBottom="12dp"
+                android:inputType="textEmailAddress"
+                app:layout_constraintBottom_toTopOf="@+id/textFriendUsername"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.474"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="158dp"
+                android:layout_height="176dp"
+                app:layout_constraintBottom_toTopOf="@+id/textCardFriendSearch"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/study_rating" />
+
+            <TextView
+                android:id="@+id/textFriendSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="Search Friend"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
