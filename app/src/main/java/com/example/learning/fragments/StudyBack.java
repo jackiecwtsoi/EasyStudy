@@ -63,16 +63,11 @@ public class StudyBack extends DialogFragment {
             }
         });
 
-        // TODO: tap on any of the 3 rating buttons returns the next question in the to-study list
         btnEasy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Row row = STUDY_LIST.get(rowIdx);
                 row.setRating(Difficulty.EASY);
-//                if (STUDY_LIST.get(rowIdx).size() >= 4) {
-//                    STUDY_LIST.get(rowIdx).remove(3);
-//                }
-//                STUDY_LIST.get(rowIdx).add("Easy");
                 dismiss();
             }
         });

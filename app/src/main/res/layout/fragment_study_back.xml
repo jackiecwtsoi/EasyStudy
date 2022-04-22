@@ -23,7 +23,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textCardFlipFromBack"
+                android:id="@+id/textFriendUsername"
                 android:layout_width="173dp"
                 android:layout_height="37dp"
                 android:layout_marginBottom="16dp"
@@ -80,7 +80,7 @@
                 android:background="@drawable/corner_icon"
                 android:text="Hard"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/textCardFlipFromBack"
+                app:layout_constraintBottom_toTopOf="@+id/textFriendUsername"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textCardAnswerContent"
@@ -94,7 +94,7 @@
                 android:background="@drawable/corner_icon"
                 android:text="Forgot!"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/textCardFlipFromBack"
+                app:layout_constraintBottom_toTopOf="@+id/textFriendUsername"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnHard"

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.learning.Card;
 import com.example.learning.DbApi;
@@ -54,7 +55,6 @@ public class StudyFront extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     SQLiteDatabase db;
-    MainActivity main;
     int userId;
     Calendar calendar = Calendar.getInstance();
     String dayOfWeek;
@@ -112,7 +112,7 @@ public class StudyFront extends Fragment {
         btnPreviousCard = rootView.findViewById(R.id.btnPreviousCard);
         progressBar = rootView.findViewById(R.id.progressBar);
 
-        main = (MainActivity) getActivity();
+        MainActivity main = (MainActivity) getActivity();
         userId = main.getLoginUserId();
         dayOfWeek = dbapi.getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
 

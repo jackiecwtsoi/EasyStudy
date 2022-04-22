@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.learning.DbApi;
 import com.example.learning.DeckEntity;
@@ -30,16 +31,6 @@ import java.util.Calendar;
  * create an instance of this fragment.
  */
 public class Study extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     // define variables
     View rootView;
     Button btnReviewSelectedDeck, btnReviewAllCards, btnReviewTodayCards;
@@ -57,25 +48,11 @@ public class Study extends Fragment {
     TasksTodayAdapter adapter;
 
     public Study(SQLiteDatabase db) {
-        // Required empty public constructor
         this.db = db;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Study.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Study newInstance(String param1, String param2, SQLiteDatabase db) {
+    public static Study newInstance(SQLiteDatabase db) {
         Study fragment = new Study(db);
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -87,13 +64,13 @@ public class Study extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         if (container != null) {
             container.removeView(container.findViewById(R.id.cardStudyDoneOverall));
             container.removeView(container.findViewById(R.id.btnReviewAgain));
             container.removeView(container.findViewById(R.id.btnReturnStudyOverview));
         }
 
+        // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_study, container, false);
         DbApi dbapi = new DbApi(this.db);
         btnReviewSelectedDeck = rootView.findViewById(R.id.btnReviewSelectedDeck);
@@ -113,6 +90,11 @@ public class Study extends Fragment {
         Context context = getActivity();
         recyclerViewTasksToday.setLayoutManager(new LinearLayoutManager(context));
 
+        // when no cards to study for today, hide the "Review Today's Cards" button
+        if (adapter.getItemCount() == 0) { // if recycler view adapter has no card in the list
+            btnReviewTodayCards.setVisibility(View.INVISIBLE);
+        }
+
         if (selected_deck == null) { // if no deck has been selected yet
             textSelectedDeckName.setText("No selected deck yet");
             btnReviewSelectedDeck.setText("Select A Deck");
@@ -121,13 +103,13 @@ public class Study extends Fragment {
             textSelectedDeckName.setText(selected_deck.getDeckName());
         }
 
-        // when the "Review Selected Deck" button is pressed, we only show the unfinished cards
+        // when the "Review Selected Deck" button is clicked, we only show the unfinished cards
         btnReviewSelectedDeck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (selected_deck == null) { // if no selected deck yet, then the button goes to Folder tab
-                    MainActivity mainActivity = (MainActivity) getActivity();
-                    mainActivity.changeToFolder();
+                    MainActivity main = (MainActivity) getActivity();
+                    main.changeToFolder(-1);
                 }
                 else { // if deck is selected, then the button goes to StudyFront fragment for that deck
                     StudyFront studyFront = new StudyFront(db);
@@ -146,7 +128,7 @@ public class Study extends Fragment {
             }
         });
 
-        // when the "Review Today's Cards" button is pressed, we show the decks that need to be REMINDED TODAY
+        // when the "Review Today's Cards" button is clicked, we show the decks that need to be REMINDED TODAY
         btnReviewTodayCards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
