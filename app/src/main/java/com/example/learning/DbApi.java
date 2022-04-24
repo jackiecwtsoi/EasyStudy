@@ -657,9 +657,13 @@ public class DbApi {
         return -1;
     }
     public void deleteFolder(int userId, int folderId){
+        String queryDeck = "DELETE FROM deck WHERE u_id = " + userId +
+                " AND folder_id = " + folderId;
         String query = "DELETE FROM folder WHERE u_id = " + userId +
                 " AND folder_id = " + folderId;
+        db.execSQL(queryDeck);
         db.execSQL(query);
+
     }
     public void deleteDeck(int userId, int folderId, int deckId){
         String query = "DELETE FROM deck WHERE u_id = " + userId +
