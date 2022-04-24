@@ -1,11 +1,18 @@
 package com.example.learning;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 
 import androidx.annotation.Nullable;
 
+import com.example.learning.fragments.ImageUtils;
+
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,6 +21,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
     private DbApi dbApi;
     private ArrayList<String> names = new ArrayList<>();
     public static SQLiteOpenHelper mInstance;
+    private Context context;
     public static synchronized SQLiteOpenHelper getmInstance(Context context){
         if (mInstance==null){
             mInstance=new MyDBOpenHelper(context,"elearningDB.db",null,1);
@@ -24,6 +32,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
 
     public MyDBOpenHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+        this.context = context;
     }
 
     @Override
@@ -43,7 +52,9 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 "frequency INTEGER, "+
                 "day_of_week TEXT,"+
                 "interval INTEGER, "+
-                "  time TEXT(1000)," +
+                "time TEXT(1000)," +
+                "cover_path TEXT, "+
+                "public INTEGER,"+
                 "  CONSTRAINT folder_id FOREIGN KEY (folder_id) REFERENCES folder (folder_id) ON DELETE CASCADE ON UPDATE CASCADE," +
                 "  CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE" +
                 ")");
@@ -140,7 +151,14 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
         decks.add("Section 4");
         decks.add("Section 5");
         decks.add("Section 6");
-
+        Bitmap bm = BitmapFactory.decodeResource(context.getResources(),R.drawable.spring_showers);
+        String path1 = ImageUtils.saveImageToGallery(context, bm, true);
+        Bitmap bm2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.tu1);
+        String path2 = ImageUtils.saveImageToGallery(context, bm2, false);
+        Bitmap bm3 = BitmapFactory.decodeResource(context.getResources(),R.drawable.tu2);
+        String path3 = ImageUtils.saveImageToGallery(context, bm3, false);
+        Bitmap bm4 = BitmapFactory.decodeResource(context.getResources(),R.drawable.tu1);
+        String path4 = ImageUtils.saveImageToGallery(context, bm4, false);
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 String folderName = folders.get(j) + " for " + names.get(i);
@@ -152,27 +170,35 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                     int frequency = -1;
                     String dayOfWeek = "";
                     int interval = 0;
+                    int pub = 1;
+                    String cover = path1;
                     if (m == 5){
                         frequency = -1;
                         dayOfWeek = "";
                         interval = 0;
+                        pub = 0;
+
                     }
                     else if (m % 3 == 0){
                         frequency = 0;
                         dayOfWeek = "Monday;Thursday";
                         interval = 0;
+                        pub = 0;
+                        cover = path2;
                     }
                     else if(m % 3 == 1){
                         frequency = 1;
                         dayOfWeek = "Monday;";
                         interval = 0;
+                        cover = path3;
                     }
                     else{
                         frequency = 2;
                         dayOfWeek = "";
                         interval = 4;
+                        cover = path4;
                     }
-                    long deckid = dbApi.insertDeck(deckName, deckDescription, 0, frequency, dayOfWeek, interval, (int)folderid, i + 1);
+                    long deckid = dbApi.insertDeck(deckName, deckDescription, 0, frequency, dayOfWeek, interval, (int)folderid, i + 1, cover, pub);
                     Random r = new Random();
                     for (int n = 0; n < 4; n++) {
                         String cardName = "Card" + Integer.toString(n) + " for " + deckName;

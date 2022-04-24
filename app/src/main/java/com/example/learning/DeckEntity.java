@@ -14,6 +14,8 @@ public class DeckEntity implements Serializable {
     int interval;
     String dayOfWeek;
     int cardNum;
+    String coverPath;
+    int pub;
 
     public int getCardNum() {
         return cardNum;
@@ -87,7 +89,7 @@ public class DeckEntity implements Serializable {
         this.dayOfWeek = dayOfWeek;
     }
 
-    public DeckEntity(String deckName, int completion, String deckDescription, String time, int frequency, String dayOfWeek, int interval, int deckID, int userId, int folderId) {
+    public DeckEntity(String deckName, int completion, String deckDescription, String time, int frequency, String dayOfWeek, int interval, int deckID, int userId, int folderId, String coverPath, int pub) {
         this.deckName = deckName;
         this.completion = completion;
         this.deckDescription = deckDescription;
@@ -98,6 +100,24 @@ public class DeckEntity implements Serializable {
         this.frequency = frequency;
         this.dayOfWeek = dayOfWeek;
         this.interval = interval;
+        this.coverPath = coverPath;
+        this.pub = pub;
+    }
+
+    public String getCoverPath() {
+        return coverPath;
+    }
+
+    public int getPub() {
+        return pub;
+    }
+
+    public void setPub(int pub) {
+        this.pub = pub;
+    }
+
+    public void setCoverPath(String coverPath) {
+        this.coverPath = coverPath;
     }
 
     public String getTime() {
