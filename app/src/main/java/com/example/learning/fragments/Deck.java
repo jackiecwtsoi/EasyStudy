@@ -119,6 +119,16 @@ public class Deck extends Fragment {
                 System.out.println(position);
             }
         });
+        adapter.setDeleteOnItemClickLitener(new DeckAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                System.out.println("click the on delete");
+
+                dbApi.deleteDeck(userID, deckList.get(position).getFolderId(), deckList.get(position).getDeckID());
+                getDeckList();
+                adapter.notifyDataSetChanged();
+            }
+        });
         folder_viewer.setLayoutManager(new LinearLayoutManager(context));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
