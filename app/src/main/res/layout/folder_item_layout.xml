@@ -16,26 +16,25 @@
        >
 
         <ImageView
-            android:id="@+id/forlder_item_delete"
+            android:id="@+id/folder_item_top"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/delete"
+            android:src="@drawable/top"
             android:layout_marginTop="50dp" />
 
         <ImageView
-            android:id="@+id/folder_item_top"
+            android:id="@+id/forlder_item_delete"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
-            android:src="@drawable/edit"
+            android:src="@drawable/delete"
             android:layout_marginTop="50dp" />
 
 
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/folder_item"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -52,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/deck_folder" />
+                android:src="@drawable/folder_open" />
 
             <TextView
                 android:id="@+id/folder_item_deck_num"
@@ -64,6 +63,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/folder_item"
             android:layout_width="250dp"
             android:layout_height="80dp"
             android:layout_marginStart="10dp"

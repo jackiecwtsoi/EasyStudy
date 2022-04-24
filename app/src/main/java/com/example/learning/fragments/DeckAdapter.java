@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.example.learning.DeckEntity;
 import com.example.learning.FolderEntity;
 import com.example.learning.R;
@@ -25,6 +27,8 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.VH>{
         TextView tv2;
         LinearLayout item;
         TextView decktv;
+        SwipeRevealLayout swipeRevealLayout;
+        ImageView delete;
         VH(@NonNull View itemView) {
             super(itemView);
             item = itemView.findViewById(R.id.folder_item);
@@ -33,16 +37,19 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.VH>{
             decktv = itemView.findViewById(R.id.folder_item_deck_num);
             tv2.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
             tv2.getPaint().setAntiAlias(true);
+            delete = itemView.findViewById(R.id.forlder_item_delete);
         }
 
     }
     private List<DeckEntity> dataList;
     private List<DeckEntity> dataListCopy = new ArrayList<>();
+
     public DeckAdapter(List<DeckEntity> dataList) {
         this.dataList = dataList;
         this.dataListCopy.addAll(dataList);
     }
     private OnItemClickLitener   mOnItemClickLitener;
+    private OnItemClickLitener mOnDeleteItemClickLitener;
 
     //设置回调接口
     public interface OnItemClickLitener{
@@ -51,6 +58,9 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.VH>{
 
     public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener){
         this.mOnItemClickLitener = mOnItemClickLitener;
+    }
+    public void setDeleteOnItemClickLitener(OnItemClickLitener mOnDeleteItemClickLitener){
+        this.mOnDeleteItemClickLitener = mOnDeleteItemClickLitener;
     }
 
     @NonNull
@@ -70,6 +80,14 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.VH>{
                 @Override
                 public void onClick(View view) {
                     mOnItemClickLitener.onItemClick(view, position);
+                }
+            });
+        }
+        if(mOnDeleteItemClickLitener != null){
+            holder.delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnDeleteItemClickLitener.onItemClick(view, position);
                 }
             });
         }
