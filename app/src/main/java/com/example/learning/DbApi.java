@@ -412,6 +412,7 @@ public class DbApi {
                 arrary.add(email);
                 arrary.add(userName);
                 arrary.add(phone);
+                arrary.add(password);
 
             } while (check_cursor.moveToNext());
 
@@ -419,6 +420,14 @@ public class DbApi {
 
         }
         return arrary;
+    }
+    public void UpdateUserIfo(int userID,String user_name,String phone_number,String password){
+        String user_id=Integer.toString(userID);
+        ContentValues values = new ContentValues();
+        values.put("name",user_name);
+        values.put("phone_number",phone_number);
+        values.put("password",password);
+        db.update("user",values,"u_id = ?",new String[]{user_id});
     }
 
 

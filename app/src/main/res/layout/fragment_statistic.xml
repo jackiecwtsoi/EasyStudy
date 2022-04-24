@@ -29,18 +29,38 @@
                 android:textAlignment="center"
                 android:gravity="center"
                 android:textColor="@color/white"/>
-            <TextView
-                android:layout_width="110dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/status_circle"
-                android:id="@+id/attendece_content"
-                android:gravity="center"
-                android:layout_marginLeft="20dp"
-                android:text="Present"
-                android:textColor="@color/white"
-                android:textSize="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/attendece_label"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+
+                    android:background="@drawable/status_circle"
+
+                    android:gravity="center"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="30dp"
+
+                    android:id="@+id/attendece_content"
+                    android:gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:text="Present"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"/>
+            </LinearLayout>
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -170,7 +190,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
                 app:cardCornerRadius="20dp"
-                app:cardBackgroundColor="#959EA8"
+                app:cardBackgroundColor="#80A4B9"
 
                 >
 
@@ -203,7 +223,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="20dp"
-                app:cardBackgroundColor="#959EA8"
+                app:cardBackgroundColor="#80A4B9"
                 app:cardCornerRadius="20dp">
 
                 <TextView
@@ -246,7 +266,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
                 app:cardCornerRadius="20dp"
-                app:cardBackgroundColor="#959EA8"
+                app:cardBackgroundColor="#80A4B9"
             >
 
                 <TextView
@@ -279,7 +299,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="20dp"
                 app:cardCornerRadius="20dp"
-                app:cardBackgroundColor="#959EA8">
+                app:cardBackgroundColor="#80A4B9">
 
                 <TextView
                     android:id="@+id/Total_p_d_text"
