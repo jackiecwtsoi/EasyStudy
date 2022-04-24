@@ -30,7 +30,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
         TextView tv2;
         TextView decktv;
         LinearLayout item;
-        SwipeRevealLayout swipeRevealLayout;
+        public SwipeRevealLayout swipeRevealLayout;
         ImageView delete;
          VH(@NonNull View itemView) {
             super(itemView);
@@ -53,6 +53,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
         this.dataList = dataList;
         this.dataListCopy.addAll(dataList);
     }
+
     private OnItemClickLitener   mOnItemClickLitener;
     private OnItemClickLitener   mOnDeleteItemClickLitener;
 
@@ -75,7 +76,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VH holder, final int position) {
+    public void onBindViewHolder(@NonNull final VH holder, final int position) {
         FolderEntity c = dataList.get(position);
         viewBinderHelper.bind(holder.swipeRevealLayout, Integer.toString(c.getFolderID()));
         holder.tv1.setText(c.getFolderName());
@@ -93,11 +94,13 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
             holder.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    holder.swipeRevealLayout.close(false);
                     mOnDeleteItemClickLitener.onItemClick(view, position);
                 }
             });
         }
     }
+
     @Override
     public int getItemCount() {
         return dataList.size();

@@ -70,7 +70,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.VH>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VH holder, final int position) {
+    public void onBindViewHolder(@NonNull final VH holder, final int position) {
         DeckEntity c = dataList.get(position);
         holder.tv1.setText(c.getDeckName());
         holder.tv2.setText(c.getDeckDescription());
@@ -87,6 +87,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.VH>{
             holder.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    holder.swipeRevealLayout.close(false);
                     mOnDeleteItemClickLitener.onItemClick(view, position);
                 }
             });

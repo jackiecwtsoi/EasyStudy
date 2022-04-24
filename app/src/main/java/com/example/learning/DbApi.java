@@ -96,7 +96,9 @@ public class DbApi {
                     @SuppressLint("Range") int frequency = fcursor.getInt(fcursor.getColumnIndex("frequency"));
                     @SuppressLint("Range") String dayOfWeek = fcursor.getString(fcursor.getColumnIndex("day_of_week"));
                     @SuppressLint("Range") int interval = fcursor.getInt(fcursor.getColumnIndex("interval"));
-                    DeckEntity deckEntity = new DeckEntity(name, completion, description, time, frequency, dayOfWeek, interval, fid, userID, folderID);
+                    @SuppressLint("Range") String coverPath = fcursor.getString(fcursor.getColumnIndex("cover_path"));
+                    @SuppressLint("Range") int pub = fcursor.getInt(fcursor.getColumnIndex("public"));
+                    DeckEntity deckEntity = new DeckEntity(name, completion, description, time, frequency, dayOfWeek, interval, fid, userID, folderID, coverPath, pub);
                     deckEntities.add(deckEntity);
                 }
             } while (fcursor.moveToNext());
@@ -181,7 +183,7 @@ public class DbApi {
         return id;
     }
 
-    public long insertDeck(String deckName, String deckDescription, int completion, int frequency, String dayofWeek, int interval, int folderID, int userID) {
+    public long insertDeck(String deckName, String deckDescription, int completion, int frequency, String dayofWeek, int interval, int folderID, int userID, String cover, int pub) {
         int[] arrary = new int[1000];
         boolean justice = false;
         int count = 0;
@@ -212,6 +214,8 @@ public class DbApi {
             values2.put("frequency", frequency);
             values2.put("day_of_week", dayofWeek);
             values2.put("interval", interval);
+            values2.put("public", pub);
+            values2.put("cover_path", cover);
             String time = getDate();
             values2.put("time", time);
             id = db.insert("deck", null, values2);
@@ -662,12 +666,16 @@ public class DbApi {
         return -1;
     }
     public void deleteFolder(int userId, int folderId){
+        String queryDeck = "DELETE FROM deck WHERE u_id = " + userId +
+                " AND folder_id = " + folderId;
         String query = "DELETE FROM folder WHERE u_id = " + userId +
                 " AND folder_id = " + folderId;
+        db.execSQL(queryDeck);
         db.execSQL(query);
+
     }
     public void deleteDeck(int userId, int folderId, int deckId){
-        String query = "DELETE FROM folder WHERE u_id = " + userId +
+        String query = "DELETE FROM deck WHERE u_id = " + userId +
                 " AND folder_id = " + folderId + " AND deck_id = " + deckId;
         db.execSQL(query);
     }

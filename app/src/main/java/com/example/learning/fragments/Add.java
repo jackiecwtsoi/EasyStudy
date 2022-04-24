@@ -1,25 +1,19 @@
 package com.example.learning.fragments;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +84,7 @@ public class Add extends Fragment {
     private TextView lastSelectedDays;
     private DbApi dbApi;
     private int userid;
+    String coverPath = "/storage/emulated/0/Android/data/com.example.learning/files/deckCovers/default.jpg";
     List<Boolean> whetherDaySelect = new ArrayList<Boolean>();
     List<TextView> selectedDays = new ArrayList<TextView>();
     SQLiteDatabase db;
@@ -113,6 +108,7 @@ public class Add extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 //        if (getArguments() != null) {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
@@ -132,6 +128,8 @@ public class Add extends Fragment {
         }
         dbApi = new DbApi(db);
         context = this.getContext();
+//        Bitmap bm = BitmapFactory.decodeResource(context.getResources(),R.drawable.spring_showers);
+//        coverPath = ImageUtils.saveImageToGallery(context, bm, true);
         selectedFolderId = -1;
         getFolderList();
         rootView = inflater.inflate(R.layout.fragment_add, container, false);
@@ -259,7 +257,7 @@ public class Add extends Fragment {
                     public void onSelected(int selectedIndex, String item) {
                         Log.d(TAG, "[Dialog]selectedIndex: " + selectedIndex + ", item: " + item);
                         selectedFolder = item;
-                        selectedFolderId = folderList.get(selectedIndex-2).getFolderID();
+                        selectedFolderId = folderList.get(selectedIndex - 2).getFolderID();
                     }
                 });
 
@@ -284,44 +282,41 @@ public class Add extends Fragment {
                 if (selectedFolderId == -1) {
                     Toast.makeText(context, "Please select a folder to add the deck", Toast.LENGTH_LONG).show();
                     System.out.println(1);
-                }
-                else if(deckName.getText().toString().equals("")){
+                } else if (deckName.getText().toString().equals("")) {
                     Toast.makeText(context, "Please input the folder name", Toast.LENGTH_LONG).show();
                     System.out.println(1);
-                }
-                else {
+                } else {
                     String name = deckName.getText().toString().trim();
 
                     String description = deckDescription.getText().toString().trim();
-                    if (description.equals("")){
+                    if (description.equals("")) {
                         description = "This is the description for " + name;
                     }
                     int frequency = -1;
                     String dayOfWeek = "";
                     int interval = 0;
-                    if (reminder == 1){
+                    if (reminder == 1) {
                         // select the remind me button
                         frequency = daily;
                         ArrayList<String> days = new ArrayList<>(Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"));
-                        if(frequency == 0 || frequency == 1){
+                        if (frequency == 0 || frequency == 1) {
                             StringBuilder sb = new StringBuilder();
-                            for(int i = 0; i < 7; i++){
-                                if(whetherDaySelect.get(i)){
+                            for (int i = 0; i < 7; i++) {
+                                if (whetherDaySelect.get(i)) {
                                     String day = days.get(i) + ";";
                                     sb.append(day);
                                 }
                                 dayOfWeek = sb.toString();
                             }
-                        }
-                        else{
+                        } else {
                             frequency = 2;
                             interval = addSeekBar.getProgress();
                         }
 
                     }
-                    long id = dbApi.insertDeck(name, description, 0, frequency, dayOfWeek, interval,selectedFolderId, userid);
+                    long id = dbApi.insertDeck(name, description, 0, frequency, dayOfWeek, interval, selectedFolderId, userid, coverPath, whetherPublic);
                     Intent intent = new Intent(rootView.getContext(), AddCardActivity.class);
-                    intent.putExtra("deck_id", (int)id);
+                    intent.putExtra("deck_id", (int) id);
                     intent.putExtra("user_id", userid);
                     intent.putExtra("folder_id", selectedFolderId);
                     startActivity(intent);
@@ -453,10 +448,21 @@ public class Add extends Fragment {
     }
 
     private void openAlbum() {
-        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+//        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+////        intent.setType("image/*");
+////        startActivityForResult(intent, 1);//1是resultcode 我们自己定义
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
-        startActivityForResult(intent, 1);//1是resultcode 我们自己定义
+        startActivityForResult(intent, 1);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        deckDescription.getText().clear();
+        deckName.getText().clear();
+        clearSelectDays();
     }
 
     @Override
@@ -465,8 +471,12 @@ public class Add extends Fragment {
         if (requestCode == 1) {
             if (data != null) {
                 try {
+                    Uri uriImage = data.getData();
                     Bitmap bitmap = BitmapFactory.decodeStream
-                            (getActivity().getContentResolver().openInputStream(data.getData()));
+                            (getActivity().getContentResolver().openInputStream(uriImage));
+//                    String path = RealPathFromUriUtils.getRealPathFromUri(context, uriImage);
+//                    System.out.println(path);
+                    coverPath = ImageUtils.saveImageToGallery(context, bitmap, false);
                     selectedImg.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -481,11 +491,6 @@ public class Add extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        System.out.println("Add on resume");
-    }
 
     @Override
     public void onDetach() {
