@@ -178,7 +178,7 @@
                     android:id="@+id/Total_done_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Done"
+                    android:text="Done decks"
                     android:layout_gravity="center_horizontal"
                     android:textSize="30dp"
                     android:textColor="@color/white"
@@ -211,9 +211,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Ongoing"
+                    android:text="Ongoing decks"
                     android:textAlignment="center"
-                    android:textSize="30dp"
+                    android:textSize="25dp"
                     android:textColor="@color/white"
                     android:layout_marginTop="30dp"/>
                 <TextView
