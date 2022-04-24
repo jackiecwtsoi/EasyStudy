@@ -391,6 +391,31 @@ public class DbApi {
         return check_cursor.getCount();
 
     }
+    public ArrayList<String> getUserIfo(int userID) {
+        String user_id = Integer.toString(userID);
+
+        ArrayList<String> arrary = new ArrayList<>();
+
+        int count = 0;
+        Cursor check_cursor = db.query("user", null, "u_id =?", new String[]{user_id}, null, null, null);
+        if (check_cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String email = check_cursor.getString(check_cursor.getColumnIndex("email"));
+                @SuppressLint("Range") String phone = check_cursor.getString(check_cursor.getColumnIndex("phone_number"));
+
+                @SuppressLint("Range") String password = check_cursor.getString(check_cursor.getColumnIndex("password"));
+                @SuppressLint("Range") String userName = check_cursor.getString(check_cursor.getColumnIndex("name"));
+                arrary.add(email);
+                arrary.add(userName);
+                arrary.add(phone);
+
+            } while (check_cursor.moveToNext());
+
+
+
+        }
+        return arrary;
+    }
 
 
     // get all cards given a user
