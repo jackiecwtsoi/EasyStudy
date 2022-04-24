@@ -16,14 +16,14 @@
             android:layout_height="wrap_content">
 
             <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+                android:id="@+id/touxiang"
+                android:layout_width="57dp"
+                android:layout_height="60dp"
                 android:layout_marginVertical="20dp"
                 android:layout_marginLeft="20dp"
-                app:qmui_border_width="0dp"
-                app:qmui_corner_radius="10dp"
                 android:src="@mipmap/ic_default_avatar"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:id="@+id/touxiang"/>
+                app:qmui_border_width="0dp"
+                app:qmui_corner_radius="10dp" />
 
             <TextView
                 android:textColor="@color/black"

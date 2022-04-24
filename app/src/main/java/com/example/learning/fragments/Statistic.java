@@ -67,11 +67,12 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
     private int done_num;
     private int ongoing_num;
     private int deck_num;
-    private TextView attendece_content;
+    private TextView attendance_content;
     private TextView Total_w_p_number;
     private TextView Total_done_number;
     private TextView Total_ongoing_number;
     private TextView Total_w_d_number;
+    private TextView attendance_label;
 
 
     private OnFragmentInteractionListener mListener;
@@ -131,18 +132,19 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
 
 
 
-        attendece_content=(TextView)view.findViewById(R.id.attendece_content);
+        attendance_content=(TextView)view.findViewById(R.id.attendece_content);
         Total_w_p_number = (TextView)view.findViewById(R.id.Total_w_p_number);
         Total_done_number = (TextView)view.findViewById(R.id.Total_done_number);
         Total_ongoing_number = (TextView)view.findViewById(R.id.Total_ongoing_number);
         Total_w_d_number = (TextView)view.findViewById(R.id.Total_w_d_number);
+        attendance_label = view.findViewById(R.id.attendece_label);
 
 
 
 
         if (check_sign==false){
-            attendece_content.setBackground(getResources().getDrawable(R.drawable.status_circle_red));
-            attendece_content.setText("No Sign");
+            attendance_label.setBackground(getResources().getDrawable(R.drawable.status_circle_red));
+            attendance_content.setText("absent");
 
         }
         Total_w_p_number.setText(present_days);
@@ -364,8 +366,8 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
 
     }
     public void UPdateAttendence(){
-        attendece_content.setBackground(getResources().getDrawable(R.drawable.status_circle));
-        attendece_content.setText("Present");
+        attendance_label.setBackground(getResources().getDrawable(R.drawable.status_circle));
+        attendance_content.setText("Present");
 
     }
     public void UpdatePresentDay(){

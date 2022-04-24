@@ -20,8 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.github.mikephil.charting.utils.Utils;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
@@ -36,7 +38,7 @@ import java.util.ArrayList;
  * Use the {@link Home#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Home extends Fragment {
+public class Home extends Fragment implements View.OnClickListener{
     private Banner mBanner1,mBanner2,mBanner3;
     private TextView mTvTarget;
     private LinearLayout mLlBanner1,mLlBanner2,mLlBanner3;
@@ -52,6 +54,8 @@ public class Home extends Fragment {
     private View rootView;
     private OnFragmentInteractionListener mListener;
     SQLiteDatabase db;
+    //The parameters of user image in home page.
+    private QMUIRadiusImageView user_image;
 
     public Home(SQLiteDatabase db) {
         // Required empty public constructor
@@ -120,6 +124,10 @@ public class Home extends Fragment {
         initBanner(mBanner3,list3);
         setProgress(0.7F);
         // Inflate the layout for this fragment
+
+        user_image = rootView.findViewById(R.id.touxiang);
+        user_image.setOnClickListener(this);
+
         return rootView;
     }
 
@@ -137,6 +145,17 @@ public class Home extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case  R.id.touxiang:
+                MainActivity main = (MainActivity) getActivity();
+                main.changeToProfile();
+
+        }
+
     }
 
     /**
