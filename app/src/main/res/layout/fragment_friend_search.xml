@@ -23,87 +23,64 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/textFriendUsername"
-                android:layout_width="144dp"
-                android:layout_height="22dp"
-                android:layout_marginBottom="168dp"
-                android:gravity="center_vertical"
-                android:text="Username"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.169"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <EditText
-                android:id="@+id/editFriendUsername"
-                android:layout_width="300dp"
-                android:layout_height="34dp"
-                android:layout_marginBottom="120dp"
-                android:inputType="textPersonName"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.527"
-                app:layout_constraintStart_toStartOf="parent" />
-
             <Button
                 android:id="@+id/btnFriendSearch"
                 android:layout_width="120dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="40dp"
                 android:background="@drawable/corner_icon"
                 android:text="Search"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.795"
+                app:layout_constraintHorizontal_bias="0.83"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editFriendUsername" />
+                app:layout_constraintTop_toBottomOf="@+id/editFriendEmail" />
 
             <Button
                 android:id="@+id/btnCancelFriendSearch"
                 android:layout_width="120dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginEnd="36dp"
                 android:layout_marginRight="36dp"
                 android:background="@drawable/corner_icon"
                 android:text="Cancel"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/btnFriendSearch"
-                app:layout_constraintTop_toBottomOf="@+id/editFriendUsername" />
+                app:layout_constraintTop_toBottomOf="@+id/editFriendEmail" />
 
             <TextView
                 android:id="@+id/textCardFriendSearch"
                 android:layout_width="145dp"
                 android:layout_height="31dp"
-                android:layout_marginTop="224dp"
+                android:layout_marginTop="40dp"
                 android:gravity="center_vertical"
                 android:text="Email"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.17"
+                app:layout_constraintHorizontal_bias="0.157"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
             <EditText
                 android:id="@+id/editFriendEmail"
-                android:layout_width="296dp"
-                android:layout_height="37dp"
-                android:layout_marginBottom="12dp"
+                android:layout_width="302dp"
+                android:layout_height="58dp"
                 android:inputType="textEmailAddress"
-                app:layout_constraintBottom_toTopOf="@+id/textFriendUsername"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.474"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textCardFriendSearch"
+                app:layout_constraintVertical_bias="0.155" />
 
             <ImageView
                 android:id="@+id/imageView4"
                 android:layout_width="158dp"
                 android:layout_height="176dp"
-                app:layout_constraintBottom_toTopOf="@+id/textCardFriendSearch"
+                android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textFriendSearch"
                 app:srcCompat="@drawable/study_rating" />
 
             <TextView

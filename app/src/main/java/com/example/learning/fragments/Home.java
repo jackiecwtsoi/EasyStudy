@@ -7,8 +7,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RawRes;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +17,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.learning.MainActivity;
 import com.example.learning.R;
-import com.github.mikephil.charting.utils.Utils;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.youth.banner.Banner;
@@ -43,14 +41,8 @@ public class Home extends Fragment implements View.OnClickListener{
     private TextView mTvTarget;
     private LinearLayout mLlBanner1,mLlBanner2,mLlBanner3;
     private QMUIRoundButton mBtnTotalProgress,mBtnCurrentProgress;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private ImageView btnFriends;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private View rootView;
     private OnFragmentInteractionListener mListener;
     SQLiteDatabase db;
@@ -58,34 +50,17 @@ public class Home extends Fragment implements View.OnClickListener{
     private QMUIRadiusImageView user_image;
 
     public Home(SQLiteDatabase db) {
-        // Required empty public constructor
+        this.db = db;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Home.
-     */
-    // TODO: Rename and change types and number of parameters
     public static Home newInstance(String param1, String param2, SQLiteDatabase db) {
         Home fragment = new Home(db);
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -97,7 +72,17 @@ public class Home extends Fragment implements View.OnClickListener{
                 parent.removeView(rootView);
             }
         }
-        rootView = inflater.inflate(R.layout.fragment_home2, container, false);
+
+        if (container != null) {
+            container.removeView(container.findViewById(R.id.recyclerViewFriends));
+            container.removeView(container.findViewById(R.id.btnFriendRequests));
+            container.removeView(container.findViewById(R.id.btnAddFriend));
+            container.removeView(container.findViewById(R.id.btnFriendsBack));
+            container.removeView(container.findViewById(R.id.textContacts));
+        }
+
+        // Inflate the layout for this fragment
+        rootView = inflater.inflate(R.layout.fragment_home, container, false);
         mTvTarget = rootView.findViewById(R.id.tvProgress);
         mBtnTotalProgress = rootView.findViewById(R.id.btnTotalProgress);
         mBtnCurrentProgress = rootView.findViewById(R.id.btnCurrentProgress);
@@ -128,18 +113,32 @@ public class Home extends Fragment implements View.OnClickListener{
         user_image = rootView.findViewById(R.id.touxiang);
         user_image.setOnClickListener(this);
 
+
+        // define variables
+        //btnFriends = rootView.findViewById(R.id.btnFriends);
+        btnFriends = rootView.findViewById(R.id.friend);
+
+        // when the friends button is pressed, switch to a new fragment which contains the friends list
+        btnFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Friends friendsFragment = new Friends(db);
+                FragmentManager friendsFragmentManager = getFragmentManager();
+                friendsFragmentManager.beginTransaction()
+                        .replace(R.id.layoutHome, friendsFragment)
+                        .addToBackStack("home")
+                        .commit();
+            }
+        });
+
         return rootView;
     }
 
-
-
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
-
 
     @Override
     public void onDetach() {
@@ -158,18 +157,7 @@ public class Home extends Fragment implements View.OnClickListener{
 
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 

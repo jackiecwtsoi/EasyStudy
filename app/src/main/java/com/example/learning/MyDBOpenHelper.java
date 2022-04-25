@@ -39,7 +39,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
     //数据库第一次创建时被调用
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE user(u_id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT(20),email TEXT(30),phone_number TEXT(20)," +
-                "password TEXT(20) )");
+                "password TEXT(20), profile_picture TEXT)");
         db.execSQL("CREATE TABLE folder(folder_id INTEGER PRIMARY KEY AUTOINCREMENT,folder_name TEXT,time TEXT,folder_description TEXT, u_id INTEGER," +
                 "CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE)");
         db.execSQL("CREATE TABLE deck(" +
@@ -215,10 +215,15 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
     }
 
     private void generateFakeFriends(){
-        dbApi.insertFriend(1, 2, FriendStatus.USER_REQUESTED); // Jasper
-        dbApi.insertFriend(1, 4, FriendStatus.USER_REQUESTED); // Ben
-        dbApi.insertFriend(1, 3, FriendStatus.FRIEND_REQUESTED); // Amy
-        dbApi.insertFriend(1, 6, FriendStatus.FRIEND_REQUESTED); // Damon
-        dbApi.insertFriend(1, 5, FriendStatus.FRIEND); // Ethan is already a friend
+        dbApi.insertFriend(1, 3, FriendStatus.FRIEND_REQUESTED); // Amy requested to be Mike's friend
+        dbApi.insertFriend(1, 6, FriendStatus.FRIEND_REQUESTED); // Damon requested to be Mike's friend
+        dbApi.insertFriend(1, 5, FriendStatus.FRIEND); // Ethan is already Mike's friend
+        dbApi.insertFriend(5, 1, FriendStatus.FRIEND); // replicate of the row above to indicate friendship
+        dbApi.insertFriend(1, 4, FriendStatus.FRIEND); // Ben is already Mike's friend
+        dbApi.insertFriend(4, 1, FriendStatus.FRIEND);
+        dbApi.insertFriend(2, 1, FriendStatus.FRIEND_REQUESTED); // Mike requested to be Jasper's friend
+        dbApi.insertFriend(3, 2, FriendStatus.FRIEND_REQUESTED); // Jasper requested to be Amy's friend
+        dbApi.insertFriend(3, 6, FriendStatus.FRIEND); // Damon is already Amy's friend
+        dbApi.insertFriend(6, 3, FriendStatus.FRIEND);
     }
 }

@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -208,5 +209,10 @@ public class MainActivity extends AppCompatActivity {
                 AlarmManager.INTERVAL_DAY,
                 pendingIntent);
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        Log.d("FragmentList", getSupportFragmentManager().getFragments().toString());
+//    }
 
 }
