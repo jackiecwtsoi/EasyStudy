@@ -89,7 +89,8 @@ public class DeckEntity implements Serializable {
         this.dayOfWeek = dayOfWeek;
     }
 
-    public DeckEntity(String deckName, int completion, String deckDescription, String time, int frequency, String dayOfWeek, int interval, int deckID, int userId, int folderId, String coverPath, int pub) {
+    public DeckEntity(String deckName, int completion, String deckDescription, String time, int frequency, String dayOfWeek, int interval,
+                      int deckID, int userId, int folderId, String coverPath, int pub) {
         this.deckName = deckName;
         this.completion = completion;
         this.deckDescription = deckDescription;

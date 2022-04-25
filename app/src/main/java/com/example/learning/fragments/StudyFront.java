@@ -29,18 +29,9 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link StudyFront.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link StudyFront#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class StudyFront extends Fragment {
     // define variables
     View rootView;
-    TextView textFolderTitle;
     TextView textDeckTitle;
     TextView textCardQuestionContent;
     TextView textStudyProgress;
@@ -63,10 +54,8 @@ public class StudyFront extends Fragment {
         this.db = db;
     }
 
-    public static StudyFront newInstance(String param1, String param2, SQLiteDatabase db) {
+    public static StudyFront newInstance(SQLiteDatabase db) {
         StudyFront fragment = new StudyFront(db);
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -86,22 +75,21 @@ public class StudyFront extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        if (rootView != null) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null) {
+                parent.removeView(rootView);
+            }
+        }
+
         if (container != null) {
             container.removeAllViews();
         }
-
-//        if (rootView != null) {
-//            ViewGroup parent = (ViewGroup) rootView.getParent();
-//            if (parent != null) {
-//                parent.removeView(rootView);
-//            }
-//        }
 
         rootView = inflater.inflate(R.layout.fragment_study_front, container, false);
 
         DbApi dbapi = new DbApi(this.db);
 
-        textFolderTitle = rootView.findViewById(R.id.textDeckTitle);
         textDeckTitle = rootView.findViewById(R.id.textDeckTitle);
         textCardQuestionContent = rootView.findViewById(R.id.textCardQuestionContent);
         textStudyProgress = rootView.findViewById(R.id.textStudyProgress);
@@ -137,8 +125,6 @@ public class StudyFront extends Fragment {
 
         textDeckTitle.setText(STUDY_LIST.get(rowIdx).getDeck().getDeckName());
         textCardQuestionContent.setText(STUDY_LIST.get(rowIdx).getCard().getCardQuestion());
-//        textFolderTitle.setText(STUDY_LIST.get(rowIdx).get(0));
-//        textCardQuestionContent.setText(STUDY_LIST.get(rowIdx).get(1));
         textStudyProgress.setText("Card " + String.valueOf(rowIdx+1) + " / " + String.valueOf(STUDY_LIST.size()));
 
         btnNextCard.setOnClickListener(new View.OnClickListener() {
@@ -148,9 +134,6 @@ public class StudyFront extends Fragment {
                     Row row = STUDY_LIST.get(++rowIdx);
                     textDeckTitle.setText(row.getDeck().getDeckName());
                     textCardQuestionContent.setText(row.getCard().getCardQuestion());
-//                    ArrayList<String> row = STUDY_LIST.get(++rowIdx);
-//                    textFolderTitle.setText(row.get(0));
-//                    textCardQuestionContent.setText(row.get(1));
                     textStudyProgress.setText("Card " + String.valueOf(rowIdx+1) + " / " + String.valueOf(STUDY_LIST.size()));
                     progressBar.setProgress(rowIdx+1);
                 }
@@ -172,18 +155,13 @@ public class StudyFront extends Fragment {
            public void onClick(View view) {
                if (rowIdx > 0) {
                    Row row = STUDY_LIST.get(--rowIdx);
-                   //textFolderTitle.setText(row.getFolder().getFolderName());
                    textDeckTitle.setText(row.getDeck().getDeckName());
                    textCardQuestionContent.setText(row.getCard().getCardQuestion());
-//                   ArrayList<String> row = STUDY_LIST.get(--rowIdx);
-//                   textFolderTitle.setText(row.get(0));
-//                   textCardQuestionContent.setText(row.get(1));
                    textStudyProgress.setText("Card " + String.valueOf(rowIdx+1) + " / " + String.valueOf(STUDY_LIST.size()));
                    progressBar.setProgress(rowIdx+1);
                }
                else {
                    rowIdx = -1;
-                   textFolderTitle.setText("You have reached the start of the decks.");
                    textCardQuestionContent.setText("You have reached the start of the cards.");
                    textStudyProgress.setText("Card " + String.valueOf(rowIdx+1) + " / " + String.valueOf(STUDY_LIST.size()));
                    progressBar.setProgress(rowIdx+1);
@@ -197,9 +175,6 @@ public class StudyFront extends Fragment {
                 StudyBack studyBack = new StudyBack(db);
                 Bundle bundle = new Bundle();
                 bundle.putInt("rowIdx", rowIdx);
-//                bundle.putInt("nEasy", nEasy);
-//                bundle.putInt("nHard", nHard);
-//                bundle.putInt("nForgot", nForgot);
                 studyBack.setArguments(bundle);
 
                 if ((rowIdx >= 0) && (rowIdx < STUDY_LIST.size())) {

@@ -133,7 +133,8 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
         for (int i = 0; i < 6; i++) {
             String name = names.get(i);
             // names.add(name);
-            dbApi.insertUserFull(name, name+"@gmail.com", "123456");
+            dbApi.insertUserFull(name, name+"@gmail.com", "123456",
+                    "https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/8394f798931623.5ee79b6a909ea.jpg");
         }
     }
     private void generateFakeFolder(){
@@ -198,6 +199,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                         interval = 4;
                         cover = path4;
                     }
+
                     long deckid = dbApi.insertDeck(deckName, deckDescription, 0, frequency, dayOfWeek, interval, (int)folderid, i + 1, cover, pub);
                     Random r = new Random();
                     for (int n = 0; n < 4; n++) {
