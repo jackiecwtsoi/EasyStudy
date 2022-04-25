@@ -29,6 +29,7 @@ public class FriendSearchResult extends Fragment {
     View rootView;
     Button btnAddSearchedFriend;
     TextView textSearchedFriendPublicNumber, textSearchedFriendPresentNumber;
+    TextView textSearchedFriendName, textSearchedFriendEmail;
 
     SQLiteDatabase db;
     int userIdFromSearch;
@@ -59,12 +60,23 @@ public class FriendSearchResult extends Fragment {
         }
 
         rootView = inflater.inflate(R.layout.fragment_friend_search_result, container, false);
-        DbApi dbapi = new DbApi(this.db);
         btnAddSearchedFriend = rootView.findViewById(R.id.btnAddSearchedFriend);
         textSearchedFriendPublicNumber = rootView.findViewById(R.id.textSearchedFriendPublicNumber);
         textSearchedFriendPresentNumber = rootView.findViewById(R.id.textSearchedFriendPresentNumber);
+        textSearchedFriendName = rootView.findViewById(R.id.textSearchedFriendName);
+        textSearchedFriendEmail = rootView.findViewById(R.id.textSearchedFriendEmail);
 
-        // TODO: display the number of public deck(s) and present days of the searched user
+        DbApi dbapi = new DbApi(this.db);
+        ArrayList<String> searchedUserInfo = dbapi.getUserInfo(userIdFromSearch); // get array that displays selected user information-
+        textSearchedFriendName.setText(searchedUserInfo.get(1));
+        textSearchedFriendEmail.setText(searchedUserInfo.get(0));
+        textSearchedFriendPublicNumber.setText(Integer.toString(dbapi.getPublicDecks(userIdFromSearch).size()));
+        textSearchedFriendPresentNumber.setText(Integer.toString(dbapi.getPresentdays(userIdFromSearch)));
+
+        // if the searched user is already a friend, then we do not display the "Add Friend" button
+        if (IS_FRIEND) {
+            btnAddSearchedFriend.setVisibility(View.INVISIBLE);
+        }
 
         // when the "Add Friend" button is clicked, update the 'friends' database and return to friends list
         btnAddSearchedFriend.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +103,4 @@ public class FriendSearchResult extends Fragment {
         int userId = main.getLoginUserId();
         dbapi.sendFriendRequest(userId, this.userIdFromSearch);
     }
-
-
 }

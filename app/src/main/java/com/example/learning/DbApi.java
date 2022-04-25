@@ -395,7 +395,7 @@ public class DbApi {
         return check_cursor.getCount();
 
     }
-    public ArrayList<String> getUserIfo(int userID) {
+    public ArrayList<String> getUserInfo(int userID) {
         String user_id = Integer.toString(userID);
 
         ArrayList<String> arrary = new ArrayList<>();
@@ -461,6 +461,18 @@ public class DbApi {
         return allDecks;
     }
 
+    // get all public decks for a specific user
+    public ArrayList<DeckEntity> getPublicDecks(int userId) {
+        ArrayList<DeckEntity> publicDecks = new ArrayList<>();
+        ArrayList<DeckEntity> decks = getAllDecks(userId);
+        for (DeckEntity deck : decks) {
+            if (deck.getPub() == 1) {
+                publicDecks.add(deck);
+            }
+        }
+        return publicDecks;
+    }
+
     // get all cards inside a specific deck
     public ArrayList<Row> getCardsFromDeck(DeckEntity deck) {
         ArrayList<Row> cardsFromDeck = new ArrayList<>();
@@ -486,7 +498,7 @@ public class DbApi {
          */
         ArrayList<DeckEntity> allDecks = getAllDecks(userID);
         for (DeckEntity deck : allDecks) { // filter the decks by frequency level
-            // scenario 1
+            // scenario 1: daily or weekly
             if (deck.getFrequency() == 0 | deck.getFrequency() == 1) {
                 ArrayList<String> dayOfWeek = new ArrayList<>( // split dayOfWeek by ";" separator
                         Arrays.asList(deck.getDayOfWeek().split(";")));
@@ -494,9 +506,15 @@ public class DbApi {
                     decksForReminder.add(deck);
                 }
             }
-            // TODO: scenario 2
+            // TODO: scenario 2: monthly (interval value means reminder every n days)
+            /* scenario 2: monthly
+            in the 'deck' table in the database, we use two columns to calculate the notification for this scenario
+            - the "interval" column represents the reminder will trigger within this amount of days
+            - the "reminder_countdown" column represents how many days left until the next reminder is triggered
+            (0 means the reminder should be triggered that day)
+             */
             else if (deck.getFrequency() == 2) {
-                //////////////////////////////
+
             }
         }
 
@@ -689,6 +707,14 @@ public class DbApi {
                 return;
             }
         }
+
+        friends = queryFriends(friendId);
+        for (FriendEntity friend : friends) {
+            if (friend.getFriendId() == userId) {
+                return;
+            }
+        }
+
         insertFriend(friendId, userId, FriendStatus.FRIEND_REQUESTED);
     }
 
