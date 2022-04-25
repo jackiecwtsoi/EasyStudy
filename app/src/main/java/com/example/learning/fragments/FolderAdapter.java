@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,7 +30,8 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
         TextView tv2;
         TextView decktv;
         LinearLayout item;
-        SwipeRevealLayout swipeRevealLayout;
+        public SwipeRevealLayout swipeRevealLayout;
+        ImageView delete;
          VH(@NonNull View itemView) {
             super(itemView);
             item = itemView.findViewById(R.id.folder_item);
@@ -36,6 +39,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
             tv2 = itemView.findViewById(R.id.item_folder_description);
             decktv = itemView.findViewById(R.id.folder_item_deck_num);
             swipeRevealLayout = itemView.findViewById(R.id.folder_swipereval);
+            delete = itemView.findViewById(R.id.forlder_item_delete);
 //            tv1 = itemView.findViewById(R.id.folder_name);
 //            tv2 = itemView.findViewById(R.id.folder_pro);
             tv2.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
@@ -49,7 +53,9 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
         this.dataList = dataList;
         this.dataListCopy.addAll(dataList);
     }
+
     private OnItemClickLitener   mOnItemClickLitener;
+    private OnItemClickLitener   mOnDeleteItemClickLitener;
 
     //设置回调接口
     public interface OnItemClickLitener{
@@ -59,6 +65,9 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
     public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener){
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
+    public void setDeleteOnItemClickLitener(OnItemClickLitener mOnDeleteItemClickLitener){
+        this.mOnDeleteItemClickLitener = mOnDeleteItemClickLitener;
+    }
 
     @NonNull
     @Override
@@ -67,7 +76,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VH holder, final int position) {
+    public void onBindViewHolder(@NonNull final VH holder, final int position) {
         FolderEntity c = dataList.get(position);
         viewBinderHelper.bind(holder.swipeRevealLayout, Integer.toString(c.getFolderID()));
         holder.tv1.setText(c.getFolderName());
@@ -81,7 +90,17 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.VH>{
                 }
             });
         }
+        if(mOnDeleteItemClickLitener != null){
+            holder.delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.swipeRevealLayout.close(false);
+                    mOnDeleteItemClickLitener.onItemClick(view, position);
+                }
+            });
+        }
     }
+
     @Override
     public int getItemCount() {
         return dataList.size();

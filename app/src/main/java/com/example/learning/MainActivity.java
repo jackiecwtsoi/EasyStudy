@@ -27,6 +27,7 @@ import com.example.learning.customizeview.HonrizonViewPager;
 import com.example.learning.fragments.Add;
 import com.example.learning.fragments.Folder;
 import com.example.learning.fragments.Home;
+import com.example.learning.fragments.Profile;
 import com.example.learning.fragments.Statistic;
 import com.example.learning.fragments.Study;
 import com.example.learning.fragments.StudyFront;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentList.add(new Add(db));
         fragmentList.add(new Study(db));
         fragmentList.add(new Statistic(db));
+        fragmentList.add(new Profile(db));
 
         textViewList = new ArrayList<ImageView>();
         textViewList.add(mcHome);
@@ -162,6 +164,9 @@ public class MainActivity extends AppCompatActivity {
     public void changeToFolder(int selectedFriendId) {
         this.selectedFriendId = selectedFriendId;
         mcContainer.setCurrentItem(1);
+    }
+    public void changeToProfile(){
+        mcContainer.setCurrentItem(5);
     }
 
     public DeckEntity getSelectedDeck() {

@@ -43,7 +43,7 @@ public class Deck extends Fragment {
     private SearchView searchView;
     private ImageView addFolder;
     private View addView;
-    List<DeckEntity> deckList;
+    List<DeckEntity> deckList = new ArrayList<>();
     private int folder_id;
     SQLiteDatabase db;
     DbApi dbApi;
@@ -92,8 +92,12 @@ public class Deck extends Fragment {
                 parent.removeView(rootView);
             }
         }
-        getDeckList();
+
         rootView = inflater.inflate(R.layout.fragment_folder, container, false);
+        MainActivity main = (MainActivity) getActivity();
+        userID = main.getLoginUserId();
+        dbApi = new DbApi(db);
+        getDeckList();
         addView = inflater.inflate(R.layout.create_folder, container, false);
         addView.setBackgroundColor(Color.WHITE);
         folder_viewer = rootView.findViewById(R.id.foler_viewer);
@@ -117,6 +121,15 @@ public class Deck extends Fragment {
                         .addToBackStack("tag13")
                         .commit();
                 System.out.println(position);
+            }
+        });
+        adapter.setDeleteOnItemClickLitener(new DeckAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                System.out.println("click the on delete");
+                dbApi.deleteDeck(userID, deckList.get(position).getFolderId(), deckList.get(position).getDeckID());
+                getDeckList();
+                adapter.notifyDataSetChanged();
             }
         });
         folder_viewer.setLayoutManager(new LinearLayoutManager(context));
@@ -168,10 +181,8 @@ public class Deck extends Fragment {
 
     }
     private void getDeckList(){
-        MainActivity main = (MainActivity) getActivity();
-        userID = main.getLoginUserId();
-        dbApi = new DbApi(db);
-        deckList = dbApi.queryDeck(folder_id, userID);
+        deckList.clear();
+        deckList.addAll(dbApi.queryDeck(folder_id, userID));
         for(DeckEntity deck : deckList){
             int deckNum = dbApi.queryCard(deck.getDeckID(), folder_id, userID).size();
             deck.setCardNum(deckNum);

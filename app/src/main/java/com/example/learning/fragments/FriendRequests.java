@@ -98,7 +98,7 @@ public class FriendRequests extends Fragment {
 
             @Override
             public void onRejectClick(int position) {
-                deleteFriend(position);
+                rejectFriend(position);
                 removeFromIncomingRequests(position);
             }
         });
@@ -131,13 +131,14 @@ public class FriendRequests extends Fragment {
         DbApi dbapi = new DbApi(this.db);
         FriendEntity friend = listIncomingFriendRequests.get(position);
         dbapi.updateFriendStatus(userId, friend, FriendStatus.FRIEND);
+        dbapi.insertFriend(friend.getFriendId(), userId, FriendStatus.FRIEND); // add another row to indicate new friendship
     }
 
     // helper function to call dbapi and delete the friend row in the friend table
-    public void deleteFriend(int position) {
+    public void rejectFriend(int position) {
         DbApi dbapi = new DbApi(this.db);
         FriendEntity friend = listIncomingFriendRequests.get(position);
-        dbapi.deleteFriend(userId, friend);
+        dbapi.deleteFriend(userId, friend.getFriendId()); // delete row
     }
 
     // helper function to remove the request item from the request list

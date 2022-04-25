@@ -96,7 +96,9 @@ public class DbApi {
                     @SuppressLint("Range") int frequency = fcursor.getInt(fcursor.getColumnIndex("frequency"));
                     @SuppressLint("Range") String dayOfWeek = fcursor.getString(fcursor.getColumnIndex("day_of_week"));
                     @SuppressLint("Range") int interval = fcursor.getInt(fcursor.getColumnIndex("interval"));
-                    DeckEntity deckEntity = new DeckEntity(name, completion, description, time, frequency, dayOfWeek, interval, fid, userID, folderID);
+                    @SuppressLint("Range") String coverPath = fcursor.getString(fcursor.getColumnIndex("cover_path"));
+                    @SuppressLint("Range") int pub = fcursor.getInt(fcursor.getColumnIndex("public"));
+                    DeckEntity deckEntity = new DeckEntity(name, completion, description, time, frequency, dayOfWeek, interval, fid, userID, folderID, coverPath, pub);
                     deckEntities.add(deckEntity);
                 }
             } while (fcursor.moveToNext());
@@ -181,7 +183,7 @@ public class DbApi {
         return id;
     }
 
-    public long insertDeck(String deckName, String deckDescription, int completion, int frequency, String dayofWeek, int interval, int folderID, int userID) {
+    public long insertDeck(String deckName, String deckDescription, int completion, int frequency, String dayofWeek, int interval, int folderID, int userID, String cover, int pub) {
         int[] arrary = new int[1000];
         boolean justice = false;
         int count = 0;
@@ -212,6 +214,8 @@ public class DbApi {
             values2.put("frequency", frequency);
             values2.put("day_of_week", dayofWeek);
             values2.put("interval", interval);
+            values2.put("public", pub);
+            values2.put("cover_path", cover);
             String time = getDate();
             values2.put("time", time);
             id = db.insert("deck", null, values2);
@@ -391,6 +395,40 @@ public class DbApi {
         return check_cursor.getCount();
 
     }
+    public ArrayList<String> getUserIfo(int userID) {
+        String user_id = Integer.toString(userID);
+
+        ArrayList<String> arrary = new ArrayList<>();
+
+        int count = 0;
+        Cursor check_cursor = db.query("user", null, "u_id =?", new String[]{user_id}, null, null, null);
+        if (check_cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String email = check_cursor.getString(check_cursor.getColumnIndex("email"));
+                @SuppressLint("Range") String phone = check_cursor.getString(check_cursor.getColumnIndex("phone_number"));
+
+                @SuppressLint("Range") String password = check_cursor.getString(check_cursor.getColumnIndex("password"));
+                @SuppressLint("Range") String userName = check_cursor.getString(check_cursor.getColumnIndex("name"));
+                arrary.add(email);
+                arrary.add(userName);
+                arrary.add(phone);
+                arrary.add(password);
+
+            } while (check_cursor.moveToNext());
+
+
+
+        }
+        return arrary;
+    }
+    public void UpdateUserIfo(int userID,String user_name,String phone_number,String password){
+        String user_id=Integer.toString(userID);
+        ContentValues values = new ContentValues();
+        values.put("name",user_name);
+        values.put("phone_number",phone_number);
+        values.put("password",password);
+        db.update("user",values,"u_id = ?",new String[]{user_id});
+    }
 
 
     // get all cards given a user
@@ -528,7 +566,6 @@ public class DbApi {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        Collections.reverse(friends); // reverse the order of the list because we want most recent friends to appear first
         return friends;
     }
 
@@ -610,9 +647,9 @@ public class DbApi {
         db.execSQL(query);
     }
 
-    public void deleteFriend(int userId, FriendEntity friend) {
+    public void deleteFriend(int userId, int friendId) {
         String query = "DELETE FROM friend WHERE u_id = " + userId +
-                " AND friend_id = " + friend.getFriendId();
+                " AND friend_id = " + friendId;
         db.execSQL(query);
     }
 
@@ -628,6 +665,20 @@ public class DbApi {
         cursor.close();
         return -1;
     }
+    public void deleteFolder(int userId, int folderId){
+        String queryDeck = "DELETE FROM deck WHERE u_id = " + userId +
+                " AND folder_id = " + folderId;
+        String query = "DELETE FROM folder WHERE u_id = " + userId +
+                " AND folder_id = " + folderId;
+        db.execSQL(queryDeck);
+        db.execSQL(query);
+
+    }
+    public void deleteDeck(int userId, int folderId, int deckId){
+        String query = "DELETE FROM deck WHERE u_id = " + userId +
+                " AND folder_id = " + folderId + " AND deck_id = " + deckId;
+        db.execSQL(query);
+    }
 
     // send friend request function: first check if friendship already exists in the 'friend' table, and then insert
     public void sendFriendRequest(int userId, int friendId) {
@@ -641,4 +692,17 @@ public class DbApi {
         insertFriend(friendId, userId, FriendStatus.FRIEND_REQUESTED);
     }
 
+    public void updateCardLevel(int folderId, int deckId, int cardId, Difficulty difficulty) {
+        int level = -1; // initialized to be -1 if no level has been entered
+        switch (difficulty) {
+            case EASY: level = 0; break;
+            case HARD: level = 1; break;
+            case FORGOT: level = 2; break;
+        }
+        String query = "UPDATE card SET level = " + level +
+                " WHERE folder_id = " + folderId +
+                " AND deck_id = " + deckId +
+                " AND card_id = " + cardId;
+        db.execSQL(query);
+    }
 }

@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.learning.Card;
+import com.example.learning.DbApi;
 import com.example.learning.Difficulty;
 import com.example.learning.R;
 import com.example.learning.Row;
@@ -57,7 +59,6 @@ public class StudyDone extends Fragment {
 
     public StudyDone(SQLiteDatabase db) {
         this.db = db;
-        // Required empty public constructor
     }
 
     /**
@@ -183,7 +184,7 @@ public class StudyDone extends Fragment {
     public void clearRatings(boolean clear) {
         if (clear) {
             for (Row row: STUDY_LIST) {
-                row.setRating(Difficulty.NONE);
+                row.setRating(Difficulty.NONE); // set rating in the STUDY_LIST
             }
         }
     }

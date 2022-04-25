@@ -133,7 +133,8 @@ public class Friends extends Fragment {
     public void deleteFriend(int position) {
         DbApi dbapi = new DbApi(this.db);
         FriendEntity friend = listFriends.get(position);
-        dbapi.deleteFriend(userId, friend);
+        dbapi.deleteFriend(userId, friend.getFriendId());
+        dbapi.deleteFriend(friend.getFriendId(), userId); // delete the duplicate row too
     }
 
     // helper function to remove the request item from the request list

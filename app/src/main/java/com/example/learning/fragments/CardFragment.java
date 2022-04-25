@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -16,6 +18,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.learning.AddCardActivity;
@@ -26,6 +29,8 @@ import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.example.learning.customizeview.CircleProgressView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
 
@@ -48,6 +53,7 @@ public class CardFragment extends Fragment {
     TextView cardNum;
     TextView decktile;
     TextView userNameText;
+    ImageView deckCover;
 
 
     public CardFragment(SQLiteDatabase db, DeckEntity deck) {
@@ -112,6 +118,16 @@ public class CardFragment extends Fragment {
         qeuryCard();
         cnp_citcleNumberProgress = rootView.findViewById(R.id.card_deck_progress);
         increase();
+        deckCover = rootView.findViewById(R.id.deck_cover);
+        String coverPath = deck.getCoverPath();
+        Uri img = Uri.fromFile(new File(coverPath));
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream
+                    (getActivity().getContentResolver().openInputStream(img));
+            deckCover.setImageBitmap(bitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         addCard = rootView.findViewById(R.id.card_add_card);
         addCard.setOnClickListener(new View.OnClickListener() {
             @Override

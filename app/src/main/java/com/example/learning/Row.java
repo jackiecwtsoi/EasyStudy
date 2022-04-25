@@ -15,10 +15,6 @@ public class Row {
         this.rating = Difficulty.NONE;
     }
 
-    public Row getRow() {
-        return this;
-    }
-
 //    public FolderEntity getFolder() {
 //        return this.folder;
 //    }

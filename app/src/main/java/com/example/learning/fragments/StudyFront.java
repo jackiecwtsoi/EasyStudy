@@ -61,7 +61,6 @@ public class StudyFront extends Fragment {
 
     public StudyFront(SQLiteDatabase db) {
         this.db = db;
-        // Required empty public constructor
     }
 
     /**
@@ -73,8 +72,8 @@ public class StudyFront extends Fragment {
      * @return A new instance of fragment Study.
      */
     // TODO: Rename and change types and number of parameters
-    public static Study newInstance(String param1, String param2, SQLiteDatabase db) {
-        Study fragment = new Study(db);
+    public static StudyFront newInstance(String param1, String param2, SQLiteDatabase db) {
+        StudyFront fragment = new StudyFront(db);
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -95,10 +94,18 @@ public class StudyFront extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-//        if (container != null) {
-//            container.removeAllViews();
+
+        if (container != null) {
+            container.removeAllViews();
+        }
+
+//        if (rootView != null) {
+//            ViewGroup parent = (ViewGroup) rootView.getParent();
+//            if (parent != null) {
+//                parent.removeView(rootView);
+//            }
 //        }
+
         rootView = inflater.inflate(R.layout.fragment_study_front, container, false);
 
         DbApi dbapi = new DbApi(this.db);
@@ -196,7 +203,7 @@ public class StudyFront extends Fragment {
         cardStudyFront.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StudyBack studyBack = new StudyBack();
+                StudyBack studyBack = new StudyBack(db);
                 Bundle bundle = new Bundle();
                 bundle.putInt("rowIdx", rowIdx);
 //                bundle.putInt("nEasy", nEasy);

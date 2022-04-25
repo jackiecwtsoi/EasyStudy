@@ -1,5 +1,6 @@
 package com.example.learning.fragments;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.learning.Card;
+import com.example.learning.DbApi;
 import com.example.learning.Difficulty;
 import com.example.learning.R;
 import com.example.learning.Row;
@@ -20,6 +23,8 @@ import com.example.learning.Row;
 import java.util.ArrayList;
 
 public class StudyBack extends DialogFragment {
+    SQLiteDatabase db;
+
     // define variables
     View rootView;
     TextView textCardAnswerContent;
@@ -30,6 +35,15 @@ public class StudyBack extends DialogFragment {
     int rowIdx;
     // define variables that come from the bundle
 //    static int rowIdx = StudyFront.rowIdx;
+
+    public StudyBack(SQLiteDatabase db) {
+        this.db = db;
+    }
+
+    public static StudyBack newInstance(SQLiteDatabase db) {
+        StudyBack fragment = new StudyBack(db);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +81,7 @@ public class StudyBack extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Row row = STUDY_LIST.get(rowIdx);
-                row.setRating(Difficulty.EASY);
+                setRating(row, Difficulty.EASY);
                 dismiss();
             }
         });
@@ -75,7 +89,7 @@ public class StudyBack extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Row row = STUDY_LIST.get(rowIdx);
-                row.setRating(Difficulty.HARD);
+                setRating(row, Difficulty.HARD);
                 dismiss();
             }
         });
@@ -83,13 +97,23 @@ public class StudyBack extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Row row = STUDY_LIST.get(rowIdx);
-                row.setRating(Difficulty.FORGOT);
+                setRating(row, Difficulty.FORGOT);
                 dismiss();
             }
         });
 
 
         return rootView;
+    }
+
+    private void setRating(Row row, Difficulty difficulty) {
+        // first update the level in the local study list
+        row.setRating(difficulty);
+
+        // second update the level in the database
+        Card card = row.getCard();
+        DbApi dbapi = new DbApi(this.db);
+        dbapi.updateCardLevel(card.getFolderId(), card.getDeckId(), card.getCardID(), difficulty);
     }
 
 }

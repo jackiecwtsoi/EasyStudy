@@ -113,6 +113,7 @@ public class Folder extends Fragment {
         adapter.setOnItemClickLitener(new FolderAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
+                System.out.println("click the on item");
                 Deck deck = new Deck(folders.get(position).getFolderID(), db);
                 FragmentManager studyFrontManager = getFragmentManager();
                 studyFrontManager.beginTransaction()
@@ -120,6 +121,16 @@ public class Folder extends Fragment {
                         .addToBackStack("tag")
                         .commit();
                 System.out.println(position);
+            }
+        });
+        adapter.setDeleteOnItemClickLitener(new FolderAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                System.out.println("click the on delete");
+
+                dbApi.deleteFolder(userId, folders.get(position).getFolderID());
+                getFolderList();
+                adapter.notifyDataSetChanged();
             }
         });
         folder_viewer.setLayoutManager(new LinearLayoutManager(context));
