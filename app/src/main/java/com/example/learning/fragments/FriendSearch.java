@@ -91,6 +91,7 @@ public class FriendSearch extends DialogFragment {
                 if (friendEmail == "") {
                     Toast.makeText(getActivity(), "Please enter your friend's email.", Toast.LENGTH_SHORT);
                 } else {
+                    dismiss();
                     searchFriendByEmail(friendEmail);
                 }
 
@@ -101,26 +102,19 @@ public class FriendSearch extends DialogFragment {
         return rootView;
     }
 
-    public void searchFriendByEmail(String email) {
+    private void searchFriendByEmail(String email) {
         DbApi dbapi = new DbApi(this.db);
         int userIdFromSearch = dbapi.queryUserByEmail(email);
-        if (userIdFromSearch == -1) { // if user is found
+        if (userIdFromSearch == -1) { // if user is not found
             Toast.makeText(getActivity(), "No user is found! Please enter again or cancel search.", Toast.LENGTH_SHORT);
             editFriendEmail.getText().clear(); // clear the edit text field
         }
         else { // if user is found, then go to another fragment showing the user info and add friend option
-            // TODO: change fragment to show searched user info
-            if (isConfirmedFriend(userIdFromSearch)) { // first check if searched user is already a friend
-                System.out.println("User is already a friend of yours :)");
-            }
-            else {
-                System.out.println("User is not yet a friend of yours :(");
-            }
             changeToSearchedUserInfo(userIdFromSearch);
         }
     }
 
-    public boolean isConfirmedFriend(int userIdFromSearch) {
+    private boolean isConfirmedFriend(int userIdFromSearch) {
         DbApi dbapi = new DbApi(this.db);
         ArrayList<FriendEntity> confirmedFriends = dbapi.getConfirmedFriends(this.userId);
         for (FriendEntity friend : confirmedFriends) {
@@ -129,11 +123,22 @@ public class FriendSearch extends DialogFragment {
         return false;
     }
 
-    public void changeToSearchedUserInfo(int userIdFromSearch) {
-        SearchedUserInfo searchedUserInfoFragment = new SearchedUserInfo(db);
-        FragmentManager searchedUserInfoFragmentManager = getFragmentManager();
-        searchedUserInfoFragmentManager.beginTransaction()
-                .replace(R.id.layoutFriendSearch, searchedUserInfoFragment)
+    private void changeToSearchedUserInfo(int userIdFromSearch) {
+        FriendSearchResult friendSearchResultFragment = new FriendSearchResult(db);
+        Bundle bundle = new Bundle();
+        boolean IS_FRIEND = false;
+
+        // check if searched user is already a friend
+        if (isConfirmedFriend(userIdFromSearch)) { // if yes, set isFriend = true
+            IS_FRIEND = true;
+        }
+        bundle.putBoolean("IS_FRIEND", IS_FRIEND);
+        bundle.putInt("userIdFromSearch", userIdFromSearch);
+        friendSearchResultFragment.setArguments(bundle);
+
+        FragmentManager friendSearchResultFragmentManager = getFragmentManager();
+        friendSearchResultFragmentManager.beginTransaction()
+                .replace(R.id.layoutFriends, friendSearchResultFragment)
                 .commit();
     }
 }

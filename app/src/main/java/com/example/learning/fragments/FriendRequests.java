@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +26,7 @@ public class FriendRequests extends Fragment {
     // define variables
     View rootView;
     Button btnAccept, btnReject;
+    ImageView btnFriendRequestsBack;
     RecyclerView recyclerViewIncoming, recyclerViewOutgoing;
     SQLiteDatabase db;
     int userId;
@@ -53,6 +56,12 @@ public class FriendRequests extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (rootView != null) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null) {
+                parent.removeView(rootView);
+            }
+        }
         if (container != null) {
             container.removeAllViews();
         }
@@ -64,6 +73,7 @@ public class FriendRequests extends Fragment {
         // buttons
         btnAccept = rootView.findViewById(R.id.btnAccept);
         btnReject = rootView.findViewById(R.id.btnReject);
+        btnFriendRequestsBack = rootView.findViewById(R.id.btnFriendRequestsBack);
 
         // recycler views
         recyclerViewIncoming = rootView.findViewById(R.id.recyclerViewIncomingFriendRequests);
@@ -93,11 +103,25 @@ public class FriendRequests extends Fragment {
             }
         });
 
-        // outgoing friend requests
-        listOutgoingFriendRequests = dbapi.getOutgoingFriendRequests(userId);
-        adapterOutgoing = new OutgoingFriendRequestsAdapter(listOutgoingFriendRequests);
-        recyclerViewOutgoing.setAdapter(adapterOutgoing);
-        recyclerViewOutgoing.setLayoutManager(new LinearLayoutManager(context));
+        // TODO: Outgoing friend requests???
+//        // outgoing friend requests
+//        listOutgoingFriendRequests = dbapi.getOutgoingFriendRequests(userId);
+//        adapterOutgoing = new OutgoingFriendRequestsAdapter(listOutgoingFriendRequests);
+//        recyclerViewOutgoing.setAdapter(adapterOutgoing);
+//        recyclerViewOutgoing.setLayoutManager(new LinearLayoutManager(context));
+
+        btnFriendRequestsBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("change to friends list");
+                Friends friendsFragment = new Friends(db);
+                FragmentManager friendsFragmentManager = getFragmentManager();
+                friendsFragmentManager.beginTransaction()
+                        .replace(R.id.layoutFriendRequests, friendsFragment)
+                        .addToBackStack("friend requests")
+                        .commit();
+            }
+        });
 
         return rootView;
     }

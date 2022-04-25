@@ -590,16 +590,17 @@ public class DbApi {
         return incomingFriendRequests;
     }
 
-    public ArrayList<FriendEntity> getOutgoingFriendRequests(int userId) {
-        ArrayList<FriendEntity> friends = queryFriends(userId);
-        ArrayList<FriendEntity> outgoingFriendRequests = new ArrayList<>();
-        for (FriendEntity friend : friends) {
-            if (friend.getFriendStatus() == FriendStatus.USER_REQUESTED) {
-                outgoingFriendRequests.add(friend);
-            }
-        }
-        return outgoingFriendRequests;
-    }
+    // tODO
+//    public ArrayList<FriendEntity> getOutgoingFriendRequests(int userId) {
+//        ArrayList<FriendEntity> friends = queryFriends(userId);
+//        ArrayList<FriendEntity> outgoingFriendRequests = new ArrayList<>();
+//        for (FriendEntity friend : friends) {
+//            if (friend.getFriendStatus() == FriendStatus.USER_REQUESTED) {
+//                outgoingFriendRequests.add(friend);
+//            }
+//        }
+//        return outgoingFriendRequests;
+//    }
 
     public void updateFriendStatus(int userId, FriendEntity friend, FriendStatus newStatus) {
         String query = "UPDATE friend SET status = '" + newStatus.name() +
@@ -615,7 +616,7 @@ public class DbApi {
         db.execSQL(query);
     }
 
-    public int queryUserByEmail(String email) {
+    public int queryUserByEmail(String email) { // returns userId
         String query = "SELECT u_id FROM user WHERE email = '" + email + "'";
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
@@ -626,6 +627,18 @@ public class DbApi {
         }
         cursor.close();
         return -1;
+    }
+
+    // send friend request function: first check if friendship already exists in the 'friend' table, and then insert
+    public void sendFriendRequest(int userId, int friendId) {
+        // check if record already exists, if so, do not insert but return
+        ArrayList<FriendEntity> friends = queryFriends(userId);
+        for (FriendEntity friend : friends) {
+            if (friend.getFriendId() == friendId) { // if record exists, return -1 and do not insert
+                return;
+            }
+        }
+        insertFriend(friendId, userId, FriendStatus.FRIEND_REQUESTED);
     }
 
 }

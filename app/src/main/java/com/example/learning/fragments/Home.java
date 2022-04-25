@@ -63,6 +63,15 @@ public class Home extends Fragment {
                 parent.removeView(rootView);
             }
         }
+
+        if (container != null) {
+            container.removeView(container.findViewById(R.id.recyclerViewFriends));
+            container.removeView(container.findViewById(R.id.btnFriendRequests));
+            container.removeView(container.findViewById(R.id.btnAddFriend));
+            container.removeView(container.findViewById(R.id.btnFriendsBack));
+            container.removeView(container.findViewById(R.id.textContacts));
+        }
+
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -77,6 +86,7 @@ public class Home extends Fragment {
                 FragmentManager friendsFragmentManager = getFragmentManager();
                 friendsFragmentManager.beginTransaction()
                         .replace(R.id.layoutHome, friendsFragment)
+                        .addToBackStack("home")
                         .commit();
             }
         });

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class Friends extends Fragment {
     // define variables
     View rootView;
-    ImageView btnAddFriend, btnFriendRequests;
+    ImageView btnAddFriend, btnFriendRequests, btnFriendsBack;
     RecyclerView recyclerViewFriends;
     SQLiteDatabase db;
     int userId;
@@ -50,6 +50,12 @@ public class Friends extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (rootView != null) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null) {
+                parent.removeView(rootView);
+            }
+        }
         if (container != null) {
             container.removeAllViews();
         }
@@ -59,6 +65,7 @@ public class Friends extends Fragment {
         DbApi dbapi = new DbApi(this.db);
         btnAddFriend = rootView.findViewById(R.id.btnAddFriend);
         btnFriendRequests = rootView.findViewById(R.id.btnFriendRequests);
+        btnFriendsBack = rootView.findViewById(R.id.btnFriendsBack);
 
         // recycler view
         recyclerViewFriends = rootView.findViewById(R.id.recyclerViewFriends);
@@ -100,6 +107,21 @@ public class Friends extends Fragment {
                 FragmentManager friendRequestsFragmentManager = getFragmentManager();
                 friendRequestsFragmentManager.beginTransaction()
                         .replace(R.id.layoutFriends, friendRequestsFragment)
+                        .addToBackStack("requests")
+                        .commit();
+            }
+        });
+
+        // when the back button is clicked, return to home
+        btnFriendsBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("change to home");
+                Home homeFragment = new Home(db);
+                FragmentManager homeFragmentManager = getFragmentManager();
+                homeFragmentManager.beginTransaction()
+                        .replace(R.id.layoutFriends, homeFragment)
+                        .addToBackStack("friends")
                         .commit();
             }
         });

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutFriends"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFF">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewFriends"
@@ -21,22 +22,49 @@
         android:layout_height="30dp"
         app:layout_constraintBottom_toTopOf="@+id/recyclerViewFriends"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.089"
+        app:layout_constraintHorizontal_bias="0.942"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.174"
+        app:layout_constraintVertical_bias="0.473"
         app:srcCompat="@drawable/notification" />
 
     <ImageView
         android:id="@+id/btnAddFriend"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerViewFriends"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.889"
+        app:layout_constraintHorizontal_bias="0.897"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewFriends"
+        app:layout_constraintVertical_bias="0.802"
+        app:srcCompat="@drawable/search" />
+
+    <ImageView
+        android:id="@+id/btnFriendsBack"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerViewFriends"
+        app:layout_constraintEnd_toStartOf="@+id/btnFriendRequests"
+        app:layout_constraintHorizontal_bias="0.066"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.174"
-        app:srcCompat="@drawable/search" />
+        app:layout_constraintVertical_bias="0.173"
+        app:srcCompat="@drawable/leftarrow" />
+
+    <TextView
+        android:id="@+id/textContacts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contacts"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerViewFriends"
+        app:layout_constraintEnd_toStartOf="@+id/btnFriendRequests"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toEndOf="@+id/btnFriendsBack"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.175" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

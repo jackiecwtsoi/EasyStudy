@@ -96,9 +96,9 @@ public class StudyFront extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if (container != null) {
-            container.removeAllViews();
-        }
+//        if (container != null) {
+//            container.removeAllViews();
+//        }
         rootView = inflater.inflate(R.layout.fragment_study_front, container, false);
 
         DbApi dbapi = new DbApi(this.db);
