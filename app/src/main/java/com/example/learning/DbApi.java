@@ -44,6 +44,19 @@ public class DbApi {
         return formatter.format(date);
 
     }
+    public ArrayList<DeckEntity> getAllPublicDecks(int userID) {
+        ArrayList<DeckEntity> allDecks = new ArrayList<>();
+        ArrayList<FolderEntity> folders = queryFolder(userID);
+        for (FolderEntity folder : folders) {
+            ArrayList<DeckEntity> decks = queryDeck(folder.getFolderID(), userID);
+            for (DeckEntity deck : decks) {
+                if(deck.getPub() == 1) {
+                    allDecks.add(deck);
+                }
+            }
+        }
+        return allDecks;
+    }
 
 
     public static String randomName(int min, int max) {

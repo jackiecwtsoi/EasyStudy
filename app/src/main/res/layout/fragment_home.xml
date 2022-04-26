@@ -1,201 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layoutHome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:orientation="vertical"
-    android:overScrollMode="never">
-
-    <LinearLayout
+    android:id="@+id/home_root_layout">
+    <androidx.core.widget.NestedScrollView
+        android:orientation="vertical"
+        android:fillViewport="true"
+        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        >
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.qmuiteam.qmui.widget.QMUIRadiusImageView
-                android:id="@+id/touxiang"
-                android:layout_width="57dp"
-                android:layout_height="60dp"
-                android:layout_marginVertical="20dp"
-                android:layout_marginLeft="20dp"
-                android:src="@mipmap/ic_default_avatar"
-                app:qmui_border_width="0dp"
-                app:qmui_corner_radius="10dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:text="Hi,User!"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:id="@+id/friend"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="10dp"
-                android:src="@mipmap/ic_personal" />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/rlProgress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:gravity="center_vertical">
-
-            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-                android:id="@+id/ivBg"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
-                app:qmui_backgroundColor="#DDDDDD"
-                app:qmui_border_width="0dp"
-                app:qmui_isRadiusAdjustBounds="false"
-                app:qmui_radius="10dp" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tvProgress"
-                android:layout_width="wrap_content"
+                <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+                    android:id="@+id/touxiang"
+                    android:layout_width="57dp"
+                    android:layout_height="60dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:src="@mipmap/ic_default_avatar"
+                    app:qmui_border_width="0dp"
+                    app:qmui_corner_radius="10dp" />
+
+                <TextView
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="Hi,User!"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="0dp" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:src="@mipmap/ic_personal"
+                    android:id="@+id/friend"/>
+            </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/rlProgress"
+                android:layout_marginHorizontal="20dp"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                    android:id="@+id/ivBg"
+                    app:qmui_border_width="0dp"
+                    app:qmui_backgroundColor="#DDDDDD"
+                    app:qmui_isRadiusAdjustBounds="false"
+                    app:qmui_radius="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp" />
+
+                <TextView
+                    android:id="@+id/tvProgress"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="Taget:50/80"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                    android:id="@+id/btnTotalProgress"
+                    android:layout_width="280dp"
+                    android:layout_height="15dp"
+                    android:layout_below="@+id/tvProgress"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    app:qmui_backgroundColor="@color/white"
+                    app:qmui_borderWidth="0dp"
+                    app:qmui_radius="10dp" />
+
+                <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                    android:id="@+id/btnCurrentProgress"
+                    android:layout_width="50dp"
+                    android:layout_height="15dp"
+                    android:layout_alignLeft="@+id/btnTotalProgress"
+                    android:layout_alignTop="@+id/btnTotalProgress"
+                    app:qmui_backgroundColor="#80a4b9"
+                    app:qmui_borderWidth="0dp"
+                    app:qmui_radius="10dp" />
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/llBanner1"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvBannerTitle1"
+                    android:textSize="14sp"
+                    android:text="Public Decks"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvBannerGuide1"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:text="See all>"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/banner_recycler1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:text="Taget:50/80"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="20dp" />
 
-            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-                android:id="@+id/btnTotalProgress"
-                android:layout_width="280dp"
-                android:layout_height="15dp"
-                android:layout_below="@+id/tvProgress"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                app:qmui_backgroundColor="@color/white"
-                app:qmui_borderWidth="0dp"
-                app:qmui_radius="10dp" />
+            <LinearLayout
+                android:id="@+id/llBanner2"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-                android:id="@+id/btnCurrentProgress"
-                android:layout_width="50dp"
-                android:layout_height="15dp"
-                android:layout_alignLeft="@+id/btnTotalProgress"
-                android:layout_alignTop="@+id/btnTotalProgress"
-                app:qmui_backgroundColor="#80a4b9"
-                app:qmui_borderWidth="0dp"
-                app:qmui_radius="10dp" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/tvBannerTitle2"
+                    android:textSize="14sp"
+                    android:text="Private Decks"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-        <LinearLayout
-            android:id="@+id/llBanner1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tvBannerGuide2"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:text="See all>"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvBannerTitle1"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/banner_recycler2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Public Decks"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:layout_marginTop="20dp" />
+            <LinearLayout
+                android:id="@+id/llBanner3"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tvBannerGuide1"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/tvBannerTitle3"
+                    android:textSize="14sp"
+                    android:text="My Decks"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvBannerGuide3"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:text="See all>"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/banner_recycler3"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="See all>"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="40dp"/>
         </LinearLayout>
-
-        <com.youth.banner.Banner
-            android:id="@+id/banner1"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp" />
-
-        <LinearLayout
-            android:id="@+id/llBanner2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvBannerTitle2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Private Decks"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tvBannerGuide2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="See all>"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <com.youth.banner.Banner
-            android:id="@+id/banner2"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp" />
-
-        <LinearLayout
-            android:id="@+id/llBanner3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvBannerTitle3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="My Decks"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tvBannerGuide3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="See all>"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <com.youth.banner.Banner
-            android:id="@+id/banner3"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp" />
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>
