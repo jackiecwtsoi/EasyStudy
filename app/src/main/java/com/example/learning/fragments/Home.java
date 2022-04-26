@@ -98,7 +98,7 @@ public class Home extends Fragment{
         userId = mainActivity.getLoginUserId();
         getDeckList();
         recyclerView1 = rootView.findViewById(R.id.banner_recycler1);
-        recyclerView2 = rootView.findViewById(R.id.banner_recycler2);
+
         recyclerView3 = rootView.findViewById(R.id.banner_recycler3);
         initRecycler();
         return rootView;
@@ -112,7 +112,6 @@ public class Home extends Fragment{
         LinearLayoutManager ms3= new LinearLayoutManager(context);
         ms3.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView1.setLayoutManager(ms);
-        recyclerView2.setLayoutManager(ms2);
         recyclerView3.setLayoutManager(ms3);
         HomeDeckAdapter adapter1 = new HomeDeckAdapter(friendDecks, context, friends);
         HomeSelfDeckAdapter adapter2 = new HomeSelfDeckAdapter(decks, context);
@@ -120,10 +119,12 @@ public class Home extends Fragment{
         adapter1.setOnItemClickLitener(new HomeDeckAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
+                MainActivity main = (MainActivity) getActivity();
+                main.changeToDeck();
                 CardFragment fragment = new CardFragment(db, friendDecks.get(position));
                 FragmentManager studyFrontManager = getFragmentManager();
                 studyFrontManager.beginTransaction()
-                        .replace(R.id.home_root_layout, fragment)
+                        .replace(R.id.layoutFolder, fragment)
                         .addToBackStack("tag13")
                         .commit();
                 System.out.println(position);
@@ -132,10 +133,12 @@ public class Home extends Fragment{
         adapter2.setOnItemClickLitener(new HomeSelfDeckAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
+                MainActivity main = (MainActivity) getActivity();
+                main.changeToDeck();
                 CardFragment fragment = new CardFragment(db, decks.get(position));
                 FragmentManager studyFrontManager = getFragmentManager();
                 studyFrontManager.beginTransaction()
-                        .replace(R.id.home_root_layout, fragment)
+                        .replace(R.id.layoutFolder, fragment)
                         .addToBackStack("tag13")
                         .commit();
                 System.out.println(position);
@@ -144,23 +147,24 @@ public class Home extends Fragment{
         adapter3.setOnItemClickLitener(new HomeSelfDeckAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
+                MainActivity main = (MainActivity) getActivity();
+                main.changeToDeck();
                 CardFragment fragment = new CardFragment(db, decks.get(position));
                 FragmentManager studyFrontManager = getFragmentManager();
                 studyFrontManager.beginTransaction()
-                        .replace(R.id.home_root_layout, fragment)
+                        .replace(R.id.layoutFolder, fragment)
                         .addToBackStack("tag13")
                         .commit();
                 System.out.println(position);
             }
         });
         recyclerView1.setAdapter(adapter1);
-        recyclerView2.setAdapter(adapter2);
         recyclerView3.setAdapter(adapter3);
     }
 
     private void getDeckList(){
         friends.clear();
-        friends.addAll(dbApi.queryFriends(userId));
+        friends.addAll(dbApi.getConfirmedFriends(userId));
         System.out.println("have frineds:" + Integer.toString(friends.size()));
         for (FriendEntity friend: friends){
             friendDecks.add(dbApi.getAllPublicDecks(friend.getFriendId()).get(0));

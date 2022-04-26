@@ -255,7 +255,7 @@ public class DbApi {
         if (check_cursor.moveToFirst()) {
             do {
                 @SuppressLint("Range") String email1 = check_cursor.getString(check_cursor.getColumnIndex("email"));
-                System.out.println(email1);
+                System.out.println("query user" + email1);
                 @SuppressLint("Range") String password1 = check_cursor.getString(check_cursor.getColumnIndex("password"));
                 @SuppressLint("Range") String userName1 = check_cursor.getString(check_cursor.getColumnIndex("name"));
                 @SuppressLint("Range") int pid = check_cursor.getInt(check_cursor.getColumnIndex("u_id"));
@@ -267,10 +267,9 @@ public class DbApi {
             } while (check_cursor.moveToNext());
         }
         System.out.println(email);
-        for (int i = 0; i < arrary.length; i++) {
+        for (int i = 0; i < count; i++) {
             System.out.println(arrary[i]);
             if (arrary[i].equals(email)) {
-
                 if (passwords[i].equals(password) && userNames[i].equals(userName)) {
                     return userIDs[i];
                 } else {

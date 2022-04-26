@@ -1,6 +1,9 @@
 package com.example.learning.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,8 @@ import com.example.learning.DeckEntity;
 import com.example.learning.FriendEntity;
 import com.example.learning.R;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +83,16 @@ public class HomeDeckAdapter extends RecyclerView.Adapter<HomeDeckAdapter.VH>{
         holder.description.setText(c.getDeckDescription());
         holder.cardNum.setText(Integer.toString(c.getCardNum()) + " cards");
         RequestOptions options = new RequestOptions().error(R.drawable.spring_showers).bitmapTransform(new RoundedCorners(30));
-        Glide.with(context).load(c.getCoverPath()).apply(options).into(holder.deckCover);
+//        System.out.println(c.getCoverPath());
+//        Glide.with(context).load(c.getCoverPath()).into(holder.deckCover);
+        Uri img = Uri.fromFile(new File(c.getCoverPath()));
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream
+                    (context.getContentResolver().openInputStream(img));
+            holder.deckCover.setImageBitmap(bitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         holder.userName.setText(friend.getFriendName());
         if (mOnItemClickLitener != null) {
             holder.deckCover.setOnClickListener(new View.OnClickListener() {

@@ -84,7 +84,7 @@ public class Add extends Fragment {
     private TextView lastSelectedDays;
     private DbApi dbApi;
     private int userid;
-    String coverPath = "/storage/emulated/0/Android/data/com.example.learning/files/deckCovers/default.jpg";
+    String coverPath = "/storage/emulated/0/Android/data/com.example.learning/files/deckCovers/default.png";
     List<Boolean> whetherDaySelect = new ArrayList<Boolean>();
     List<TextView> selectedDays = new ArrayList<TextView>();
     SQLiteDatabase db;
@@ -476,7 +476,7 @@ public class Add extends Fragment {
                             (getActivity().getContentResolver().openInputStream(uriImage));
 //                    String path = RealPathFromUriUtils.getRealPathFromUri(context, uriImage);
 //                    System.out.println(path);
-                    coverPath = ImageUtils.saveImageToGallery(context, bitmap, false);
+                    coverPath = ImageUtils.saveImageToGallery(context, bitmap, "");
                     selectedImg.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

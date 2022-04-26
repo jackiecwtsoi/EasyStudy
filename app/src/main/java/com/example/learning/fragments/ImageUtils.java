@@ -13,23 +13,23 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ImageUtils {
-    public static String saveImageToGallery(Context context, Bitmap bmp, boolean defaultImg) {
+    public static String saveImageToGallery(Context context, Bitmap bmp, String defaultImg) {
         //生成路径
         File root = context.getExternalFilesDir(null);
         String dirName = "deckCovers";
-        String fileName = "default.jpg";
+        String fileName = "default.png";
         File appDir = new File(root, dirName);
         if (!appDir.exists()) {
             appDir.mkdirs();
         }
-        if (defaultImg) {
-            fileName = "default.jpg";
+        if (defaultImg != "") {
+            fileName = defaultImg;
         } else {
             //文件名为时间
             long timeStamp = System.currentTimeMillis();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String sd = sdf.format(new Date(timeStamp));
-            fileName = sd + ".jpg";
+            fileName = sd + ".png";
         }
 
         //获取文件

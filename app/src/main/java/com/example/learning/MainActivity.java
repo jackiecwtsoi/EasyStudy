@@ -165,6 +165,9 @@ public class MainActivity extends AppCompatActivity {
         this.selectedFriendId = selectedFriendId;
         mcContainer.setCurrentItem(1);
     }
+    public void changeToDeck(){
+        mcContainer.setCurrentItem(1);
+    }
     public void changeToProfile(){
         mcContainer.setCurrentItem(5);
     }

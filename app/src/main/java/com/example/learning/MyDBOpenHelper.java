@@ -152,14 +152,25 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
         decks.add("Section 4");
         decks.add("Section 5");
         decks.add("Section 6");
-        Bitmap bm = BitmapFactory.decodeResource(context.getResources(),R.drawable.spring_showers);
-        String path1 = ImageUtils.saveImageToGallery(context, bm, true);
-        Bitmap bm2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.tu1);
-        String path2 = ImageUtils.saveImageToGallery(context, bm2, false);
-        Bitmap bm3 = BitmapFactory.decodeResource(context.getResources(),R.drawable.tu2);
-        String path3 = ImageUtils.saveImageToGallery(context, bm3, false);
-        Bitmap bm4 = BitmapFactory.decodeResource(context.getResources(),R.drawable.tu1);
-        String path4 = ImageUtils.saveImageToGallery(context, bm4, false);
+        Bitmap bm = BitmapFactory.decodeResource(context.getResources(),R.drawable.default1);
+        String path1 = ImageUtils.saveImageToGallery(context, bm, "default1.jpg");
+        Bitmap bm2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.default2);
+        String path2 = ImageUtils.saveImageToGallery(context, bm2, "default2.jpg");
+        Bitmap bm3 = BitmapFactory.decodeResource(context.getResources(),R.drawable.default3);
+        String path3 = ImageUtils.saveImageToGallery(context, bm3, "default3.jpg");
+        Bitmap bm4 = BitmapFactory.decodeResource(context.getResources(),R.drawable.default4);
+        String path4 = ImageUtils.saveImageToGallery(context, bm4, "default4.jpg");
+        Bitmap bm5 = BitmapFactory.decodeResource(context.getResources(),R.drawable.default5);
+        String path5 = ImageUtils.saveImageToGallery(context, bm5, "default5.jpg");
+        Bitmap bm6 = BitmapFactory.decodeResource(context.getResources(),R.drawable.default6);
+        String path6 = ImageUtils.saveImageToGallery(context, bm6, "default6.jpg");
+        ArrayList<String> covers = new ArrayList<>();
+        covers.add(path1);
+        covers.add(path2);
+        covers.add(path3);
+        covers.add(path4);
+        covers.add(path5);
+        covers.add(path6);
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 String folderName = folders.get(j) + " for " + names.get(i);
@@ -172,7 +183,9 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                     String dayOfWeek = "";
                     int interval = 0;
                     int pub = 1;
-                    String cover = path1;
+                    Random r = new Random();
+                    String cover = covers.get(r.nextInt(6));
+
                     if (m == 5){
                         frequency = -1;
                         dayOfWeek = "";
@@ -185,23 +198,23 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                         dayOfWeek = "Monday;Thursday";
                         interval = 0;
                         pub = 0;
-                        cover = path2;
+//                        cover = path2;
                     }
                     else if(m % 3 == 1){
                         frequency = 1;
                         dayOfWeek = "Monday;";
                         interval = 0;
-                        cover = path3;
+//                        cover = path3;
                     }
                     else{
                         frequency = 2;
                         dayOfWeek = "";
                         interval = 4;
-                        cover = path4;
+//                        cover = path4;
                     }
 
                     long deckid = dbApi.insertDeck(deckName, deckDescription, 0, frequency, dayOfWeek, interval, (int)folderid, i + 1, cover, pub);
-                    Random r = new Random();
+//                    Random r = new Random();
                     for (int n = 0; n < 4; n++) {
                         String cardName = "Card" + Integer.toString(n) + " for " + deckName;
                         int a = r.nextInt(10);
