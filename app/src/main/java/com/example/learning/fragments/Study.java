@@ -33,7 +33,7 @@ import java.util.Calendar;
 public class Study extends Fragment {
     // define variables
     View rootView;
-    Button btnReviewSelectedDeck, btnReviewAllCards, btnReviewTodayCards;
+    TextView btnReviewSelectedDeck, btnReviewAllCards, btnReviewTodayCards;
     RecyclerView recyclerViewTasksToday;
     TextView textSelectedDeckName;
     SQLiteDatabase db;
@@ -69,6 +69,12 @@ public class Study extends Fragment {
             container.removeView(container.findViewById(R.id.btnReviewAgain));
             container.removeView(container.findViewById(R.id.btnReturnStudyOverview));
         }
+//        if (rootView != null) {
+//            ViewGroup parent = (ViewGroup) rootView.getParent();
+//            if (parent != null) {
+//                parent.removeView(rootView);
+//            }
+//        }
 
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_study, container, false);

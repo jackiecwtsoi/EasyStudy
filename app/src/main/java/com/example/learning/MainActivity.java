@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.AlarmManager;
-import android.app.FragmentManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,23 +18,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.learning.customizeview.HonrizonViewPager;
 import com.example.learning.fragments.Add;
-import com.example.learning.fragments.CardFragment;
-import com.example.learning.fragments.Deck;
 import com.example.learning.fragments.Folder;
-import com.example.learning.fragments.Home;
 import com.example.learning.fragments.Home2;
 import com.example.learning.fragments.Profile;
 import com.example.learning.fragments.Statistic;
 import com.example.learning.fragments.Study;
-import com.example.learning.fragments.StudyFront;
 import com.google.android.material.tabs.TabLayout;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -221,5 +213,10 @@ public class MainActivity extends AppCompatActivity {
                 AlarmManager.INTERVAL_DAY,
                 pendingIntent);
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        Log.d("FragmentList", getSupportFragmentManager().getFragments().toString());
+//    }
 
 }

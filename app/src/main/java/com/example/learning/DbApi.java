@@ -395,7 +395,7 @@ public class DbApi {
         return check_cursor.getCount();
 
     }
-    public ArrayList<String> getUserIfo(int userID) {
+    public ArrayList<String> getUserInfo(int userID) {
         String user_id = Integer.toString(userID);
 
         ArrayList<String> arrary = new ArrayList<>();
@@ -474,6 +474,18 @@ public class DbApi {
         return allDecks;
     }
 
+    // get all public decks for a specific user
+    public ArrayList<DeckEntity> getPublicDecks(int userId) {
+        ArrayList<DeckEntity> publicDecks = new ArrayList<>();
+        ArrayList<DeckEntity> decks = getAllDecks(userId);
+        for (DeckEntity deck : decks) {
+            if (deck.getPub() == 1) {
+                publicDecks.add(deck);
+            }
+        }
+        return publicDecks;
+    }
+
     // get all cards inside a specific deck
     public ArrayList<Row> getCardsFromDeck(DeckEntity deck) {
         ArrayList<Row> cardsFromDeck = new ArrayList<>();
@@ -499,7 +511,7 @@ public class DbApi {
          */
         ArrayList<DeckEntity> allDecks = getAllDecks(userID);
         for (DeckEntity deck : allDecks) { // filter the decks by frequency level
-            // scenario 1
+            // scenario 1: daily or weekly
             if (deck.getFrequency() == 0 | deck.getFrequency() == 1) {
                 ArrayList<String> dayOfWeek = new ArrayList<>( // split dayOfWeek by ";" separator
                         Arrays.asList(deck.getDayOfWeek().split(";")));
@@ -507,9 +519,15 @@ public class DbApi {
                     decksForReminder.add(deck);
                 }
             }
-            // TODO: scenario 2
+            // TODO: scenario 2: monthly (interval value means reminder every n days)
+            /* scenario 2: monthly
+            in the 'deck' table in the database, we use two columns to calculate the notification for this scenario
+            - the "interval" column represents the reminder will trigger within this amount of days
+            - the "reminder_countdown" column represents how many days left until the next reminder is triggered
+            (0 means the reminder should be triggered that day)
+             */
             else if (deck.getFrequency() == 2) {
-                //////////////////////////////
+
             }
         }
 
@@ -579,7 +597,6 @@ public class DbApi {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        Collections.reverse(friends); // reverse the order of the list because we want most recent friends to appear first
         return friends;
     }
 
@@ -641,16 +658,17 @@ public class DbApi {
         return incomingFriendRequests;
     }
 
-    public ArrayList<FriendEntity> getOutgoingFriendRequests(int userId) {
-        ArrayList<FriendEntity> friends = queryFriends(userId);
-        ArrayList<FriendEntity> outgoingFriendRequests = new ArrayList<>();
-        for (FriendEntity friend : friends) {
-            if (friend.getFriendStatus() == FriendStatus.USER_REQUESTED) {
-                outgoingFriendRequests.add(friend);
-            }
-        }
-        return outgoingFriendRequests;
-    }
+    // tODO
+//    public ArrayList<FriendEntity> getOutgoingFriendRequests(int userId) {
+//        ArrayList<FriendEntity> friends = queryFriends(userId);
+//        ArrayList<FriendEntity> outgoingFriendRequests = new ArrayList<>();
+//        for (FriendEntity friend : friends) {
+//            if (friend.getFriendStatus() == FriendStatus.USER_REQUESTED) {
+//                outgoingFriendRequests.add(friend);
+//            }
+//        }
+//        return outgoingFriendRequests;
+//    }
 
     public void updateFriendStatus(int userId, FriendEntity friend, FriendStatus newStatus) {
         String query = "UPDATE friend SET status = '" + newStatus.name() +
@@ -660,13 +678,13 @@ public class DbApi {
         db.execSQL(query);
     }
 
-    public void deleteFriend(int userId, FriendEntity friend) {
+    public void deleteFriend(int userId, int friendId) {
         String query = "DELETE FROM friend WHERE u_id = " + userId +
-                " AND friend_id = " + friend.getFriendId();
+                " AND friend_id = " + friendId;
         db.execSQL(query);
     }
 
-    public int queryUserByEmail(String email) {
+    public int queryUserByEmail(String email) { // returns userId
         String query = "SELECT u_id FROM user WHERE email = '" + email + "'";
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
@@ -692,6 +710,38 @@ public class DbApi {
                 " AND folder_id = " + folderId + " AND deck_id = " + deckId;
         db.execSQL(query);
     }
+    // send friend request function: first check if friendship already exists in the 'friend' table, and then insert
+    public void sendFriendRequest(int userId, int friendId) {
+        // check if record already exists, if so, do not insert but return
+        ArrayList<FriendEntity> friends = queryFriends(userId);
+        for (FriendEntity friend : friends) {
+            if (friend.getFriendId() == friendId) { // if record exists, return -1 and do not insert
+                return;
+            }
+        }
 
+        friends = queryFriends(friendId);
+        for (FriendEntity friend : friends) {
+            if (friend.getFriendId() == userId) {
+                return;
+            }
+        }
+
+        insertFriend(friendId, userId, FriendStatus.FRIEND_REQUESTED);
+    }
+
+    public void updateCardLevel(int folderId, int deckId, int cardId, Difficulty difficulty) {
+        int level = -1; // initialized to be -1 if no level has been entered
+        switch (difficulty) {
+            case EASY: level = 0; break;
+            case HARD: level = 1; break;
+            case FORGOT: level = 2; break;
+        }
+        String query = "UPDATE card SET level = " + level +
+                " WHERE folder_id = " + folderId +
+                " AND deck_id = " + deckId +
+                " AND card_id = " + cardId;
+        db.execSQL(query);
+    }
 
 }

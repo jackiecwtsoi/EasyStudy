@@ -1,5 +1,6 @@
 package com.example.learning.fragments;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
@@ -29,12 +30,12 @@ import java.util.ArrayList;
 public class FriendSearch extends DialogFragment {
     // define variables
     View rootView;
-    EditText editFriendEmail, editFriendUsername;
+    EditText editFriendEmail;
     CardView cardFriendSearch;
     Button btnCancelFriendSearch, btnFriendSearch;
 
     SQLiteDatabase db;
-    String friendEmail, friendUsername;
+    String friendEmail;
     int userId;
 
     public FriendSearch(SQLiteDatabase db) {
@@ -56,7 +57,6 @@ public class FriendSearch extends DialogFragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_friend_search, container, false);
         editFriendEmail = rootView.findViewById(R.id.editFriendEmail);
-        editFriendUsername = rootView.findViewById(R.id.editFriendUsername);
         cardFriendSearch = rootView.findViewById(R.id.cardFriendSearch);
         btnCancelFriendSearch = rootView.findViewById(R.id.btnCancelFriendSearch);
         btnFriendSearch = rootView.findViewById(R.id.btnFriendSearch);
@@ -80,47 +80,38 @@ public class FriendSearch extends DialogFragment {
             }
         });
 
-        // when the "Search" button is clicked, search the database using the email or username
+        // when the "Search" button is clicked, search the database using the email
         btnFriendSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 friendEmail = editFriendEmail.getText().toString();
-                friendUsername = editFriendUsername.getText().toString();
 
                 // check if nothing has been entered into the field
-                if (friendEmail == "") {
-                    Toast.makeText(getActivity(), "Please enter your friend's email.", Toast.LENGTH_SHORT);
+                if (friendEmail.matches("")) {
+                    Toast.makeText(getContext(), "Please enter your friend's email.", Toast.LENGTH_LONG).show();
                 } else {
                     searchFriendByEmail(friendEmail);
                 }
-
-                // TODO: do we need to search by username?
             }
         });
 
         return rootView;
     }
 
-    public void searchFriendByEmail(String email) {
+    private void searchFriendByEmail(String email) {
         DbApi dbapi = new DbApi(this.db);
         int userIdFromSearch = dbapi.queryUserByEmail(email);
-        if (userIdFromSearch == -1) { // if user is found
-            Toast.makeText(getActivity(), "No user is found! Please enter again or cancel search.", Toast.LENGTH_SHORT);
+        if (userIdFromSearch == -1) { // if user is not found
+            Toast.makeText(getContext(), "No user is found!", Toast.LENGTH_LONG).show();
             editFriendEmail.getText().clear(); // clear the edit text field
         }
         else { // if user is found, then go to another fragment showing the user info and add friend option
-            // TODO: change fragment to show searched user info
-            if (isConfirmedFriend(userIdFromSearch)) { // first check if searched user is already a friend
-                System.out.println("User is already a friend of yours :)");
-            }
-            else {
-                System.out.println("User is not yet a friend of yours :(");
-            }
+            dismiss();
             changeToSearchedUserInfo(userIdFromSearch);
         }
     }
 
-    public boolean isConfirmedFriend(int userIdFromSearch) {
+    private boolean isConfirmedFriend(int userIdFromSearch) { // check if the searched user is already a friend
         DbApi dbapi = new DbApi(this.db);
         ArrayList<FriendEntity> confirmedFriends = dbapi.getConfirmedFriends(this.userId);
         for (FriendEntity friend : confirmedFriends) {
@@ -129,11 +120,23 @@ public class FriendSearch extends DialogFragment {
         return false;
     }
 
-    public void changeToSearchedUserInfo(int userIdFromSearch) {
-        SearchedUserInfo searchedUserInfoFragment = new SearchedUserInfo(db);
-        FragmentManager searchedUserInfoFragmentManager = getFragmentManager();
-        searchedUserInfoFragmentManager.beginTransaction()
-                .replace(R.id.layoutFriendSearch, searchedUserInfoFragment)
+    private void changeToSearchedUserInfo(int userIdFromSearch) {
+        FriendSearchResult friendSearchResultFragment = new FriendSearchResult(db);
+        Bundle bundle = new Bundle();
+        boolean IS_FRIEND = false;
+
+        // check if searched user is already a friend
+        if (isConfirmedFriend(userIdFromSearch)) { // if yes, set isFriend = true
+            IS_FRIEND = true;
+        }
+
+        bundle.putBoolean("IS_FRIEND", IS_FRIEND);
+        bundle.putInt("userIdFromSearch", userIdFromSearch);
+        friendSearchResultFragment.setArguments(bundle);
+
+        FragmentManager friendSearchResultFragmentManager = getFragmentManager();
+        friendSearchResultFragmentManager.beginTransaction()
+                .replace(R.id.layoutFriends, friendSearchResultFragment)
                 .commit();
     }
 }
