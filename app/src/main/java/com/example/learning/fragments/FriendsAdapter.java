@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.learning.DeckEntity;
 import com.example.learning.FriendEntity;
 import com.example.learning.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -34,12 +35,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.VH> {
     static class VH extends RecyclerView.ViewHolder {
         TextView textFriendName;
         ImageView btnViewFriendDecks, btnDeleteFriend;
+        ImageView imgFriendPicture;
 
         public VH(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             textFriendName = itemView.findViewById(R.id.friend_name);
             btnViewFriendDecks = itemView.findViewById(R.id.btnViewFriendDecks);
             btnDeleteFriend = itemView.findViewById(R.id.btnDeleteFriend);
+            imgFriendPicture = itemView.findViewById(R.id.friend_picture);
 
             btnViewFriendDecks.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -86,6 +89,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.VH> {
     public void onBindViewHolder(@NonNull VH holder, int position) {
         FriendEntity friend = dataList.get(position);
         holder.textFriendName.setText(friend.getFriendName());
+        if (!friend.getFriendPicture().isEmpty()) {
+            Picasso.get().load(friend.getFriendPicture()).into(holder.imgFriendPicture);
+        }
     }
 
     @Override

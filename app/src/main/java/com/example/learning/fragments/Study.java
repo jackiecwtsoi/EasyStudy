@@ -2,6 +2,8 @@ package com.example.learning.fragments;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,21 +24,20 @@ import com.example.learning.DeckEntity;
 import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.example.learning.StudyType;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Study#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Study extends Fragment {
     // define variables
     View rootView;
     TextView btnReviewSelectedDeck, btnReviewAllCards, btnReviewTodayCards;
     RecyclerView recyclerViewTasksToday;
     TextView textSelectedDeckName;
+    ImageView imgUserPhoto;
+
     SQLiteDatabase db;
     int userId;
     Calendar calendar = Calendar.getInstance();
@@ -64,17 +66,18 @@ public class Study extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (rootView != null) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null) {
+                parent.removeView(rootView);
+            }
+        }
+
         if (container != null) {
             container.removeView(container.findViewById(R.id.cardStudyDoneOverall));
             container.removeView(container.findViewById(R.id.btnReviewAgain));
             container.removeView(container.findViewById(R.id.btnReturnStudyOverview));
         }
-//        if (rootView != null) {
-//            ViewGroup parent = (ViewGroup) rootView.getParent();
-//            if (parent != null) {
-//                parent.removeView(rootView);
-//            }
-//        }
 
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_study, container, false);
@@ -83,6 +86,15 @@ public class Study extends Fragment {
         btnReviewTodayCards = rootView.findViewById(R.id.btnReviewTodayCards);
         btnReviewAllCards = rootView.findViewById(R.id.btnReviewAllCards);
         textSelectedDeckName = rootView.findViewById(R.id.textSelectedDeckName);
+        imgUserPhoto = rootView.findViewById(R.id.imgUserPhoto);
+
+        // load the user profile picture using url from the database
+        String userProfileURL = dbapi.queryUserProfileURL(userId);
+        if (!userProfileURL.isEmpty()) {
+            Picasso.get()
+                    .load(userProfileURL)
+                    .into(imgUserPhoto);
+        }
 
         // recycler view
         recyclerViewTasksToday = rootView.findViewById(R.id.recyclerViewTasksToday);

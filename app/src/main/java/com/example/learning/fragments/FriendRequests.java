@@ -27,17 +27,13 @@ public class FriendRequests extends Fragment {
     View rootView;
     Button btnAccept, btnReject;
     ImageView btnFriendRequestsBack;
-    RecyclerView recyclerViewIncoming, recyclerViewOutgoing;
+    RecyclerView recyclerViewIncoming;
     SQLiteDatabase db;
     int userId;
 
     // define list of people who have sent friend request to the user
     ArrayList<FriendEntity> listIncomingFriendRequests = new ArrayList<>();
-    // define list of people the user has sent friend request to
-    ArrayList<FriendEntity> listOutgoingFriendRequests = new ArrayList<>();
-
     IncomingFriendRequestsAdapter adapterIncoming;
-    OutgoingFriendRequestsAdapter adapterOutgoing;
 
     public FriendRequests(SQLiteDatabase db) {
         this.db = db;
@@ -77,7 +73,6 @@ public class FriendRequests extends Fragment {
 
         // recycler views
         recyclerViewIncoming = rootView.findViewById(R.id.recyclerViewIncomingFriendRequests);
-        recyclerViewOutgoing = rootView.findViewById(R.id.recyclerViewOutgoingFriendRequests);
 
         MainActivity main = (MainActivity) getActivity();
         userId = main.getLoginUserId();
@@ -102,13 +97,6 @@ public class FriendRequests extends Fragment {
                 removeFromIncomingRequests(position);
             }
         });
-
-        // TODO: Outgoing friend requests???
-//        // outgoing friend requests
-//        listOutgoingFriendRequests = dbapi.getOutgoingFriendRequests(userId);
-//        adapterOutgoing = new OutgoingFriendRequestsAdapter(listOutgoingFriendRequests);
-//        recyclerViewOutgoing.setAdapter(adapterOutgoing);
-//        recyclerViewOutgoing.setLayoutManager(new LinearLayoutManager(context));
 
         btnFriendRequestsBack.setOnClickListener(new View.OnClickListener() {
             @Override

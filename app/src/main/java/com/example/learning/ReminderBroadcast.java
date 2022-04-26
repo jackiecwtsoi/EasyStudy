@@ -17,16 +17,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class ReminderBroadcast extends BroadcastReceiver {
-//    SQLiteDatabase db;
-
-//    public ReminderBroadcast() {
-//        super();
-//    }
-//
-//    public ReminderBroadcast(SQLiteDatabase db) {
-//        this.db = db;
-//    }
-
     @Override
     public void onReceive(Context context, Intent intent) {
         MyDBOpenHelper myDBHelper = new MyDBOpenHelper(context, "elearning.db", null, 1);
@@ -34,6 +24,7 @@ public class ReminderBroadcast extends BroadcastReceiver {
         DbApi dbapi = new DbApi(db);
 
         int userId = intent.getIntExtra("userId", 0);
+        String username = dbapi.queryUserName(userId);
 
         Calendar calendar = Calendar.getInstance();
         int intDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
@@ -41,7 +32,7 @@ public class ReminderBroadcast extends BroadcastReceiver {
 
         ArrayList<DeckEntity> decksForReminder = dbapi.getDecksForReminder(userId, dayOfWeek);
 
-        System.out.println("userId: " + userId);
+        System.out.println("userId: " + userId + ": " + username);
         System.out.println("decks to study for: " + decksForReminder.size());
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
@@ -55,14 +46,11 @@ public class ReminderBroadcast extends BroadcastReceiver {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.avatar))
                 .setContentTitle("Study Time!")
-//                .setContentText("Hello user " + userId + "! Today is " + dayOfWeek + ", and you have "  +
-//                        decksForReminder.size() + " unfinished decks to study for.\n" +
-//                        "Click this notification to start studying.")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(
-                        "Hello user " + userId + "! Today is " + dayOfWeek + ", and you have "  +
+                        "Hello " + username + "! Today is " + dayOfWeek + ", and you have "  +
                                 decksForReminder.size() + " unfinished decks to study for. " +
                                 "Click this notification to start studying.")
                 )

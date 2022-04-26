@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import com.example.learning.FriendStatus;
 import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -37,12 +39,14 @@ public class IncomingFriendRequestsAdapter extends RecyclerView.Adapter<Incoming
     static class VH extends RecyclerView.ViewHolder {
         TextView textIncomingFriendName;
         FloatingActionButton btnAccept, btnReject;
+        ImageView imgFriendPicture;
 
         public VH(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             textIncomingFriendName = itemView.findViewById(R.id.incoming_friend_name);
             btnAccept = itemView.findViewById(R.id.btnAccept);
             btnReject = itemView.findViewById(R.id.btnReject);
+            imgFriendPicture = itemView.findViewById(R.id.incoming_friend_picture);
 
             btnAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -90,7 +94,9 @@ public class IncomingFriendRequestsAdapter extends RecyclerView.Adapter<Incoming
     public void onBindViewHolder(@NonNull IncomingFriendRequestsAdapter.VH holder, int position) {
         FriendEntity friend = dataList.get(position);
         holder.textIncomingFriendName.setText(friend.getFriendName());
-
+        if (!friend.getFriendPicture().isEmpty()) {
+            Picasso.get().load(friend.getFriendPicture()).into(holder.imgFriendPicture);
+        }
     }
 
     @Override

@@ -10,11 +10,17 @@ import com.example.learning.fragments.Deck;
 import com.example.learning.fragments.Friends;
 
 import java.sql.Array;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 public class DbApi {
     private SQLiteDatabase db;
@@ -166,19 +172,18 @@ public class DbApi {
         return id;
     }
 
-    public long insertUserFull(String User_name, String email, String password) {
+    public long insertUserFull(String username, String email, String password, String profilePicture) {
         long id = -1;
-        if (User_name != null) {
+        if (username != null) {
             ContentValues values1 = new ContentValues();
-            values1.put("name", User_name);
+            values1.put("name", username);
             values1.put("email", email);
             values1.put("password", password);
+            values1.put("profile_picture", profilePicture);
             id = db.insert("user", null, values1);
-
-            System.out.println("create user: " + User_name);
-
+            System.out.println("create user: " + username);
         } else {
-            System.out.println("not create user: " + User_name);
+            System.out.println("not create user: " + username);
         }
         return id;
     }
@@ -280,8 +285,21 @@ public class DbApi {
         return "";
     }
 
-    public long insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int folderID, int userID) {
+    public String queryUserProfileURL(int userId) {
+        Cursor cursor = db.query("user", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int pid = cursor.getInt(cursor.getColumnIndex("u_id"));
+                if (pid == userId) {
+                    @SuppressLint("Range") String userProfileURL = cursor.getString(cursor.getColumnIndex("profile_picture"));
+                    return userProfileURL;
+                }
+            } while (cursor.moveToNext());
+        }
+        return "";
+    }
 
+    public long insertCard(String cardName, String cardQuestion, String cardAnswer, int hardness, int deckID, int folderID, int userID) {
         int[] arrary = new int[1000];
         boolean justice = false;
         int count = 0;
@@ -506,15 +524,25 @@ public class DbApi {
                     decksForReminder.add(deck);
                 }
             }
-            // TODO: scenario 2: monthly (interval value means reminder every n days)
+
             /* scenario 2: monthly
-            in the 'deck' table in the database, we use two columns to calculate the notification for this scenario
-            - the "interval" column represents the reminder will trigger within this amount of days
-            - the "reminder_countdown" column represents how many days left until the next reminder is triggered
-            (0 means the reminder should be triggered that day)
+            using the "deck" database, we check if the difference between today and the date the deck was created is divisible by the interval value
+            if yes, then we add that deck to today's deck list for the user to study
              */
             else if (deck.getFrequency() == 2) {
-
+                String creationDateString = deck.getTime();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+                formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+                try {
+                    Date creationDate = formatter.parse(creationDateString);
+                    Date todayDate = new Date(System.currentTimeMillis());
+                    int diff = Days.daysBetween(new DateTime(creationDate).toLocalDate(), new DateTime(todayDate).toLocalDate()).getDays();
+                    if (diff % deck.getInterval() == 0) { // if diff is divisible by interval value, then we add this deck to today's study list
+                        decksForReminder.add(deck);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -524,7 +552,6 @@ public class DbApi {
 
     public ArrayList<Row> getCardsForReminder(int userID, String todayDayOfWeek) {
         ArrayList<Row> cardsForReminder = new ArrayList<>();
-        ArrayList<DeckEntity> allDecks = getAllDecks(userID);
         ArrayList<DeckEntity> decksForReminder = getDecksForReminder(userID, todayDayOfWeek);
         for (DeckEntity deck : decksForReminder) {
             ArrayList<Card> cards = queryCard(deck.getDeckID(), deck.getFolderId(), userID);
@@ -575,7 +602,7 @@ public class DbApi {
                     @SuppressLint("Range") int friendId = cursor.getInt(cursor.getColumnIndex("friend_id"));
                     @SuppressLint("Range") String friendStatusString = cursor.getString(cursor.getColumnIndex("status"));
                     String friendName = queryUserName(friendId);
-                    String friendPicture = ""; //TODO: friend profile picture
+                    String friendPicture = queryUserProfileURL(friendId);
                     @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex("date"));
 
                     FriendEntity friend = new FriendEntity(friendId, friendStatusString, friendName, friendPicture, date);
@@ -644,18 +671,6 @@ public class DbApi {
         }
         return incomingFriendRequests;
     }
-
-    // tODO
-//    public ArrayList<FriendEntity> getOutgoingFriendRequests(int userId) {
-//        ArrayList<FriendEntity> friends = queryFriends(userId);
-//        ArrayList<FriendEntity> outgoingFriendRequests = new ArrayList<>();
-//        for (FriendEntity friend : friends) {
-//            if (friend.getFriendStatus() == FriendStatus.USER_REQUESTED) {
-//                outgoingFriendRequests.add(friend);
-//            }
-//        }
-//        return outgoingFriendRequests;
-//    }
 
     public void updateFriendStatus(int userId, FriendEntity friend, FriendStatus newStatus) {
         String query = "UPDATE friend SET status = '" + newStatus.name() +

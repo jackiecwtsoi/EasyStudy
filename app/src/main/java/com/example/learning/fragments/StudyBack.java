@@ -33,8 +33,6 @@ public class StudyBack extends DialogFragment {
 
     static ArrayList<Row> STUDY_LIST = StudyFront.STUDY_LIST;
     int rowIdx;
-    // define variables that come from the bundle
-//    static int rowIdx = StudyFront.rowIdx;
 
     public StudyBack(SQLiteDatabase db) {
         this.db = db;

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.learning.DbApi;
@@ -21,6 +22,7 @@ import com.example.learning.FriendStatus;
 import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.example.learning.Row;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -30,6 +32,7 @@ public class FriendSearchResult extends Fragment {
     Button btnAddSearchedFriend;
     TextView textSearchedFriendPublicNumber, textSearchedFriendPresentNumber;
     TextView textSearchedFriendName, textSearchedFriendEmail;
+    ImageView imgSearchedFriendPicture;
 
     SQLiteDatabase db;
     int userIdFromSearch;
@@ -65,6 +68,7 @@ public class FriendSearchResult extends Fragment {
         textSearchedFriendPresentNumber = rootView.findViewById(R.id.textSearchedFriendPresentNumber);
         textSearchedFriendName = rootView.findViewById(R.id.textSearchedFriendName);
         textSearchedFriendEmail = rootView.findViewById(R.id.textSearchedFriendEmail);
+        imgSearchedFriendPicture = rootView.findViewById(R.id.imgSearchedFriendPicture);
 
         DbApi dbapi = new DbApi(this.db);
         ArrayList<String> searchedUserInfo = dbapi.getUserInfo(userIdFromSearch); // get array that displays selected user information-
@@ -72,6 +76,14 @@ public class FriendSearchResult extends Fragment {
         textSearchedFriendEmail.setText(searchedUserInfo.get(0));
         textSearchedFriendPublicNumber.setText(Integer.toString(dbapi.getPublicDecks(userIdFromSearch).size()));
         textSearchedFriendPresentNumber.setText(Integer.toString(dbapi.getPresentdays(userIdFromSearch)));
+
+        // update profile picture
+        String searchedFriendPictureURL = dbapi.queryUserProfileURL(userIdFromSearch);
+        if (!searchedFriendPictureURL.isEmpty()) {
+            Picasso.get()
+                    .load(searchedFriendPictureURL)
+                    .into(imgSearchedFriendPicture);
+        }
 
         // if the searched user is already a friend, then we do not display the "Add Friend" button
         if (IS_FRIEND) {

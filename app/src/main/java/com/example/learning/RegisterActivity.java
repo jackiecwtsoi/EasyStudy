@@ -23,6 +23,7 @@ public class RegisterActivity extends AppCompatActivity {
     private MyDBOpenHelper myDBHelper;
     private DbApi dbApi;
     private int userID;
+    private String userProfileURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity {
         userName = findViewById(R.id.login_user_name);
         email = findViewById(R.id.login_email);
         password = findViewById(R.id.login_password);
+        userProfileURL = "https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/8394f798931623.5ee79b6a909ea.jpg";
+
         Intent intent = getIntent();
         isRegister = intent.getIntExtra("register", 0);
         if (isRegister == 0) {
@@ -55,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if(isRegister == 1){
                         int result = dbApi.queryUser(name, mail, pass);
                         if (result == -2){
-                        userID = (int)dbApi.insertUserFull(name, mail, pass);
+                        userID = (int)dbApi.insertUserFull(name, mail, pass, userProfileURL);
                         startMain();
                         }
                         else {
@@ -66,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
                         int result = searchUser(name, mail, pass);
                         if (result == -2){
                             Toast.makeText(RegisterActivity.this, "Emial not exists, automatically register", Toast.LENGTH_LONG).show();
-                            userID = (int)dbApi.insertUserFull(name, mail, pass);
+                            userID = (int)dbApi.insertUserFull(name, mail, pass, userProfileURL);
                             startMain();
                         }
                         else if(result == -1){

@@ -35,24 +35,15 @@
         app:srcCompat="@drawable/leftarrow" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewOutgoingFriendRequests"
-        android:layout_width="327dp"
-        android:layout_height="228dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewIncomingFriendRequests" />
-
-    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewIncomingFriendRequests"
         android:layout_width="370dp"
-        android:layout_height="273dp"
+        android:layout_height="615dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.218">
+        app:layout_constraintVertical_bias="0.655">
 
     </androidx.recyclerview.widget.RecyclerView>
 
