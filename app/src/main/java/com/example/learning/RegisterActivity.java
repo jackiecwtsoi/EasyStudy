@@ -1,3 +1,4 @@
+
 package com.example.learning;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,9 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText userName;
@@ -54,12 +58,58 @@ public class RegisterActivity extends AppCompatActivity {
                 String name = userName.getText().toString();
                 String mail = email.getText().toString();
                 String pass = password.getText().toString();
+                String url = "https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/8394f798931623.5ee79b6a909ea.jpg";
+
+                if(name.length() == 0  ){
+                    Toast.makeText(RegisterActivity.this,"Name can not be empty!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(name.length() > 20  ){
+                    Toast.makeText(RegisterActivity.this,"Name must be less than 20 characters",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                //判断密码
+                if(pass.length() == 0 ){
+                    Toast.makeText(RegisterActivity.this,"password can not be empty!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(pass.length() > 16  ){
+                    Toast.makeText(RegisterActivity.this,"Password must be less than 16 characters!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(pass.length() != 0 && password.length() < 6  ){
+                    Toast.makeText(RegisterActivity.this,"Password must be greater than 8 digits!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //判断邮箱
+                if(mail.length() == 0 ){
+                    Toast.makeText(RegisterActivity.this,"email can not be empty!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String regEx1 = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+                Pattern p;
+                Matcher m;
+
+                p = Pattern.compile(regEx1);
+                m = p.matcher(mail);
+
+                if (!m.matches()){
+                    Toast.makeText(RegisterActivity.this,"E-mail format is incorrect!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+
+
                 if (!name.equals("") && !mail.equals("") && !pass.equals("")) {
                     if(isRegister == 1){
                         int result = dbApi.queryUser(name, mail, pass);
                         if (result == -2){
-                        userID = (int)dbApi.insertUserFull(name, mail, pass, userProfileURL);
-                        startMain();
+                            userID = (int)dbApi.insertUserFull(name, mail, pass, url);
+                            Toast.makeText(RegisterActivity.this, "okokokokokokokok", Toast.LENGTH_LONG).show();
+                            startMain();
                         }
                         else {
                             Toast.makeText(RegisterActivity.this, "Email has been registered, please login directly", Toast.LENGTH_LONG).show();
@@ -68,8 +118,8 @@ public class RegisterActivity extends AppCompatActivity {
                     else {
                         int result = searchUser(name, mail, pass);
                         if (result == -2){
-                            Toast.makeText(RegisterActivity.this, "Email does not exist, automatically register", Toast.LENGTH_LONG).show();
-                            userID = (int)dbApi.insertUserFull(name, mail, pass, userProfileURL);
+                            Toast.makeText(RegisterActivity.this, "Email not exists, automatically register", Toast.LENGTH_LONG).show();
+                            userID = (int)dbApi.insertUserFull(name, mail, pass, url);
                             startMain();
                         }
                         else if(result == -1){
@@ -87,7 +137,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-//    private int registerFun(String name, String mail, String pass) {
+    //    private int registerFun(String name, String mail, String pass) {
 //        int result = dbApi.queryUser(name, mail, pass);
 //        if (result ==-2){
 //        return (int) dbApi.insertUserFull(name, mail, pass);}

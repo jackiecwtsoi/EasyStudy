@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.learning.DbApi;
+import com.example.learning.DeckEntity;
+import com.example.learning.FriendEntity;
 import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
@@ -28,44 +33,67 @@ import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Home.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Home#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class Home extends Fragment implements View.OnClickListener{
-    private Banner mBanner1,mBanner2,mBanner3;
-    private TextView mTvTarget;
-    private LinearLayout mLlBanner1,mLlBanner2,mLlBanner3;
-    private QMUIRoundButton mBtnTotalProgress,mBtnCurrentProgress;
-    private ImageView btnFriends;
 
-    private View rootView;
-    private OnFragmentInteractionListener mListener;
+public class Home extends Fragment implements View.OnClickListener{
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    View rootView;
+    RecyclerView recyclerView1;
+    RecyclerView recyclerView2;
+    RecyclerView recyclerView3;
+    Context context;
     SQLiteDatabase db;
+    DbApi dbApi;
+    int userId;
+    ArrayList<DeckEntity> decks = new ArrayList<>();
+    ArrayList<FriendEntity> friends = new ArrayList<>();
+    ArrayList<DeckEntity> friendDecks = new ArrayList<>();
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
     //The parameters of user image in home page.
     private QMUIRadiusImageView user_image;
+    private ImageView btnFriends;
+
 
     public Home(SQLiteDatabase db) {
         this.db = db;
+        // Required empty public constructor
     }
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment Home2.
+     */
+    // TODO: Rename and change types and number of parameters
     public static Home newInstance(String param1, String param2, SQLiteDatabase db) {
         Home fragment = new Home(db);
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         if (rootView != null) {
             ViewGroup parent = (ViewGroup) rootView.getParent();
             if (parent != null) {
@@ -80,35 +108,18 @@ public class Home extends Fragment implements View.OnClickListener{
             container.removeView(container.findViewById(R.id.btnFriendsBack));
             container.removeView(container.findViewById(R.id.textContacts));
         }
-
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        mTvTarget = rootView.findViewById(R.id.tvProgress);
-        mBtnTotalProgress = rootView.findViewById(R.id.btnTotalProgress);
-        mBtnCurrentProgress = rootView.findViewById(R.id.btnCurrentProgress);
-        mLlBanner1 = rootView.findViewById(R.id.llBanner1);
-        mLlBanner2 = rootView.findViewById(R.id.llBanner2);
-        mLlBanner3 = rootView.findViewById(R.id.llBanner3);
-        mBanner1 = rootView.findViewById(R.id.banner1);
-        mBanner2 = rootView.findViewById(R.id.banner2);
-        mBanner3 = rootView.findViewById(R.id.banner3);
-        ArrayList list1 = new ArrayList();
-        list1.add(R.mipmap.bg_default_banner);
-        list1.add(R.mipmap.tu1);
-        list1.add(R.mipmap.tu2);
-        ArrayList list2 = new ArrayList();
-        list2.add(R.mipmap.tu3);
-        list2.add(R.mipmap.tu4);
-        list2.add(R.mipmap.tu1);
-        ArrayList list3 = new ArrayList();
-        list3.add(R.mipmap.undraw_predictive_analytics_kf9n);
-        list3.add(R.mipmap.undraw_predictive_analytics_kf9n);
-        list3.add(R.mipmap.undraw_predictive_analytics_kf9n);
-        initBanner(mBanner1,list1);
-        initBanner(mBanner2,list2);
-        initBanner(mBanner3,list3);
-        setProgress(0.7F);
-        // Inflate the layout for this fragment
+        dbApi = new DbApi(db);
+        context = getActivity();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        userId = mainActivity.getLoginUserId();
+        getDeckList();
+        recyclerView1 = rootView.findViewById(R.id.banner_recycler1);
+
+        recyclerView3 = rootView.findViewById(R.id.banner_recycler3);
+        initRecycler();
+
 
         user_image = rootView.findViewById(R.id.touxiang);
         user_image.setOnClickListener(this);
@@ -125,7 +136,7 @@ public class Home extends Fragment implements View.OnClickListener{
                 Friends friendsFragment = new Friends(db);
                 FragmentManager friendsFragmentManager = getFragmentManager();
                 friendsFragmentManager.beginTransaction()
-                        .replace(R.id.layoutHome, friendsFragment)
+                        .replace(R.id.home_root_layout, friendsFragment)
                         .addToBackStack("home")
                         .commit();
             }
@@ -134,18 +145,83 @@ public class Home extends Fragment implements View.OnClickListener{
         return rootView;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void initRecycler() {
+        LinearLayoutManager ms = new LinearLayoutManager(context);
+        ms.setOrientation(LinearLayoutManager.HORIZONTAL);
+        LinearLayoutManager ms2 = new LinearLayoutManager(context);
+        ms2.setOrientation(LinearLayoutManager.HORIZONTAL);
+        LinearLayoutManager ms3= new LinearLayoutManager(context);
+        ms3.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView1.setLayoutManager(ms);
+        recyclerView3.setLayoutManager(ms3);
+        HomeDeckAdapter adapter1 = new HomeDeckAdapter(friendDecks, context, friends);
+        HomeSelfDeckAdapter adapter2 = new HomeSelfDeckAdapter(decks, context);
+        HomeSelfDeckAdapter adapter3 = new HomeSelfDeckAdapter(decks, context);
+        adapter1.setOnItemClickLitener(new HomeDeckAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                MainActivity main = (MainActivity) getActivity();
+                main.changeToDeck();
+                CardFragment fragment = new CardFragment(db, friendDecks.get(position));
+                FragmentManager studyFrontManager = getFragmentManager();
+                studyFrontManager.beginTransaction()
+                        .replace(R.id.layoutFolder, fragment)
+                        .addToBackStack("tag13")
+                        .commit();
+                System.out.println(position);
+            }
+        });
+        adapter2.setOnItemClickLitener(new HomeSelfDeckAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                MainActivity main = (MainActivity) getActivity();
+                main.changeToDeck();
+                CardFragment fragment = new CardFragment(db, decks.get(position));
+                FragmentManager studyFrontManager = getFragmentManager();
+                studyFrontManager.beginTransaction()
+                        .replace(R.id.layoutFolder, fragment)
+                        .addToBackStack("tag13")
+                        .commit();
+                System.out.println(position);
+            }
+        });
+        adapter3.setOnItemClickLitener(new HomeSelfDeckAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                MainActivity main = (MainActivity) getActivity();
+                main.changeToDeck();
+                CardFragment fragment = new CardFragment(db, decks.get(position));
+                FragmentManager studyFrontManager = getFragmentManager();
+                studyFrontManager.beginTransaction()
+                        .replace(R.id.layoutFolder, fragment)
+                        .addToBackStack("tag13")
+                        .commit();
+                System.out.println(position);
+            }
+        });
+        recyclerView1.setAdapter(adapter1);
+        recyclerView3.setAdapter(adapter3);
+    }
+
+    private void getDeckList(){
+        friends.clear();
+        friends.addAll(dbApi.getConfirmedFriends(userId));
+        System.out.println("have frineds:" + Integer.toString(friends.size()));
+        for (FriendEntity friend: friends){
+            friendDecks.add(dbApi.getAllPublicDecks(friend.getFriendId()).get(0));
         }
+        decks.clear();
+        decks.addAll(dbApi.getAllDecks(userId));
+        for(DeckEntity deck : friendDecks){
+            int deckNum = dbApi.queryCard(deck.getDeckID(), deck.getFolderId(), deck.getUserId()).size();
+            deck.setCardNum(deckNum);
+        }
+        for(DeckEntity deck : decks){
+            int deckNum = dbApi.queryCard(deck.getDeckID(), deck.getFolderId(), deck.getUserId()).size();
+            deck.setCardNum(deckNum);
+        }
+        System.out.println("home deck length:"+ Integer.toString(decks.size()));
     }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -155,46 +231,5 @@ public class Home extends Fragment implements View.OnClickListener{
 
         }
 
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    private void initBanner(Banner banner, ArrayList<Integer> resId) {
-        banner.setImages(resId);
-        banner.setImageLoader(new CustomLoader());
-        banner.isAutoPlay(true);
-        banner.setDelayTime(3000);
-        banner.start();
-    }
-
-    private void setProgress(float per) {
-        float total = 280F;
-        float current = total*per;
-        float px = dpToPx(getContext(),current);
-        RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams) mBtnCurrentProgress.getLayoutParams());
-//        mBtnCurrentProgress.setWidth(Math.round(px));
-        params.width = Math.round(px);
-
-        mBtnCurrentProgress.setLayoutParams(params);
-        mTvTarget.setText("Target:" + Math.round((80 * per)) + "/80");
-    }
-
-    public class CustomLoader extends ImageLoader {
-        @Override
-        public void displayImage(Context context, Object path, ImageView imageView) {
-            Glide.with(context).load(path).into(imageView);
-        }
-    }
-
-    private float dpToPx(Context context, float dp) {
-        float scale = context.getResources().getDisplayMetrics().density;
-        return dp*scale+0.5F;
     }
 }
