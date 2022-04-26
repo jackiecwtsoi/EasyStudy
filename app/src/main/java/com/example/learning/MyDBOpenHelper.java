@@ -39,7 +39,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
     //数据库第一次创建时被调用
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE user(u_id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT(20),email TEXT(30),phone_number TEXT(20)," +
-                "password TEXT(20), profile_picture TEXT)");
+                "password TEXT(20), profile_picture TEXT(1000))");
         db.execSQL("CREATE TABLE folder(folder_id INTEGER PRIMARY KEY AUTOINCREMENT,folder_name TEXT,time TEXT,folder_description TEXT, u_id INTEGER," +
                 "CONSTRAINT u_id FOREIGN KEY (u_id) REFERENCES user (u_id) ON DELETE CASCADE ON UPDATE CASCADE)");
         db.execSQL("CREATE TABLE deck(" +
