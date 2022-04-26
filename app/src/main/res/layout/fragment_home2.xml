@@ -125,6 +125,8 @@
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
             android:layout_marginHorizontal="20dp"
+            app:title_height="20dp"
+            app:title_textsize="20sp"
             android:layout_height="200dp" />
 
         <LinearLayout

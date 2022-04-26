@@ -52,6 +52,7 @@ public class Home extends Fragment implements View.OnClickListener{
     private String mParam1;
     private String mParam2;
     private View rootView;
+    ArrayList<String> titles = new ArrayList<>();
     private OnFragmentInteractionListener mListener;
     SQLiteDatabase db;
     //The parameters of user image in home page.
@@ -119,6 +120,10 @@ public class Home extends Fragment implements View.OnClickListener{
         list3.add(R.mipmap.undraw_predictive_analytics_kf9n);
         list3.add(R.mipmap.undraw_predictive_analytics_kf9n);
         list3.add(R.mipmap.undraw_predictive_analytics_kf9n);
+
+        titles.add("aa");
+        titles.add("bb");
+        titles.add("cc");
         initBanner(mBanner1,list1);
         initBanner(mBanner2,list2);
         initBanner(mBanner3,list3);
@@ -182,6 +187,8 @@ public class Home extends Fragment implements View.OnClickListener{
         banner.setImages(resId);
         banner.setImageLoader(new CustomLoader());
         banner.isAutoPlay(true);
+        banner.setBannerTitles(titles);
+//        banner.setBannerTitleList()
         banner.setDelayTime(3000);
         banner.start();
     }

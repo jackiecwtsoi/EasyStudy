@@ -460,6 +460,19 @@ public class DbApi {
         }
         return allDecks;
     }
+    public ArrayList<DeckEntity> getAllPublicDecks(int userID) {
+        ArrayList<DeckEntity> allDecks = new ArrayList<>();
+        ArrayList<FolderEntity> folders = queryFolder(userID);
+        for (FolderEntity folder : folders) {
+            ArrayList<DeckEntity> decks = queryDeck(folder.getFolderID(), userID);
+            for (DeckEntity deck : decks) {
+                if(deck.getPub() == 1) {
+                    allDecks.add(deck);
+                }
+            }
+        }
+        return allDecks;
+    }
 
     // get all cards inside a specific deck
     public ArrayList<Row> getCardsFromDeck(DeckEntity deck) {
@@ -679,5 +692,6 @@ public class DbApi {
                 " AND folder_id = " + folderId + " AND deck_id = " + deckId;
         db.execSQL(query);
     }
+
 
 }

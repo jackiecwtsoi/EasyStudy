@@ -2,11 +2,11 @@ package com.example.learning;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.AlarmManager;
+import android.app.FragmentManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -24,8 +24,11 @@ import android.widget.Toast;
 
 import com.example.learning.customizeview.HonrizonViewPager;
 import com.example.learning.fragments.Add;
+import com.example.learning.fragments.CardFragment;
+import com.example.learning.fragments.Deck;
 import com.example.learning.fragments.Folder;
 import com.example.learning.fragments.Home;
+import com.example.learning.fragments.Home2;
 import com.example.learning.fragments.Profile;
 import com.example.learning.fragments.Statistic;
 import com.example.learning.fragments.Study;
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         mcStats = findViewById(R.id.stats_text);
         mcContainer = findViewById(R.id.vp_container);
         fragmentList = new ArrayList<Fragment>();
-        fragmentList.add(new Home(db));
+        fragmentList.add(new Home2(db));
         fragmentList.add(new Folder(db));
         fragmentList.add(new Add(db));
         fragmentList.add(new Study(db));
@@ -164,6 +167,16 @@ public class MainActivity extends AppCompatActivity {
         this.selectedFriendId = selectedFriendId;
         mcContainer.setCurrentItem(1);
     }
+//    public void changeToDeck(DeckEntity deck){
+////        Deck deckFragment = new Deck(1, db);
+//        mcContainer.setCurrentItem(1);
+//        CardFragment fragment = new CardFragment(db, deck);
+//        FragmentManager studyFrontManager = getFragmentManager();
+//        studyFrontManager.beginTransaction()
+//                .replace(R.id.layoutFolder, fragment)
+//                .addToBackStack("tag13")
+//                .commit();
+//    }
     public void changeToProfile(){
         mcContainer.setCurrentItem(5);
     }
