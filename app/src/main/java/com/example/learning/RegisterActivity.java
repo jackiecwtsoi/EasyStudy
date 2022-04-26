@@ -68,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
                     else {
                         int result = searchUser(name, mail, pass);
                         if (result == -2){
-                            Toast.makeText(RegisterActivity.this, "Emial not exists, automatically register", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, "Email does not exist, automatically register", Toast.LENGTH_LONG).show();
                             userID = (int)dbApi.insertUserFull(name, mail, pass, userProfileURL);
                             startMain();
                         }

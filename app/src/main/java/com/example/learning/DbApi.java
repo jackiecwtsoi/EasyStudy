@@ -257,7 +257,6 @@ public class DbApi {
         for (int i = 0; i < arrary.length; i++) {
             System.out.println(arrary[i]);
             if (arrary[i].equals(email)) {
-
                 if (passwords[i].equals(password) && userNames[i].equals(userName)) {
                     return userIDs[i];
                 } else {
