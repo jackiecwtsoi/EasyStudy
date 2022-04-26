@@ -121,18 +121,33 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
 
 
         // 创建图表
+        int easy;
+        int hard;
+        int forgot;
+        int Total;
+        ArrayList<Integer> arrary =dbApi.getUserCardLevel(userid);
+        easy = arrary.get(0);
+        hard = arrary.get(1);
+        forgot = arrary.get(2);
+        Total = easy+hard+forgot;
+        float easy_value = (easy/Total)*100;
+        float hard_value = (hard/Total)*100;
+        float forgot_value = (forgot/Total)*100;
 
         pie = (PieChart) view.findViewById(R.id.pie);
         list=new ArrayList<>();
+        PieEntry pieEntry1 = new PieEntry(easy_value,"Forgot");
+        PieEntry pieEntry2 = new PieEntry(hard_value,"Hard");
+        PieEntry pieEntry3 = new PieEntry(forgot_value,"Easy");
+        list.add(pieEntry1);
+        list.add(pieEntry2);
+        list.add(pieEntry3);
 
-
-        list.add(new PieEntry(30,"Forset"));
-        list.add(new PieEntry(30,"Hard"));
-        list.add(new PieEntry(40,"Easy"));
 
         PieDataSet pieDataSet=new PieDataSet(list,"");
         PieData pieData=new PieData(pieDataSet);
         pie.setData(pieData);
+        Toast.makeText(view.getContext(),"test"+Total+easy_value+" "+hard_value+arrary,Toast.LENGTH_SHORT).show();
 
         pieDataSet.setColors(Color.rgb(69,124,153), Color.rgb(69,124,153),Color.rgb(69,124,153));//设置各个数据的颜色
 

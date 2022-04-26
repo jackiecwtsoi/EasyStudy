@@ -34,7 +34,7 @@ import com.youth.banner.loader.ImageLoader;
 import java.util.ArrayList;
 
 
-public class Home extends Fragment{
+public class Home extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -53,6 +53,9 @@ public class Home extends Fragment{
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    //The parameters of user image in home page.
+    private QMUIRadiusImageView user_image;
+    private ImageView btnFriends;
 
 
     public Home(SQLiteDatabase db) {
@@ -90,6 +93,21 @@ public class Home extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        if (rootView != null) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null) {
+                parent.removeView(rootView);
+            }
+        }
+
+        if (container != null) {
+            container.removeView(container.findViewById(R.id.recyclerViewFriends));
+            container.removeView(container.findViewById(R.id.btnFriendRequests));
+            container.removeView(container.findViewById(R.id.btnAddFriend));
+            container.removeView(container.findViewById(R.id.btnFriendsBack));
+            container.removeView(container.findViewById(R.id.textContacts));
+        }
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
         dbApi = new DbApi(db);
@@ -101,6 +119,30 @@ public class Home extends Fragment{
         recyclerView2 = rootView.findViewById(R.id.banner_recycler2);
         recyclerView3 = rootView.findViewById(R.id.banner_recycler3);
         initRecycler();
+
+
+        user_image = rootView.findViewById(R.id.touxiang);
+        user_image.setOnClickListener(this);
+
+
+        // define variables
+        //btnFriends = rootView.findViewById(R.id.btnFriends);
+        btnFriends = rootView.findViewById(R.id.friend);
+
+        // when the friends button is pressed, switch to a new fragment which contains the friends list
+        btnFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Friends friendsFragment = new Friends(db);
+                FragmentManager friendsFragmentManager = getFragmentManager();
+                friendsFragmentManager.beginTransaction()
+                        .replace(R.id.home_root_layout, friendsFragment)
+                        .addToBackStack("home")
+                        .commit();
+            }
+        });
+
+
         return rootView;
     }
 
@@ -176,5 +218,15 @@ public class Home extends Fragment{
             deck.setCardNum(deckNum);
         }
         System.out.println("home deck length:"+ Integer.toString(decks.size()));
+    }
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case  R.id.touxiang:
+                MainActivity main = (MainActivity) getActivity();
+                main.changeToProfile();
+
+        }
+
     }
 }

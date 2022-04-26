@@ -267,7 +267,7 @@ public class DbApi {
             } while (check_cursor.moveToNext());
         }
         System.out.println(email);
-        for (int i = 0; i < arrary.length; i++) {
+        for (int i = 0; i < count; i++) {
             System.out.println(arrary[i]);
             if (arrary[i].equals(email)) {
 
@@ -459,6 +459,42 @@ public class DbApi {
         values.put("phone_number",phone_number);
         values.put("password",password);
         db.update("user",values,"u_id = ?",new String[]{user_id});
+    }
+    public ArrayList<Integer> getUserCardLevel(int userID) {
+        String user_id = Integer.toString(userID);
+        ArrayList<Integer> arrary = new ArrayList<>();
+        int count = 0;
+        int easy=0;
+        int hard=0;
+        int forgot=0;
+
+        Cursor check_cursor = db.query("card", null, "u_id =?", new String[]{user_id}, null, null, null);
+        if (check_cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int level = check_cursor.getInt(check_cursor.getColumnIndex("level"));
+                if (level == 0){
+                    easy=easy+1;
+                }
+                if (level == 1){
+                    hard=hard+1;
+                }
+                if (level==2){
+                    forgot=forgot+1;
+                }
+
+
+
+            } while (check_cursor.moveToNext());
+
+
+
+
+        }
+        arrary.add(easy);
+        arrary.add(hard);
+        arrary.add(forgot);
+        return arrary;
+
     }
 
 
