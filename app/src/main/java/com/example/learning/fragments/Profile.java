@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.learning.DbApi;
 import com.example.learning.MainActivity;
 import com.example.learning.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -40,6 +42,7 @@ public class Profile extends Fragment implements View.OnClickListener{
     private String name_information;
     private String phone_information;
     private Profile mContext;
+    private ImageView imgUserPhoto;
 
     public Profile(SQLiteDatabase db) {
         // Required empty public constructor
@@ -71,6 +74,13 @@ public class Profile extends Fragment implements View.OnClickListener{
         password = view.findViewById(R.id.editTextTextPassword);
         save_button = view.findViewById(R.id.save_change_btn);
         cancel_button = view.findViewById(R.id.cacel_change_btn);
+        imgUserPhoto = view.findViewById(R.id.user_profile);
+        String userProfileURL = dbApi.queryUserProfileURL(userId);
+        if (!userProfileURL.isEmpty()) {
+            Picasso.get()
+                    .load(userProfileURL)
+                    .into(imgUserPhoto);
+        }
 
         showUserInformation();
         save_button.setOnClickListener(this);
