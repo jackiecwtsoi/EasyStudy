@@ -359,15 +359,14 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
             PieDataSet pieDataSet = new PieDataSet(list, "");
             PieData pieData = new PieData(pieDataSet);
             pieData.setValueTextSize(16);
-            pieData.setValueFormatter(new PercentFormatter());
 
+            pieData.setValueFormatter(new PercentFormatter());
             pie.setData(pieData);
             pie.setExtraOffsets(26, 26, 26, 26);
             pie.setDrawEntryLabels(false);
             pie.setUsePercentValues(true);
             Legend legend=pie.getLegend();
             legend.setTextSize(18);
-
             pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
             pieDataSet.setValueLinePart1Length(0.6f);
 
