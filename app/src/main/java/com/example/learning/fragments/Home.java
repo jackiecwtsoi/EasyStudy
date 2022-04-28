@@ -147,7 +147,6 @@ public class Home extends Fragment implements View.OnClickListener{
             }
         });
 
-
         return rootView;
     }
 
