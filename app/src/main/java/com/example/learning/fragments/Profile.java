@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -68,6 +69,7 @@ public class Profile extends Fragment implements View.OnClickListener{
     private EditText password;
     private Button save_button;
     private Button cancel_button;
+    private ImageView btnProfileBack;
     private int userId;
     private String name_information;
     private String phone_information;
@@ -128,7 +130,20 @@ public class Profile extends Fragment implements View.OnClickListener{
         save_button.setOnClickListener(this);
         cancel_button.setOnClickListener(this);
 
+        btnProfileBack = view.findViewById(R.id.btnProfileBack);
 
+        // when the back button is clicked, change to home fragment
+        btnProfileBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("change to home");
+                Home homeFragment = new Home(db);
+                FragmentManager homeFragmentManager = getFragmentManager();
+                homeFragmentManager.beginTransaction()
+                        .replace(R.id.layoutProfile, homeFragment)
+                        .commit();
+            }
+        });
 
         return view;
     }

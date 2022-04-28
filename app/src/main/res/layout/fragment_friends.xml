@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutFriends"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewFriends"
@@ -24,22 +26,11 @@
         app:layout_constraintHorizontal_bias="0.942"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.184"
+        app:layout_constraintVertical_bias="0.45"
         app:srcCompat="@drawable/notification" />
-
+  
     <ImageView
-        android:id="@+id/btnAddFriend"
-        android:layout_width="50dp"
-        android:layout_height="49dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.939"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewFriends"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/add_orange" />
 
-    <ImageView
         android:id="@+id/btnFriendsBack"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -48,7 +39,7 @@
         app:layout_constraintHorizontal_bias="0.066"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.173"
+        app:layout_constraintVertical_bias="0.437"
         app:srcCompat="@drawable/leftarrow" />
 
     <TextView
@@ -64,6 +55,18 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toEndOf="@+id/btnFriendsBack"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.175" />
+        app:layout_constraintVertical_bias="0.448" />
+
+    <ImageView
+        android:id="@+id/btnAddFriend"
+        android:layout_width="50dp"
+        android:layout_height="49dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.939"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewFriends"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/add_orange" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
