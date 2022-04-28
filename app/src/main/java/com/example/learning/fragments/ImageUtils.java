@@ -29,7 +29,7 @@ public class ImageUtils {
             long timeStamp = System.currentTimeMillis();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String sd = sdf.format(new Date(timeStamp));
-            fileName = sd + ".png";
+            fileName = sd + ".jpg";
         }
 
         //获取文件

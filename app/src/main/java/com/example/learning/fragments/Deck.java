@@ -40,6 +40,7 @@ public class Deck extends Fragment {
     SQLiteDatabase db;
     DbApi dbApi;
     int userID;
+
     public Deck(int folder, SQLiteDatabase db) {
         this.folder_id = folder;
         this.db = db;
@@ -147,17 +148,31 @@ public class Deck extends Fragment {
         });
         return rootView;
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
 
     }
-    private void getDeckList(){
-        deckList.clear();
-        deckList.addAll(dbApi.queryDeck(folder_id, userID));
-        for(DeckEntity deck : deckList){
-            int deckNum = dbApi.queryCard(deck.getDeckID(), folder_id, userID).size();
-            deck.setCardNum(deckNum);
+
+    private void getDeckList() {
+        if (folder_id == -1) {
+            // public decks for the friends
+            MainActivity mainActivity = (MainActivity) getActivity();
+            userID = mainActivity.getSelectedFriendId();
+            deckList.clear();
+            deckList.addAll(dbApi.getAllPublicDecks(userID));
+            for (DeckEntity deck : deckList) {
+                int deckNum = dbApi.queryCard(deck.getDeckID(), folder_id, userID).size();
+                deck.setCardNum(deckNum);
+            }
+        } else {
+            deckList.clear();
+            deckList.addAll(dbApi.queryDeck(folder_id, userID));
+            for (DeckEntity deck : deckList) {
+                int deckNum = dbApi.queryCard(deck.getDeckID(), folder_id, userID).size();
+                deck.setCardNum(deckNum);
+            }
         }
     }
 
