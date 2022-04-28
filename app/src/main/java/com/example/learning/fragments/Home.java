@@ -201,6 +201,7 @@ public class Home extends Fragment {
     private void getDeckList(){
         friends.clear();
         friends.addAll(dbApi.getConfirmedFriends(userId));
+        friendDecks.clear();
         System.out.println("have frineds:" + Integer.toString(friends.size()));
         for (FriendEntity friend: friends){
             friendDecks.add(dbApi.getAllPublicDecks(friend.getFriendId()).get(0));
