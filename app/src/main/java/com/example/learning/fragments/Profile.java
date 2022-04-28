@@ -104,12 +104,22 @@ public class Profile extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.removeView(view);
+            }
+        }
+        if (container != null) {
+            container.removeAllViews();
+        }
         // Inflate the layout for this fragment
         MainActivity main = (MainActivity) getActivity();
+        System.out.println("profile create");
         userId = main.getLoginUserId();
         mContext = Profile.this;
         dbApi = new DbApi(db);
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
         email = view.findViewById(R.id.TextTextmail);
         user_name = view.findViewById(R.id.editTextTextPersonName);
         phone_number = view.findViewById(R.id.editTextTextPhone);
@@ -149,6 +159,12 @@ public class Profile extends Fragment implements View.OnClickListener{
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("profile on resume");
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.save_change_btn:
@@ -165,6 +181,7 @@ public class Profile extends Fragment implements View.OnClickListener{
 
 
     }
+
     private void getPicFromLocal() {
 
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);

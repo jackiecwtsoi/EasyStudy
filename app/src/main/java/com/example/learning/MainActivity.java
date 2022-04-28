@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentList.add(new Add(db));
         fragmentList.add(new Study(db));
         fragmentList.add(new Statistic(db));
-        fragmentList.add(new Profile(db));
+//        fragmentList.add(new Profile(db));
 
         textViewList = new ArrayList<ImageView>();
         textViewList.add(mcHome);
