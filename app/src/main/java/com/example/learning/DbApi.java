@@ -4,10 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.Toast;
 
 import com.example.learning.fragments.Deck;
 import com.example.learning.fragments.Friends;
+import com.example.learning.fragments.ImageUtils;
 
 import java.sql.Array;
 import java.text.ParseException;
@@ -198,7 +201,17 @@ public class DbApi {
         } else {
             System.out.println("not create user: " + username);
         }
+        // generate default folder for user
+        long folderId = insertFolder("default folder", "description for default folder", (int)id);
+        int frequency = -1;
+        String dayOfWeek = "";
+        int interval = 0;
+        int pub = 1;
+        String path = "/storage/emulated/0/Android/data/com.example.learning/files/deckCovers/default1.jpg";
+        long deckId = insertDeck("default deck", "description for default deck", 0, frequency, dayOfWeek, interval, (int)folderId, (int)id, path, 1);
+        long cardId = insertCard("default card", "1 + 1 = ?", "2", 0, (int) deckId, (int) folderId, (int)id);
         return id;
+
     }
 
     public long insertDeck(String deckName, String deckDescription, int completion, int frequency, String dayofWeek, int interval, int folderID, int userID, String cover, int pub) {

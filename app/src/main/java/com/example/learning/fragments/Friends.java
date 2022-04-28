@@ -121,7 +121,6 @@ public class Friends extends Fragment {
                 FragmentManager homeFragmentManager = getFragmentManager();
                 homeFragmentManager.beginTransaction()
                         .replace(R.id.layoutFriends, homeFragment)
-                        .addToBackStack("friends")
                         .commit();
             }
         });

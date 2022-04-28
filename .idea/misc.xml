@@ -56,6 +56,7 @@
         <entry key="app/src/main/res/layout/fragment_friend_search_result.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_friends.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.39791666666666664" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_statistic.xml" value="0.39791666666666664" />
         <entry key="app/src/main/res/layout/fragment_study.xml" value="0.23777173913043478" />
         <entry key="app/src/main/res/layout/fragment_study_back.xml" value="0.2947916666666667" />

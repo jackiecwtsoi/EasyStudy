@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,11 +33,10 @@ import java.util.Calendar;
 public class StudyFront extends Fragment {
     // define variables
     View rootView;
-    TextView textDeckTitle;
-    TextView textCardQuestionContent;
-    TextView textStudyProgress;
+    TextView textDeckTitle, textCardQuestionContent, textStudyProgress;
     CardView cardStudyFront;
     Button btnNextCard, btnPreviousCard;
+    Button btnAbortStudy;
     ProgressBar progressBar;
     StudyType STUDY_TYPE; // indicates whether we study ALL CARDS from the database
     DeckEntity selected_deck;
@@ -97,6 +97,7 @@ public class StudyFront extends Fragment {
         btnNextCard = rootView.findViewById(R.id.btnNextCard);
         btnPreviousCard = rootView.findViewById(R.id.btnPreviousCard);
         progressBar = rootView.findViewById(R.id.progressBar);
+        btnAbortStudy = rootView.findViewById(R.id.btnAbortStudy);
 
         MainActivity main = (MainActivity) getActivity();
         userId = main.getLoginUserId();
@@ -127,6 +128,21 @@ public class StudyFront extends Fragment {
         textCardQuestionContent.setText(STUDY_LIST.get(rowIdx).getCard().getCardQuestion());
         textStudyProgress.setText("Card " + String.valueOf(rowIdx+1) + " / " + String.valueOf(STUDY_LIST.size()));
 
+        // abort study session button: return to StudyDone fragment when clicked
+        btnAbortStudy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rowIdx = STUDY_LIST.size();
+
+                // change to StudyDone fragment
+                StudyDone studyDone = new StudyDone(db);
+                FragmentManager studyManager = getFragmentManager();
+                studyManager.beginTransaction()
+                        .replace(R.id.layoutStudyFront, studyDone)
+                        .commit();
+            }
+        });
+
         btnNextCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,7 +156,7 @@ public class StudyFront extends Fragment {
                 else {
                     rowIdx = STUDY_LIST.size();
 
-                    // change to Study fragment
+                    // change to StudyDone fragment
                     StudyDone studyDone = new StudyDone(db);
                     FragmentManager studyManager = getFragmentManager();
                     studyManager.beginTransaction()

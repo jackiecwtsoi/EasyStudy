@@ -5,18 +5,21 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.learning.DbApi;
 import com.example.learning.MainActivity;
 import com.example.learning.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -36,10 +39,12 @@ public class Profile extends Fragment implements View.OnClickListener{
     private EditText password;
     private Button save_button;
     private Button cancel_button;
+    private ImageView btnProfileBack;
     private int userId;
     private String name_information;
     private String phone_information;
     private Profile mContext;
+    private ImageView imgUserPhoto;
 
     public Profile(SQLiteDatabase db) {
         // Required empty public constructor
@@ -71,12 +76,32 @@ public class Profile extends Fragment implements View.OnClickListener{
         password = view.findViewById(R.id.editTextTextPassword);
         save_button = view.findViewById(R.id.save_change_btn);
         cancel_button = view.findViewById(R.id.cacel_change_btn);
+        imgUserPhoto = view.findViewById(R.id.user_profile);
+        String userProfileURL = dbApi.queryUserProfileURL(userId);
+        if (!userProfileURL.isEmpty()) {
+            Picasso.get()
+                    .load(userProfileURL)
+                    .into(imgUserPhoto);
+        }
 
         showUserInformation();
         save_button.setOnClickListener(this);
         cancel_button.setOnClickListener(this);
 
+        btnProfileBack = view.findViewById(R.id.btnProfileBack);
 
+        // when the back button is clicked, change to home fragment
+        btnProfileBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("change to home");
+                Home homeFragment = new Home(db);
+                FragmentManager homeFragmentManager = getFragmentManager();
+                homeFragmentManager.beginTransaction()
+                        .replace(R.id.layoutProfile, homeFragment)
+                        .commit();
+            }
+        });
 
         return view;
     }

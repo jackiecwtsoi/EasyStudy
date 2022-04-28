@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,10 +36,7 @@ import java.util.ArrayList;
 
 
 public class Home extends Fragment implements View.OnClickListener{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     View rootView;
     RecyclerView recyclerView1;
     RecyclerView recyclerView2;
@@ -50,9 +48,7 @@ public class Home extends Fragment implements View.OnClickListener{
     ArrayList<DeckEntity> decks = new ArrayList<>();
     ArrayList<FriendEntity> friends = new ArrayList<>();
     ArrayList<DeckEntity> friendDecks = new ArrayList<>();
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
     //The parameters of user image in home page.
     private QMUIRadiusImageView user_image;
     private ImageView btnFriends;
@@ -63,31 +59,14 @@ public class Home extends Fragment implements View.OnClickListener{
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Home2.
-     */
-    // TODO: Rename and change types and number of parameters
     public static Home newInstance(String param1, String param2, SQLiteDatabase db) {
         Home fragment = new Home(db);
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -107,6 +86,19 @@ public class Home extends Fragment implements View.OnClickListener{
             container.removeView(container.findViewById(R.id.btnAddFriend));
             container.removeView(container.findViewById(R.id.btnFriendsBack));
             container.removeView(container.findViewById(R.id.textContacts));
+            container.removeView(container.findViewById(R.id.btnProfileBack));
+            container.removeView(container.findViewById(R.id.user_profile));
+            container.removeView(container.findViewById(R.id.Edit_title));
+            container.removeView(container.findViewById(R.id.profile_mail_label));
+            container.removeView(container.findViewById(R.id.TextTextmail));
+            container.removeView(container.findViewById(R.id.profile_name_label));
+            container.removeView(container.findViewById(R.id.editTextTextPersonName));
+            container.removeView(container.findViewById(R.id.profile_phone_label));
+            container.removeView(container.findViewById(R.id.editTextTextPhone));
+            container.removeView(container.findViewById(R.id.profile_password_label));
+            container.removeView(container.findViewById(R.id.editTextTextPhone));
+            container.removeView(container.findViewById(R.id.cacel_change_btn));
+            container.removeView(container.findViewById(R.id.save_change_btn));
         }
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
@@ -137,7 +129,6 @@ public class Home extends Fragment implements View.OnClickListener{
                 FragmentManager friendsFragmentManager = getFragmentManager();
                 friendsFragmentManager.beginTransaction()
                         .replace(R.id.home_root_layout, friendsFragment)
-                        .addToBackStack("home")
                         .commit();
             }
         });

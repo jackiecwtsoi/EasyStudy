@@ -24,7 +24,8 @@
                     android:id="@+id/touxiang"
                     android:layout_width="57dp"
                     android:layout_height="60dp"
-                    android:layout_marginVertical="20dp"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginBottom="30dp"
                     android:layout_marginLeft="20dp"
                     android:src="@mipmap/ic_default_avatar"
                     app:qmui_border_width="0dp"
@@ -33,6 +34,7 @@
                 <TextView
                     android:textColor="@color/black"
                     android:textSize="16sp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_gravity="center_vertical"
                     android:text="Hi,User!"
@@ -46,59 +48,61 @@
 
                 <ImageView
                     android:id="@+id/friend"
-                    android:layout_width="40dp"
+                    android:layout_width="27dp"
                     android:layout_height="40dp"
-                    android:layout_margin="10dp"
-                    android:src="@mipmap/ic_personal" />
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="60dp"
+                    android:src="@mipmap/ic_personal"
+                    android:layout_marginEnd="20dp" />
             </LinearLayout>
-            <RelativeLayout
-                android:id="@+id/rlProgress"
-                android:layout_marginHorizontal="20dp"
-                android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+<!--            <RelativeLayout-->
+<!--                android:id="@+id/rlProgress"-->
+<!--                android:layout_marginHorizontal="20dp"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
 
-                <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-                    android:id="@+id/ivBg"
-                    app:qmui_border_width="0dp"
-                    app:qmui_backgroundColor="#DDDDDD"
-                    app:qmui_isRadiusAdjustBounds="false"
-                    app:qmui_radius="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp" />
+<!--                <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton-->
+<!--                    android:id="@+id/ivBg"-->
+<!--                    app:qmui_border_width="0dp"-->
+<!--                    app:qmui_backgroundColor="#DDDDDD"-->
+<!--                    app:qmui_isRadiusAdjustBounds="false"-->
+<!--                    app:qmui_radius="10dp"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="70dp" />-->
 
-                <TextView
-                    android:id="@+id/tvProgress"
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:text="Taget:50/80"
-                    android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+<!--                <TextView-->
+<!--                    android:id="@+id/tvProgress"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginLeft="20dp"-->
+<!--                    android:text="Taget:50/80"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content" />-->
 
-                <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-                    android:id="@+id/btnTotalProgress"
-                    android:layout_width="280dp"
-                    android:layout_height="15dp"
-                    android:layout_below="@+id/tvProgress"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    app:qmui_backgroundColor="@color/white"
-                    app:qmui_borderWidth="0dp"
-                    app:qmui_radius="10dp" />
+<!--                <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton-->
+<!--                    android:id="@+id/btnTotalProgress"-->
+<!--                    android:layout_width="280dp"-->
+<!--                    android:layout_height="15dp"-->
+<!--                    android:layout_below="@+id/tvProgress"-->
+<!--                    android:layout_centerHorizontal="true"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    app:qmui_backgroundColor="@color/white"-->
+<!--                    app:qmui_borderWidth="0dp"-->
+<!--                    app:qmui_radius="10dp" />-->
 
-                <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-                    android:id="@+id/btnCurrentProgress"
-                    android:layout_width="50dp"
-                    android:layout_height="15dp"
-                    android:layout_alignLeft="@+id/btnTotalProgress"
-                    android:layout_alignTop="@+id/btnTotalProgress"
-                    app:qmui_backgroundColor="#80a4b9"
-                    app:qmui_borderWidth="0dp"
-                    app:qmui_radius="10dp" />
-            </RelativeLayout>
+<!--                <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton-->
+<!--                    android:id="@+id/btnCurrentProgress"-->
+<!--                    android:layout_width="50dp"-->
+<!--                    android:layout_height="15dp"-->
+<!--                    android:layout_alignLeft="@+id/btnTotalProgress"-->
+<!--                    android:layout_alignTop="@+id/btnTotalProgress"-->
+<!--                    app:qmui_backgroundColor="#80a4b9"-->
+<!--                    app:qmui_borderWidth="0dp"-->
+<!--                    app:qmui_radius="10dp" />-->
+<!--            </RelativeLayout>-->
             <LinearLayout
                 android:id="@+id/llBanner1"
                 android:orientation="horizontal"
