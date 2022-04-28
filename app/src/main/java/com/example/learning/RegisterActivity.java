@@ -1,3 +1,4 @@
+
 package com.example.learning;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -106,9 +107,9 @@ public class RegisterActivity extends AppCompatActivity {
                     if(isRegister == 1){
                         int result = dbApi.queryUser(name, mail, pass);
                         if (result == -2){
-                        userID = (int)dbApi.insertUserFull(name, mail, pass, url);
-                        Toast.makeText(RegisterActivity.this, "okokokokokokokok", Toast.LENGTH_LONG).show();
-                        startMain();
+                            userID = (int)dbApi.insertUserFull(name, mail, pass, url);
+                            Toast.makeText(RegisterActivity.this, "okokokokokokokok", Toast.LENGTH_LONG).show();
+                            startMain();
                         }
                         else {
                             Toast.makeText(RegisterActivity.this, "Email has been registered, please login directly", Toast.LENGTH_LONG).show();
@@ -136,7 +137,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-//    private int registerFun(String name, String mail, String pass) {
+    //    private int registerFun(String name, String mail, String pass) {
 //        int result = dbApi.queryUser(name, mail, pass);
 //        if (result ==-2){
 //        return (int) dbApi.insertUserFull(name, mail, pass);}
@@ -150,6 +151,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void startMain(){
         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
         intent.putExtra("user_id", userID);
+        intent.putExtra("user_name", userName.getText().toString());
         startActivity(intent);
     }
 }

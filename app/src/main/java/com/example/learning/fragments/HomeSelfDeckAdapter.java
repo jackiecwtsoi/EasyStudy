@@ -51,12 +51,13 @@ public class HomeSelfDeckAdapter extends RecyclerView.Adapter<HomeSelfDeckAdapte
     private List<DeckEntity> dataList;
     private List<DeckEntity> dataListCopy = new ArrayList<>();
     private Context context;
+    private String userName;
 
-    public HomeSelfDeckAdapter(List<DeckEntity> dataList, Context context) {
+    public HomeSelfDeckAdapter(List<DeckEntity> dataList, Context context, String userName) {
         this.dataList = dataList;
         this.dataListCopy.addAll(dataList);
         this.context = context;
-
+        this.userName = userName;
     }
 
     private OnItemClickLitener   mOnItemClickLitener;
@@ -87,6 +88,7 @@ public class HomeSelfDeckAdapter extends RecyclerView.Adapter<HomeSelfDeckAdapte
         holder.title.setText(c.getDeckName());
         holder.description.setText(c.getDeckDescription());
         holder.cardNum.setText(Integer.toString(c.getCardNum()) + " cards");
+        holder.userName.setText(userName);
         RequestOptions options = new RequestOptions().error(R.drawable.spring_showers).bitmapTransform(new RoundedCorners(30));
 //        Glide.with(context).load(c.getCoverPath()).into(holder.deckCover);
         Uri img = Uri.fromFile(new File(c.getCoverPath()));
@@ -120,12 +122,5 @@ public class HomeSelfDeckAdapter extends RecyclerView.Adapter<HomeSelfDeckAdapte
     @Override
     public int getItemCount() {
         return dataList.size();
-    }
-    public void saveStates(Bundle outState) {
-        viewBinderHelper.saveStates(outState);
-    }
-
-    public void restoreStates(Bundle inState) {
-        viewBinderHelper.restoreStates(inState);
     }
 }

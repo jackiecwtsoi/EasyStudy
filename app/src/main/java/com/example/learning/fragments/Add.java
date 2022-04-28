@@ -84,7 +84,7 @@ public class Add extends Fragment {
     private TextView lastSelectedDays;
     private DbApi dbApi;
     private int userid;
-    String coverPath = "/storage/emulated/0/Android/data/com.example.learning/files/deckCovers/default.png";
+    String coverPath = "/storage/emulated/0/Android/data/com.example.learning/files/deckCovers/default2.jpg";
     List<Boolean> whetherDaySelect = new ArrayList<Boolean>();
     List<TextView> selectedDays = new ArrayList<TextView>();
     SQLiteDatabase db;

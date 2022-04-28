@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.learning.customizeview.HonrizonViewPager;
 import com.example.learning.fragments.Add;
+import com.example.learning.fragments.Deck;
 import com.example.learning.fragments.Folder;
 import com.example.learning.fragments.Home;
 import com.example.learning.fragments.Profile;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private MyDBOpenHelper myDBHelper;
     FragmentTransaction fragmentTransaction;
     private int uid;
+    private String userName;
 
     private DeckEntity selectedDeck;
     private int selectedFriendId;
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         uid = intent.getIntExtra("user_id", 1);
+        userName = intent.getStringExtra("user_name");
         createNotificationChannel();
 
         // connect to the database
@@ -164,11 +167,18 @@ public class MainActivity extends AppCompatActivity {
     public void changeToFolder(int selectedFriendId) {
         this.selectedFriendId = selectedFriendId;
         mcContainer.setCurrentItem(1);
+
     }
-    public void changeToDeck(){
+
+    public void changeToDeck() {
         mcContainer.setCurrentItem(1);
     }
-    public void changeToProfile(){
+
+    public int getSelectedFriendId() {
+        return this.selectedFriendId;
+    }
+
+    public void changeToProfile() {
         mcContainer.setCurrentItem(5);
     }
 
@@ -178,6 +188,10 @@ public class MainActivity extends AppCompatActivity {
 
     public int getLoginUserId() {
         return uid;
+    }
+
+    public String getUserName() {
+        return this.userName;
     }
 
     private void createNotificationChannel() {
