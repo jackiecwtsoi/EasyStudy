@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.learning.DeckEntity;
 import com.example.learning.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,12 +53,13 @@ public class HomeSelfDeckAdapter extends RecyclerView.Adapter<HomeSelfDeckAdapte
     private List<DeckEntity> dataListCopy = new ArrayList<>();
     private Context context;
     private String userName;
-
-    public HomeSelfDeckAdapter(List<DeckEntity> dataList, Context context, String userName) {
+    private String userProfile;
+    public HomeSelfDeckAdapter(List<DeckEntity> dataList, Context context, String userName, String userProfile) {
         this.dataList = dataList;
         this.dataListCopy.addAll(dataList);
         this.context = context;
         this.userName = userName;
+        this.userProfile = userProfile;
     }
 
     private OnItemClickLitener   mOnItemClickLitener;
@@ -99,7 +101,6 @@ public class HomeSelfDeckAdapter extends RecyclerView.Adapter<HomeSelfDeckAdapte
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println(c.getCoverPath());
         if (mOnItemClickLitener != null) {
             holder.deckCover.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,6 +109,8 @@ public class HomeSelfDeckAdapter extends RecyclerView.Adapter<HomeSelfDeckAdapte
                 }
             });
         }
+        Picasso.get().load(userProfile)
+                .into(holder.userProfile);
 //        if(mOnDeleteItemClickLitener != null){
 //            holder.delete.setOnClickListener(new View.OnClickListener() {
 //                @Override

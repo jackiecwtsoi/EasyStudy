@@ -29,6 +29,8 @@
         android:layout_marginStart="144dp"
         android:layout_marginLeft="144dp"
         android:layout_marginTop="80dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         android:background="@drawable/profile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

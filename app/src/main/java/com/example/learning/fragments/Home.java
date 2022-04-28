@@ -29,13 +29,14 @@ import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
+import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 
 
-public class Home extends Fragment implements View.OnClickListener{
+public class Home extends Fragment {
 
     View rootView;
     RecyclerView recyclerView1;
@@ -50,7 +51,7 @@ public class Home extends Fragment implements View.OnClickListener{
     ArrayList<DeckEntity> friendDecks = new ArrayList<>();
 
     //The parameters of user image in home page.
-    private QMUIRadiusImageView user_image;
+    private ImageView user_image;
     private ImageView btnFriends;
     private TextView userName;
     private String name;
@@ -101,6 +102,7 @@ public class Home extends Fragment implements View.OnClickListener{
             container.removeView(container.findViewById(R.id.editTextTextPhone));
             container.removeView(container.findViewById(R.id.cacel_change_btn));
             container.removeView(container.findViewById(R.id.save_change_btn));
+//            container.removeView(container.findViewById(R.id.touxiang));
         }
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
@@ -113,14 +115,26 @@ public class Home extends Fragment implements View.OnClickListener{
         userName = rootView.findViewById(R.id.home_user_name);
         userName.setText("Hi "+name + "!");
         recyclerView1 = rootView.findViewById(R.id.banner_recycler1);
-
         recyclerView3 = rootView.findViewById(R.id.banner_recycler3);
         initRecycler();
-
-
         user_image = rootView.findViewById(R.id.touxiang);
-        user_image.setOnClickListener(this);
-
+        user_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Profile profileFragment = new Profile(db);
+                System.out.println("fragment");
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.home_root_layout, profileFragment)
+                        .commit();
+            }
+        });
+        String userProfileURL = dbApi.queryUserProfileURL(userId);
+        if (!userProfileURL.isEmpty()) {
+            Picasso.get()
+                    .load(userProfileURL)
+                    .into(user_image);
+        }
 
         // define variables
         //btnFriends = rootView.findViewById(R.id.btnFriends);
@@ -151,7 +165,7 @@ public class Home extends Fragment implements View.OnClickListener{
         recyclerView1.setLayoutManager(ms);
         recyclerView3.setLayoutManager(ms3);
         HomeDeckAdapter adapter1 = new HomeDeckAdapter(friendDecks, context, friends);
-        HomeSelfDeckAdapter adapter3 = new HomeSelfDeckAdapter(decks, context, name);
+        HomeSelfDeckAdapter adapter3 = new HomeSelfDeckAdapter(decks, context, name, dbApi.queryUserProfileURL(userId));
         adapter1.setOnItemClickLitener(new HomeDeckAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -187,6 +201,7 @@ public class Home extends Fragment implements View.OnClickListener{
     private void getDeckList(){
         friends.clear();
         friends.addAll(dbApi.getConfirmedFriends(userId));
+        friendDecks.clear();
         System.out.println("have frineds:" + Integer.toString(friends.size()));
         for (FriendEntity friend: friends){
             friendDecks.add(dbApi.getAllPublicDecks(friend.getFriendId()).get(0));
@@ -203,14 +218,5 @@ public class Home extends Fragment implements View.OnClickListener{
         }
         System.out.println("home deck length:"+ Integer.toString(decks.size()));
     }
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case  R.id.touxiang:
-                MainActivity main = (MainActivity) getActivity();
-                main.changeToProfile();
 
-        }
-
-    }
 }

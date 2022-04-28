@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:id="@+id/stats_text"
-        android:src='@drawable/statistics' android:layout_weight="1"
+        android:src='@drawable/statistic' android:layout_weight="1"
         android:gravity="center"
        >
 

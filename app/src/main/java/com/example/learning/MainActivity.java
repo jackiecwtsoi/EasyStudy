@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     private MyDBOpenHelper myDBHelper;
     FragmentTransaction fragmentTransaction;
+    ArrayList<Integer> defaultIcons = new ArrayList<>();
+    ArrayList<Integer> fillIcons = new ArrayList<>();
     private int uid;
     private String userName;
 
@@ -92,13 +94,14 @@ public class MainActivity extends AppCompatActivity {
         mcStudy = findViewById(R.id.study_text);
         mcStats = findViewById(R.id.stats_text);
         mcContainer = findViewById(R.id.vp_container);
+
         fragmentList = new ArrayList<Fragment>();
         fragmentList.add(new Home(db));
         fragmentList.add(new Folder(db));
         fragmentList.add(new Add(db));
         fragmentList.add(new Study(db));
         fragmentList.add(new Statistic(db));
-        fragmentList.add(new Profile(db));
+//        fragmentList.add(new Profile(db));
 
         textViewList = new ArrayList<ImageView>();
         textViewList.add(mcHome);
@@ -106,7 +109,17 @@ public class MainActivity extends AppCompatActivity {
         textViewList.add(mcAdd);
         textViewList.add(mcStudy);
         textViewList.add(mcStats);
-
+        defaultIcons.add(R.drawable.home);
+        defaultIcons.add(R.drawable.folder);
+        defaultIcons.add(R.drawable.add);
+        defaultIcons.add(R.drawable.study);
+        defaultIcons.add(R.drawable.statistic);
+        fillIcons.add(R.drawable.home_fill);
+        fillIcons.add(R.drawable.folder_fill);
+        fillIcons.add(R.drawable.add_fill);
+        fillIcons.add(R.drawable.study_fill);
+        fillIcons.add(R.drawable.statistic_fill);
+        mcHome.setImageResource(R.drawable.home_fill);
         for (final ImageView viewer :
                 textViewList) {
             viewer.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +161,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+                for(int i = 0; i < 5; i++){
+                    textViewList.get(i).setImageResource(defaultIcons.get(i));
+                }
+                textViewList.get(position).setImageResource(fillIcons.get(position));
             }
 
             @Override
