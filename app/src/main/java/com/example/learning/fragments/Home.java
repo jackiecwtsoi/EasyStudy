@@ -165,7 +165,7 @@ public class Home extends Fragment {
         recyclerView1.setLayoutManager(ms);
         recyclerView3.setLayoutManager(ms3);
         HomeDeckAdapter adapter1 = new HomeDeckAdapter(friendDecks, context, friends);
-        HomeSelfDeckAdapter adapter3 = new HomeSelfDeckAdapter(decks, context, name);
+        HomeSelfDeckAdapter adapter3 = new HomeSelfDeckAdapter(decks, context, name, dbApi.queryUserProfileURL(userId));
         adapter1.setOnItemClickLitener(new HomeDeckAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
