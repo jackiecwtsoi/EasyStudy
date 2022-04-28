@@ -23,6 +23,7 @@ import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.example.learning.SpecialCalendar;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -62,6 +63,7 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
     private TextView Total_w_d_number;
     private TextView attendance_label;
     private Button update_btn;
+    private Legend legend;
 
 
     private OnFragmentInteractionListener mListener;
@@ -118,6 +120,7 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
             attendance_label.setBackground(getResources().getDrawable(R.drawable.status_circle_red));
             attendance_content.setText("absent");
 
+
         }
         Total_w_p_number.setText(present_days);
         Total_done_number.setText(done_number);
@@ -173,7 +176,7 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.pie_data_update:
-                ShowPiechart(view);
+                UpdatePiechart(view);
                 break;
 
         }
@@ -200,6 +203,7 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
                     UpdatePresentDay();
                     UpdateDonenumber();
                     UpdateOngoingnumber();
+                    check_sign = true;
 
                     Toast.makeText(view.getContext(),"签到成功",Toast.LENGTH_SHORT).show();
 
@@ -334,6 +338,7 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
         easy = arrary.get(0);
         hard = arrary.get(1);
         forgot = arrary.get(2);
+
         if (easy==0&&hard==0&&forgot==0){
             PieEntry pieEntry1 = new PieEntry(100,"No Data");
         }
@@ -360,20 +365,79 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
             PieData pieData = new PieData(pieDataSet);
             pieData.setValueTextSize(16);
 
-            pieData.setValueFormatter(new PercentFormatter());
-            pie.setData(pieData);
-            pie.setExtraOffsets(26, 26, 26, 26);
-            pie.setDrawEntryLabels(false);
-            pie.setUsePercentValues(true);
-            Legend legend=pie.getLegend();
-            legend.setTextSize(18);
             pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
             pieDataSet.setValueLinePart1Length(0.6f);
 
             pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);//设置各个数据的颜色
+            pie.removeAllViews();
+
+
+            pie.setData(pieData);
+            pie.setExtraOffsets(26, 26, 26, 26);
+            pie.setDrawEntryLabels(false);
+            pie.setUsePercentValues(true);
+            pie.getLegend().setEnabled(true);
+            legend=pie.getLegend();
+            legend.setTextSize(18);
+
         }
     }
     public void UpdatePiechart(View view){
+        int easy;
+        int hard;
+        int forgot;
+        ArrayList<Integer> arrary =dbApi.getUserCardLevel(userid);
+        easy = arrary.get(0);
+        hard = arrary.get(1);
+        forgot = arrary.get(2);
+
+        if (easy==0&&hard==0&&forgot==0){
+            PieEntry pieEntry1 = new PieEntry(100,"No Data");
+        }
+        else {
+
+
+            list = new ArrayList<>();
+            if (easy != 0) {
+                PieEntry pieEntry1 = new PieEntry(easy, "Easy");
+                list.add(pieEntry1);
+            }
+            if (hard != 0) {
+                PieEntry pieEntry2 = new PieEntry(hard, "Hard");
+                list.add(pieEntry2);
+
+            }
+            if (forgot != 0) {
+                PieEntry pieEntry3 = new PieEntry(forgot, "Forgot");
+                list.add(pieEntry3);
+            }
+
+
+            PieDataSet pieDataSet = new PieDataSet(list, "");
+
+            PieData pieData = new PieData(pieDataSet);
+
+            pieData.setValueTextSize(16);
+            pieData.setValueFormatter(new PercentFormatter());
+            pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+            pieDataSet.setValueLinePart1Length(0.6f);
+
+            pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);//设置各个数据的颜色
+            pie.removeAllViews();
+
+
+            pie.setData(pieData);
+            pie.setExtraOffsets(26, 26, 26, 26);
+            pie.setDrawEntryLabels(false);
+            pie.setUsePercentValues(true);
+            pie.getLegend().setEnabled(true);
+//            Legend legend=pie.getLegend();
+//            legend.resetCustom();
+//
+//            legend.setTextSize(18);
+
+
+        }
 
     }
     public String getSignDate(){
