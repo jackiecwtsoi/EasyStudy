@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,9 +23,12 @@ import com.example.learning.MainActivity;
 import com.example.learning.R;
 import com.example.learning.SpecialCalendar;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,6 +61,7 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
     private TextView Total_ongoing_number;
     private TextView Total_w_d_number;
     private TextView attendance_label;
+    private Button update_btn;
 
 
     private OnFragmentInteractionListener mListener;
@@ -103,6 +108,8 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
         Total_ongoing_number = (TextView)view.findViewById(R.id.Total_ongoing_number);
         Total_w_d_number = (TextView)view.findViewById(R.id.Total_w_d_number);
         attendance_label = view.findViewById(R.id.attendece_label);
+        update_btn = view.findViewById(R.id.pie_data_update);
+        pie = (PieChart) view.findViewById(R.id.pie);
 
 
 
@@ -116,40 +123,14 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
         Total_done_number.setText(done_number);
         Total_ongoing_number.setText(ongoing_number);
         Total_w_d_number.setText(deck_number);
+        update_btn.setOnClickListener(this);
+
+        //Update piechart
+        ShowPiechart(view);
 
 
 
 
-        // 创建图表
-        int easy;
-        int hard;
-        int forgot;
-        int Total;
-        ArrayList<Integer> arrary =dbApi.getUserCardLevel(userid);
-        easy = arrary.get(0);
-        hard = arrary.get(1);
-        forgot = arrary.get(2);
-        Total = easy+hard+forgot;
-        float easy_value = (easy/Total)*100;
-        float hard_value = (hard/Total)*100;
-        float forgot_value = (forgot/Total)*100;
-
-        pie = (PieChart) view.findViewById(R.id.pie);
-        list=new ArrayList<>();
-        PieEntry pieEntry1 = new PieEntry(easy_value,"Forgot");
-        PieEntry pieEntry2 = new PieEntry(hard_value,"Hard");
-        PieEntry pieEntry3 = new PieEntry(forgot_value,"Easy");
-        list.add(pieEntry1);
-        list.add(pieEntry2);
-        list.add(pieEntry3);
-
-
-        PieDataSet pieDataSet=new PieDataSet(list,"");
-        PieData pieData=new PieData(pieDataSet);
-        pie.setData(pieData);
-        Toast.makeText(view.getContext(),"test"+Total+easy_value+" "+hard_value+arrary,Toast.LENGTH_SHORT).show();
-
-        pieDataSet.setColors(Color.rgb(69,124,153), Color.rgb(69,124,153),Color.rgb(69,124,153));//设置各个数据的颜色
 
         //创建日历
         registration_calendar_gv=(GridView)view.findViewById(R.id.registration_calendar_gv);
@@ -190,6 +171,12 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.pie_data_update:
+                ShowPiechart(view);
+                break;
+
+        }
 
     }
 
@@ -337,6 +324,59 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
             }
         }
     }
+    public void ShowPiechart(View view){
+
+        // 创建图表
+        int easy;
+        int hard;
+        int forgot;
+        ArrayList<Integer> arrary =dbApi.getUserCardLevel(userid);
+        easy = arrary.get(0);
+        hard = arrary.get(1);
+        forgot = arrary.get(2);
+        if (easy==0&&hard==0&&forgot==0){
+            PieEntry pieEntry1 = new PieEntry(100,"No Data");
+        }
+        else {
+
+
+            list = new ArrayList<>();
+            if (easy!=0) {
+                PieEntry pieEntry1 = new PieEntry(easy, "Forgot");
+                list.add(pieEntry1);
+            }
+            if (hard!=0) {
+                PieEntry pieEntry2 = new PieEntry(hard, "Hard");
+                list.add(pieEntry2);
+
+            }
+            if(forgot!=0){
+                PieEntry pieEntry3 = new PieEntry(forgot, "Easy");
+                list.add(pieEntry3);
+            }
+
+
+            PieDataSet pieDataSet = new PieDataSet(list, "");
+            PieData pieData = new PieData(pieDataSet);
+            pieData.setValueTextSize(16);
+            pieData.setValueFormatter(new PercentFormatter());
+
+            pie.setData(pieData);
+            pie.setExtraOffsets(26, 26, 26, 26);
+            pie.setDrawEntryLabels(false);
+            pie.setUsePercentValues(true);
+            Legend legend=pie.getLegend();
+            legend.setTextSize(18);
+
+            pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+            pieDataSet.setValueLinePart1Length(0.6f);
+
+            pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);//设置各个数据的颜色
+        }
+    }
+    public void UpdatePiechart(View view){
+
+    }
     public String getSignDate(){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(System.currentTimeMillis());
@@ -368,7 +408,6 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
         String ongoing_number = Integer.toString(ongoing_num);
         Total_ongoing_number.setText(ongoing_number);
     }
-
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
