@@ -151,6 +151,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void startMain(){
         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
         intent.putExtra("user_id", userID);
+        intent.putExtra("user_name", userName.getText().toString());
         startActivity(intent);
     }
 }

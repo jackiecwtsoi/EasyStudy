@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     >
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewFriends"
         android:layout_width="376dp"
@@ -27,8 +28,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.45"
         app:srcCompat="@drawable/notification" />
-
+  
     <ImageView
+
         android:id="@+id/btnFriendsBack"
         android:layout_width="30dp"
         android:layout_height="30dp"

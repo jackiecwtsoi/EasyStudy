@@ -52,6 +52,8 @@ public class Home extends Fragment implements View.OnClickListener{
     //The parameters of user image in home page.
     private QMUIRadiusImageView user_image;
     private ImageView btnFriends;
+    private TextView userName;
+    private String name;
 
 
     public Home(SQLiteDatabase db) {
@@ -106,7 +108,10 @@ public class Home extends Fragment implements View.OnClickListener{
         context = getActivity();
         MainActivity mainActivity = (MainActivity) getActivity();
         userId = mainActivity.getLoginUserId();
+        name = mainActivity.getUserName();
         getDeckList();
+        userName = rootView.findViewById(R.id.home_user_name);
+        userName.setText("Hi "+name + "!");
         recyclerView1 = rootView.findViewById(R.id.banner_recycler1);
 
         recyclerView3 = rootView.findViewById(R.id.banner_recycler3);
@@ -146,28 +151,13 @@ public class Home extends Fragment implements View.OnClickListener{
         recyclerView1.setLayoutManager(ms);
         recyclerView3.setLayoutManager(ms3);
         HomeDeckAdapter adapter1 = new HomeDeckAdapter(friendDecks, context, friends);
-        HomeSelfDeckAdapter adapter2 = new HomeSelfDeckAdapter(decks, context);
-        HomeSelfDeckAdapter adapter3 = new HomeSelfDeckAdapter(decks, context);
+        HomeSelfDeckAdapter adapter3 = new HomeSelfDeckAdapter(decks, context, name);
         adapter1.setOnItemClickLitener(new HomeDeckAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 MainActivity main = (MainActivity) getActivity();
                 main.changeToDeck();
                 CardFragment fragment = new CardFragment(db, friendDecks.get(position));
-                FragmentManager studyFrontManager = getFragmentManager();
-                studyFrontManager.beginTransaction()
-                        .replace(R.id.layoutFolder, fragment)
-                        .addToBackStack("tag13")
-                        .commit();
-                System.out.println(position);
-            }
-        });
-        adapter2.setOnItemClickLitener(new HomeSelfDeckAdapter.OnItemClickLitener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                MainActivity main = (MainActivity) getActivity();
-                main.changeToDeck();
-                CardFragment fragment = new CardFragment(db, decks.get(position));
                 FragmentManager studyFrontManager = getFragmentManager();
                 studyFrontManager.beginTransaction()
                         .replace(R.id.layoutFolder, fragment)

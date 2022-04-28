@@ -37,6 +37,7 @@ public class Study extends Fragment {
     RecyclerView recyclerViewTasksToday;
     TextView textSelectedDeckName;
     ImageView imgUserPhoto;
+    TextView hiUser;
 
     SQLiteDatabase db;
     int userId;
@@ -87,7 +88,9 @@ public class Study extends Fragment {
         btnReviewAllCards = rootView.findViewById(R.id.btnReviewAllCards);
         textSelectedDeckName = rootView.findViewById(R.id.textSelectedDeckName);
         imgUserPhoto = rootView.findViewById(R.id.imgUserPhoto);
-
+        hiUser = rootView.findViewById(R.id.textHiUser);
+        MainActivity main = (MainActivity) getActivity();
+        hiUser.setText("Hi " + main.getUserName() + "!");
         // load the user profile picture using url from the database
         String userProfileURL = dbapi.queryUserProfileURL(userId);
         if (!userProfileURL.isEmpty()) {
@@ -98,7 +101,6 @@ public class Study extends Fragment {
 
         // recycler view
         recyclerViewTasksToday = rootView.findViewById(R.id.recyclerViewTasksToday);
-        MainActivity main = (MainActivity) getActivity();
         selected_deck = main.getSelectedDeck();
         userId = main.getLoginUserId();
         dayOfWeek = dbapi.getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));

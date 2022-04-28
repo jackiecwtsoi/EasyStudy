@@ -147,5 +147,12 @@ public class Friends extends Fragment {
         int selectedFriendId = listFriends.get(position).getFriendId();
         MainActivity main = (MainActivity) getActivity();
         main.changeToFolder(selectedFriendId);
+        Deck deck = new Deck(-1, db);
+        FragmentManager studyFrontManager = getFragmentManager();
+        studyFrontManager.beginTransaction()
+                .replace(R.id.layoutFolder, deck)
+                .addToBackStack("tag")
+                .commit();
+        System.out.println(position);
     }
 }
