@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.learning.DbApi;
 import com.example.learning.DeckEntity;
 import com.example.learning.MainActivity;
@@ -29,6 +30,7 @@ import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class Study extends Fragment {
     // define variables
@@ -49,7 +51,6 @@ public class Study extends Fragment {
 
     ArrayList<DeckEntity> listTasksToday = new ArrayList<>();
     TasksTodayAdapter adapter;
-
     public Study(SQLiteDatabase db) {
         this.db = db;
     }
@@ -83,6 +84,7 @@ public class Study extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_study, container, false);
         DbApi dbapi = new DbApi(this.db);
+//        String userProfileURL = dbapi.queryUserProfileURL(userId);
         btnReviewSelectedDeck = rootView.findViewById(R.id.btnReviewSelectedDeck);
         btnReviewTodayCards = rootView.findViewById(R.id.btnReviewTodayCards);
         btnReviewAllCards = rootView.findViewById(R.id.btnReviewAllCards);
@@ -92,17 +94,13 @@ public class Study extends Fragment {
         MainActivity main = (MainActivity) getActivity();
         hiUser.setText("Hi " + main.getUserName() + "!");
         // load the user profile picture using url from the database
-        String userProfileURL = dbapi.queryUserProfileURL(userId);
-        if (!userProfileURL.isEmpty()) {
-            Picasso.get()
-                    .load(userProfileURL)
-                    .into(imgUserPhoto);
-        }
+
 
         // recycler view
         recyclerViewTasksToday = rootView.findViewById(R.id.recyclerViewTasksToday);
         selected_deck = main.getSelectedDeck();
         userId = main.getLoginUserId();
+        Picasso.get().load(dbapi.queryUserProfileURL(userId)).into(imgUserPhoto);
         dayOfWeek = dbapi.getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
         listTasksToday = dbapi.getDecksForReminder(userId, dayOfWeek);
         adapter = new TasksTodayAdapter(listTasksToday);

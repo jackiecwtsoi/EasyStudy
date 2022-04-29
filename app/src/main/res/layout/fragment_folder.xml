@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="My File"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:layout_marginTop="30dp"/>
 
     <ImageView

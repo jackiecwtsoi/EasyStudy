@@ -319,6 +319,8 @@
                 android:id="@+id/add_selected_img"
                 android:src="@drawable/spring_showers"
                 android:layout_below="@+id/add_browse_button"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"/>
             <TextView

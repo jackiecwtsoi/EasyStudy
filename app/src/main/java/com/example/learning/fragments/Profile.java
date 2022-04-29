@@ -129,11 +129,19 @@ public class Profile extends Fragment implements View.OnClickListener{
         imgUserPhoto = view.findViewById(R.id.user_profile);
         imgUserPhoto.setOnClickListener(this);
 //        String userProfileURL = dbApi.queryUserProfileURL(userId);
-        String userProfileURL = "https://zongwei-design-courses.oss-cn-shenzhen.aliyuncs.com/Images/%E5%9B%BE%E7%89%871.png";
-        if (!userProfileURL.isEmpty()) {
-            Picasso.get()
-                    .load(userProfileURL)
-                    .into(imgUserPhoto);
+//        String userProfileURL = "https://zongwei-design-courses.oss-cn-shenzhen.aliyuncs.com/Images/%E5%9B%BE%E7%89%871.png";
+//        if (!userProfileURL.isEmpty()) {
+//            Picasso.get()
+//                    .load(userProfileURL)
+//                    .into(imgUserPhoto);
+//        }
+        Uri img = Uri.fromFile(new File(dbApi.queryUserProfileURL(userId)));
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream
+                    (getActivity().getContentResolver().openInputStream(img));
+            imgUserPhoto.setImageBitmap(bitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
 
         showUserInformation();
