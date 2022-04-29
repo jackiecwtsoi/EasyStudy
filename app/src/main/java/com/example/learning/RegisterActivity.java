@@ -108,7 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
                         int result = dbApi.queryUser(name, mail, pass);
                         if (result == -2){
                             userID = (int)dbApi.insertUserFull(name, mail, pass, url);
-                            Toast.makeText(RegisterActivity.this, "okokokokokokokok", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_LONG).show();
                             startMain();
                         }
                         else {

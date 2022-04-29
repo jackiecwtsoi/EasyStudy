@@ -114,20 +114,14 @@
 
                 <TextView
                     android:id="@+id/tvBannerTitle1"
-                    android:textSize="14sp"
+                    android:textSize="24sp"
                     android:text="Public Decks"
                     android:textColor="@color/black"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
+                    android:textStyle="bold"
                     android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/tvBannerGuide1"
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
-                    android:text="See all>"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -145,18 +139,11 @@
 
                 <TextView
                     android:id="@+id/tvBannerTitle3"
-                    android:textSize="14sp"
+                    android:textSize="24sp"
                     android:text="My Decks"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/tvBannerGuide3"
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
-                    android:text="See all>"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>

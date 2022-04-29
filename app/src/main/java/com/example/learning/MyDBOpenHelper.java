@@ -221,7 +221,8 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                         int b = r.nextInt(10);
                         String cardQuestion = Integer.toString(a) + '+' + Integer.toString(b) + "= ? ";
                         String cardAnswer = Integer.toString(a + b);
-                        int hardness = r.nextInt(2);
+//                        int hardness = r.nextInt(0) - 1;
+                        int hardness = -1;
                         dbApi.insertCard(cardName, cardQuestion, cardAnswer, hardness, (int)deckid, (int)folderid, i + 1);
                     }
                 }

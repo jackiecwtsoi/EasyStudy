@@ -205,15 +205,15 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
                     UpdateOngoingnumber();
                     check_sign = true;
 
-                    Toast.makeText(view.getContext(),"签到成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(),"You have signed in ",Toast.LENGTH_SHORT).show();
 
                 }
                 else {
-                    Toast.makeText(view.getContext(),"您已经签到，亲~~waku waku",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(),"You are already present today",Toast.LENGTH_SHORT).show();
                 }
 
             }else{
-                Toast.makeText(view.getContext(),"您选择的日期："+today,Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(),"The date you choose："+today,Toast.LENGTH_SHORT).show();
 
             }
         }

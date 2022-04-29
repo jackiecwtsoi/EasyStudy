@@ -246,7 +246,7 @@ public class Add extends Fragment {
                     folderNames.add(folder.getFolderName());
                 }
                 selectedFolder = folderNames.get(0);
-                selectedFolderId = 0;
+                selectedFolderId = folderList.get(0).getFolderID();
                 View outerView = LayoutInflater.from(rootView.getContext()).inflate(R.layout.folder_wheel_view, null);
                 WheelView wv = (WheelView) outerView.findViewById(R.id.foler_wheel_view);
                 wv.setOffset(2);
@@ -460,9 +460,9 @@ public class Add extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        deckDescription.getText().clear();
-        deckName.getText().clear();
-        clearSelectDays();
+//        deckDescription.getText().clear();
+//        deckName.getText().clear();
+//        clearSelectDays();
     }
 
     @Override

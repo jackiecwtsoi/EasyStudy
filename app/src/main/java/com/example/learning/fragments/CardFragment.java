@@ -40,7 +40,7 @@ public class CardFragment extends Fragment {
     SQLiteDatabase db;
     View rootView;
     private ScheduledFuture<?> scheduledFuture;
-    private float completion = (float)0.9;
+    private float completion = (float) 0.9;
     DbApi dbApi;
     DeckEntity deck;
     ArrayList<Card> cards = new ArrayList<>();
@@ -48,6 +48,7 @@ public class CardFragment extends Fragment {
     TextView decktile;
     TextView userNameText;
     ImageView deckCover;
+    float completness = (float) 0.0;
 
 
     public CardFragment(SQLiteDatabase db, DeckEntity deck) {
@@ -55,9 +56,12 @@ public class CardFragment extends Fragment {
         this.db = db;
         this.deck = deck;
     }
+
     private CircleProgressView cnp_citcleNumberProgress;
 
-    /** 指定给进度条的进程 */
+    /**
+     * 指定给进度条的进程
+     */
     private float progress;
     protected static final int WHAT_INCREASE = 1;
     TextView addCard;
@@ -68,7 +72,8 @@ public class CardFragment extends Fragment {
             progress = progress + (float) 0.05;
             cnp_citcleNumberProgress.setProgress(progress);
             handler.sendEmptyMessageDelayed(WHAT_INCREASE, 30);
-            if (progress >= deck.getCompletion() + 0.1) {
+            System.out.println(completness);
+            if (progress >= completness) {
                 handler.removeMessages(WHAT_INCREASE);
             }
         }
@@ -94,7 +99,7 @@ public class CardFragment extends Fragment {
 
         qeuryCard();
         cnp_citcleNumberProgress = rootView.findViewById(R.id.card_deck_progress);
-        increase();
+//        increase();
         deckCover = rootView.findViewById(R.id.deck_cover);
         String coverPath = deck.getCoverPath();
         Uri img = Uri.fromFile(new File(coverPath));
@@ -118,7 +123,7 @@ public class CardFragment extends Fragment {
             }
         });
         cardNum = rootView.findViewById(R.id.card_card_num);
-        cardNum.setText(Integer.toString(cards.size())+ " cards |");
+        cardNum.setText(Integer.toString(cards.size()) + " cards |");
         decktile = rootView.findViewById(R.id.card_deck_title);
         decktile.setText(deck.getDeckName());
         changeToStudy = rootView.findViewById(R.id.card_to_study);
@@ -136,20 +141,38 @@ public class CardFragment extends Fragment {
 
     private void increase() {
         progress = 0;
-        handler.removeMessages(WHAT_INCREASE);
-        handler.sendEmptyMessage(WHAT_INCREASE);
+        if(completness != 0.0) {
+            handler.removeMessages(WHAT_INCREASE);
+            handler.sendEmptyMessage(WHAT_INCREASE);
+
+        }
+        else {
+            cnp_citcleNumberProgress.setProgress(0);
+        }
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         qeuryCard();
-        cardNum.setText(Integer.toString(cards.size())+ " cards |");
+        cardNum.setText(Integer.toString(cards.size()) + " cards |");
+        increase();
     }
 
-    private void qeuryCard(){
+    private void qeuryCard() {
         cards.clear();
         System.out.println(deck.getDeckName());
         cards.addAll(dbApi.queryCard(deck.getDeckID(), deck.getFolderId(), deck.getUserId()));
+        int complete = 0;
+        for (Card card : cards) {
+            int level = card.getLevel();
+            System.out.println("card level:" + Integer.toString(level));
+            if (level != -1) {
+                complete += 1;
+            }
+        }
+        System.out.println("total complete: " + Integer.toString(complete));
+        completness = (float)complete / cards.size();
     }
 }

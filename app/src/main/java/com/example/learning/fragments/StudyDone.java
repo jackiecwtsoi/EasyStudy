@@ -20,6 +20,7 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -147,7 +148,7 @@ public class StudyDone extends Fragment {
         this.pieTodayProgress.setData(pieDataTodayProgress);
 
         // customize more
-//        this.pieDataTodayProgress.setValueFormatter(new PercentFormatter(this.pieTodayProgress));
+        this.pieDataTodayProgress.setValueFormatter(new PercentFormatter());
         this.pieTodayProgress.setTouchEnabled(INTERACT_ENABLE);
         this.pieTodayProgress.setUsePercentValues(true);
         this.pieTodayProgress.setDrawHoleEnabled(false);

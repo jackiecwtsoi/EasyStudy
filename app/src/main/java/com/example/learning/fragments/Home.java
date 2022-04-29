@@ -205,7 +205,7 @@ public class Home extends Fragment {
         friendDecks.clear();
         System.out.println("have frineds:" + Integer.toString(friends.size()));
         for (FriendEntity friend: friends){
-            friendDecks.add(dbApi.getAllPublicDecks(friend.getFriendId()).get(0));
+            friendDecks.add(dbApi.getAllPublicDecks(friend.getFriendId()).get(1));
         }
         decks.clear();
         decks.addAll(dbApi.getAllDecks(userId));

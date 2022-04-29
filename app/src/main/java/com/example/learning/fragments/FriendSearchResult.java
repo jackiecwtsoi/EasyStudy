@@ -33,7 +33,7 @@ public class FriendSearchResult extends Fragment {
     TextView textSearchedFriendPublicNumber, textSearchedFriendPresentNumber;
     TextView textSearchedFriendName, textSearchedFriendEmail;
     ImageView imgSearchedFriendPicture;
-
+    ImageView back;
     SQLiteDatabase db;
     int userIdFromSearch;
     Boolean IS_FRIEND;
@@ -69,7 +69,18 @@ public class FriendSearchResult extends Fragment {
         textSearchedFriendName = rootView.findViewById(R.id.textSearchedFriendName);
         textSearchedFriendEmail = rootView.findViewById(R.id.textSearchedFriendEmail);
         imgSearchedFriendPicture = rootView.findViewById(R.id.imgSearchedFriendPicture);
-
+        back = rootView.findViewById(R.id.friend_search_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Friends friendsFragment = new Friends(db);
+                FragmentManager friendsFragmentManager = getFragmentManager();
+                friendsFragmentManager.beginTransaction()
+                        .replace(R.id.layoutFriendSearchResult, friendsFragment)
+                        .addToBackStack("friend requests")
+                        .commit();
+            }
+        });
         DbApi dbapi = new DbApi(this.db);
         ArrayList<String> searchedUserInfo = dbapi.getUserInfo(userIdFromSearch); // get array that displays selected user information-
         textSearchedFriendName.setText(searchedUserInfo.get(1));

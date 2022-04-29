@@ -117,7 +117,7 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     private void addCard() {
-        dbApi.insertCard("name", title.getText().toString(), answer.getText().toString(), 0, deck_id, folerId, userId);
+        dbApi.insertCard("name", title.getText().toString(), answer.getText().toString(), -1, deck_id, folerId, userId);
     }
 
     private void flipAnimation(int question) {
