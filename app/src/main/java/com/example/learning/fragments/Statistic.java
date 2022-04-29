@@ -294,7 +294,7 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
                 viewHolder.day.setBackgroundResource(R.mipmap.member_ok);
             }
             if (dayNumber[i]==day&&check==false){
-                viewHolder.day.setText("今");
+                viewHolder.day.setText("Today");
                 view.setBackgroundResource(R.color.colorPrimary);
                 viewHolder.day.setTextColor(Color.parseColor("#ffffff"));
             }
@@ -347,7 +347,7 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
 
             list = new ArrayList<>();
             if (easy!=0) {
-                PieEntry pieEntry1 = new PieEntry(easy, "Forgot");
+                PieEntry pieEntry1 = new PieEntry(easy, "Easy");
                 list.add(pieEntry1);
             }
             if (hard!=0) {
@@ -356,7 +356,7 @@ public class Statistic extends Fragment implements View.OnClickListener,GridView
 
             }
             if(forgot!=0){
-                PieEntry pieEntry3 = new PieEntry(forgot, "Easy");
+                PieEntry pieEntry3 = new PieEntry(forgot, "Forgot");
                 list.add(pieEntry3);
             }
 

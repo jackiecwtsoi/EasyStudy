@@ -508,6 +508,12 @@ public class DbApi {
         return arrary;
 
     }
+    public void updateUserImg(int userID,String path){
+        String user_id=Integer.toString(userID);
+        ContentValues values = new ContentValues();
+        values.put("profile_picture",path);
+        db.update("user",values,"u_id = ?",new String[]{user_id});
+    }
 
 
     // get all cards given a user
