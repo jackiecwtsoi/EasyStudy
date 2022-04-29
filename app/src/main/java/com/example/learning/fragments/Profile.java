@@ -129,11 +129,19 @@ public class Profile extends Fragment implements View.OnClickListener{
         imgUserPhoto = view.findViewById(R.id.user_profile);
         imgUserPhoto.setOnClickListener(this);
 //        String userProfileURL = dbApi.queryUserProfileURL(userId);
-        String userProfileURL = "https://zongwei-design-courses.oss-cn-shenzhen.aliyuncs.com/Images/%E5%9B%BE%E7%89%871.png";
-        if (!userProfileURL.isEmpty()) {
-            Picasso.get()
-                    .load(userProfileURL)
-                    .into(imgUserPhoto);
+//        String userProfileURL = "https://zongwei-design-courses.oss-cn-shenzhen.aliyuncs.com/Images/%E5%9B%BE%E7%89%871.png";
+//        if (!userProfileURL.isEmpty()) {
+//            Picasso.get()
+//                    .load(userProfileURL)
+//                    .into(imgUserPhoto);
+//        }
+        Uri img = Uri.fromFile(new File(dbApi.queryUserProfileURL(userId)));
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream
+                    (getActivity().getContentResolver().openInputStream(img));
+            imgUserPhoto.setImageBitmap(bitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
 
         showUserInformation();
@@ -175,6 +183,9 @@ public class Profile extends Fragment implements View.OnClickListener{
                 break;
             case R.id.user_profile:
                 getPicFromLocal();
+
+
+//                Toast.makeText(this.getContext(),upload_url+coverPath,Toast.LENGTH_LONG).show();
 
 
         }
@@ -222,50 +233,21 @@ public class Profile extends Fragment implements View.OnClickListener{
                                 (getActivity().getContentResolver().openInputStream(uriImage));
 //                    String path = RealPathFromUriUtils.getRealPathFromUri(context, uriImage);
 //                    System.out.println(path);
-                        coverPath = UserImageUtils.saveImageToGallery(this.getContext(), bitmap, "");
+                        coverPath = UserImageUtils.saveImageToGallery(this.getActivity(), bitmap, "");
+                        saveUserImage();
                         imgUserPhoto.setImageBitmap(bitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
 
+
             }
         }
     }
+    public void saveUserImage(){
+        dbApi.updateUserImg(userId,coverPath);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
 
@@ -360,116 +342,6 @@ public class Profile extends Fragment implements View.OnClickListener{
 
 
 
-    //与个人的存储区域有关
-    private static final String ENDPOINT = "oss-cn-shenzhen.aliyuncs.com";
-    //上传仓库名
-    private static final String BUCKET_NAME = "zongwei-design-courses";
-
-    private OSS getOSSClient() {
-        OSSCredentialProvider credentialProvider =
-                new OSSPlainTextAKSKCredentialProvider("LTAI5tH9Rt14dxZpnjbLcFwH" ,
-                        "58o4ius32UdePzF5zwOsTatQXIyIC0");
-        return new OSSClient(mContext.getContext(), ENDPOINT, credentialProvider);
-    }
-
-    /**
-     * 上传方法
-     *
-     * @param objectKey 标识
-     * @param path      需上传文件的路径
-     * @return 外网访问的路径
-     */
-    private String upload(String objectKey, String path) {
-        // 构造上传请求
-        PutObjectRequest request =
-                new PutObjectRequest(BUCKET_NAME,
-                        objectKey, path);
-        try {
-            //得到client
-            OSS client = getOSSClient();
-            //上传获取结果
-            PutObjectResult result = client.putObject(request);
-            //获取可访问的url
-            String url = client.presignPublicObjectURL(BUCKET_NAME, objectKey);
-            //格式打印输出
-
-            return url;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
-    /**
-     * 上传普通图片
-     *
-     * @param path 本地地址
-     * @return 服务器地址
-     */
-    public String uploadImage(String path) {
-        String key = getObjectImageKey(path);
-        return upload(key, path);
-    }
-
-    /**
-     * 上传头像
-     *
-     * @param path 本地地址
-     * @return 服务器地址
-     */
-    public  String uploadPortrait(String path) {
-        String key = getObjectPortraitKey(path);
-        return upload(key, path);
-    }
-
-    /**
-     * 上传audio
-     *
-     * @param path 本地地址
-     * @return 服务器地址
-     */
-    public String uploadAudio(String path) {
-        String key = getObjectAudioKey(path);
-        return upload(key, path);
-    }
-
-
-    /**
-     * 获取时间
-     *
-     * @return 时间戳 例如:201805
-     */
-    private String getDateString() {
-        return DateFormat.format("yyyyMM", new Date()).toString();
-    }
-
-    /**
-     * 返回key
-     *
-     * @param path 本地路径
-     * @return key
-     */
-    //格式: image/201805/sfdsgfsdvsdfdsfs.jpg
-    private String getObjectImageKey(String path) {
-        String fileMd5 = HashUtil.getMD5String(new File(path));
-        String dateString = getDateString();
-        return String.format("image/%s/%s.jpg", dateString, fileMd5);
-    }
-
-    //格式: portrait/201805/sfdsgfsdvsdfdsfs.jpg
-    private String getObjectPortraitKey(String path) {
-        String fileMd5 = HashUtil.getMD5String(new File(path));
-        String dateString = getDateString();
-        return String.format("portrait/%s/%s.jpg", dateString, fileMd5);
-    }
-
-    //格式: audio/201805/sfdsgfsdvsdfdsfs.mp3
-    private String getObjectAudioKey(String path) {
-        String fileMd5 = HashUtil.getMD5String(new File(path));
-        String dateString = getDateString();
-        return String.format("audio/%s/%s.mp3", dateString, fileMd5);
-    }
 
 
 
