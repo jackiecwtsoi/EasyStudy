@@ -129,12 +129,13 @@ public class Home extends Fragment {
                         .commit();
             }
         });
-        String userProfileURL = dbApi.queryUserProfileURL(userId);
-        if (!userProfileURL.isEmpty()) {
-            Picasso.get()
-                    .load(userProfileURL)
-                    .into(user_image);
-        }
+//        String userProfileURL = dbApi.queryUserProfileURL(userId);
+////        if (!userProfileURL.isEmpty()) {
+////            Picasso.get()
+////                    .load(userProfileURL)
+////                    .into(user_image);
+////        }
+        ImageUtils.loadProfile(getActivity(), dbApi.queryUserProfileURL(userId), user_image);
 
         // define variables
         //btnFriends = rootView.findViewById(R.id.btnFriends);

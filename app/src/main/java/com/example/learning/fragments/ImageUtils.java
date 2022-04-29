@@ -3,7 +3,11 @@ package com.example.learning.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,5 +63,21 @@ public class ImageUtils {
         }
         return "";
     }
+    public static void loadProfile(Context context, String url, ImageView target){
+        System.out.println(url);
+        if(url.startsWith("http")){
+            Picasso.get().load(url).into(target);
+        }
+        else {
+            Uri img = Uri.fromFile(new File(url));
+            try {
+                Bitmap bitmap = BitmapFactory.decodeStream
+                        (context.getContentResolver().openInputStream(img));
+                target.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
+        }
+    }
 }

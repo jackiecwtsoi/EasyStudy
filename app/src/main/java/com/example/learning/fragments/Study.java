@@ -100,7 +100,8 @@ public class Study extends Fragment {
         recyclerViewTasksToday = rootView.findViewById(R.id.recyclerViewTasksToday);
         selected_deck = main.getSelectedDeck();
         userId = main.getLoginUserId();
-        Picasso.get().load(dbapi.queryUserProfileURL(userId)).into(imgUserPhoto);
+//        Picasso.get().load(dbapi.queryUserProfileURL(userId)).into(imgUserPhoto);
+        ImageUtils.loadProfile(getActivity(), dbapi.queryUserProfileURL(userId), imgUserPhoto);
         dayOfWeek = dbapi.getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
         listTasksToday = dbapi.getDecksForReminder(userId, dayOfWeek);
         adapter = new TasksTodayAdapter(listTasksToday);

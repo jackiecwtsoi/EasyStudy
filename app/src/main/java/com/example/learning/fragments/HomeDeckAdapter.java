@@ -103,7 +103,8 @@ public class HomeDeckAdapter extends RecyclerView.Adapter<HomeDeckAdapter.VH>{
                 }
             });
         }
-        Picasso.get().load(friend.getFriendPicture()).into(holder.userProfile);
+//        Picasso.get().load(friend.getFriendPicture()).into(holder.userProfile);
+        ImageUtils.loadProfile(context, friend.getFriendPicture(), holder.userProfile);
 //        if(mOnDeleteItemClickLitener != null){
 //            holder.delete.setOnClickListener(new View.OnClickListener() {
 //                @Override

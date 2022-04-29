@@ -109,8 +109,9 @@ public class HomeSelfDeckAdapter extends RecyclerView.Adapter<HomeSelfDeckAdapte
                 }
             });
         }
-        Picasso.get().load(userProfile)
-                .into(holder.userProfile);
+        ImageUtils.loadProfile(context, userProfile, holder.userProfile);
+//        Picasso.get().load(userProfile)
+//                .into(holder.userProfile);
 //        if(mOnDeleteItemClickLitener != null){
 //            holder.delete.setOnClickListener(new View.OnClickListener() {
 //                @Override
