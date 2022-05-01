@@ -1,5 +1,6 @@
-### README
+# README
 
+EasyStudy is a prototype Android app created using Android Studio that allows users to develop smart study techniques. To run the app, follow the steps below:
 1. Download the source code
 2. Open it with Android Studio
 3. Select the emulator(Pixel 3a XL API 28)
@@ -20,5 +21,4 @@
 
 
 
-###HAPPY LEARNING!
-
+HAPPY LEARNING!
