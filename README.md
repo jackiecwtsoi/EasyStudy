@@ -1,4 +1,4 @@
-# README
+# EasyStudy
 
 EasyStudy is a prototype Android app created using Android Studio that allows users to develop smart study techniques. Check the [user manual](user_manual.pdf) to know more about the features of this app.
 
